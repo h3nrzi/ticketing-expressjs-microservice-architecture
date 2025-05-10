@@ -18,6 +18,14 @@ build:
         manual:
           - src: "auth/src/**/*.ts"
             dest: .
+    - image: h3nrzi/tickets
+      context: tickets
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "tickets/src/**/*.ts"
+            dest: .
     # - image: h3nrzi/client
     #   context: client
     #   docker:

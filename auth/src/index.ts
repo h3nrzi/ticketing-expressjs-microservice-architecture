@@ -6,8 +6,11 @@ async function startServer() {
 		// Check if JWT_KEY is defined in environment variables
 		if (!process.env.JWT_KEY) throw new Error("JWT_KEY must be defined!");
 
+		// Check if MONGO_URI is defined in environment variables
+		if (!process.env.MONGO_URI) throw new Error("MONGO_URI must be defined!");
+
 		// Connect to MongoDB
-		await mongoose.connect("mongodb://auth-mongo-srv:27017/auth");
+		await mongoose.connect(process.env.MONGO_URI!);
 		console.log("Connected to MongoDB!");
 	} catch (err) {
 		console.error(err);
