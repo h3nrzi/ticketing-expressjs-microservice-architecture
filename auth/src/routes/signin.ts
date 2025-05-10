@@ -1,11 +1,13 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import BadRequestError from "../errors/bad-request-error";
-import validateRequest from "../middlewares/validate-request";
 import User from "../models/user";
-import JwtService from "../services/jwt-service";
-import { Password } from "../services/password";
-import NotFoundError from "../errors/not-found-error";
+import {
+	BadRequestError,
+	NotFoundError,
+	PasswordManager,
+	JwtService,
+	validateRequest,
+} from "@h3nrzi-ticket/common";
 
 const router = express.Router();
 
@@ -30,7 +32,7 @@ router.post(
 
 		// check if password is valid
 		// if passwords do not match, throw a BadRequestError
-		const passwordsMatch = await Password.compare(
+		const passwordsMatch = await PasswordManager.compare(
 			existingUser.password,
 			password
 		);
