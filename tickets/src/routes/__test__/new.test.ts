@@ -2,93 +2,86 @@ import request from "supertest";
 import app from "../../app";
 import { Ticket } from "../../models/ticket";
 
-it("has a route handler listening to /api/tickets for post requests", async () => {
-	// Send a POST request
-	const res = await request(app).post("/api/tickets").send({});
-
-	// Expect the response status to not be 404
-	expect(res.status).not.toEqual(404);
-});
-
-it("can only be accessed if the user is signed in", async () => {
-	// Send a POST request
-	const res = await request(app).post("/api/tickets").send({});
-
-	// Expect the response status to be 401
-	expect(res.status).toEqual(401);
-});
-
-it("returns a status other than 401 if the user is signed in", async () => {
-	// Send a POST request
-	const res = await request(app)
+const createTicket = (data = {}) => {
+	return request(app)
 		.post("/api/tickets")
 		.set("Cookie", global.signup())
-		.send({});
+		.send(data);
+};
 
-	// Expect the response status to be 401
-	expect(res.status).not.toEqual(401);
-});
+describe("POST /api/tickets", () => {
+	beforeEach(async () => {
+		await Ticket.deleteMany({});
+	});
 
-it("returns an error if an invalid title is provided", async () => {
-	// Signup a user
-	const cookie = global.signup();
+	describe("Route Handler", () => {
+		it("should respond with non-404 status when route exists", async () => {
+			const response = await request(app).post("/api/tickets").send({});
+			expect(response.status).not.toEqual(404);
+		});
+	});
 
-	// Send a POST request with an invalid title
-	const res = await request(app)
-		.post("/api/tickets")
-		.set("Cookie", global.signup())
-		.send({ title: "", price: 10 });
+	describe("Authentication", () => {
+		it("should return 401 when user is not authenticated", async () => {
+			const response = await request(app).post("/api/tickets").send({});
+			expect(response.status).toEqual(401);
+		});
 
-	// Send a POST request without a title
-	const res2 = await request(app)
-		.post("/api/tickets")
-		.set("Cookie", global.signup())
-		.send({ price: 10 });
+		it("should return non-401 status when user is authenticated", async () => {
+			const response = await createTicket({});
+			expect(response.status).not.toEqual(401);
+		});
+	});
 
-	// Expect the responses to have the correct status codes
-	expect(res.status).toEqual(400);
-	expect(res2.status).toEqual(400);
-});
+	describe("Input Validation", () => {
+		describe("Title Validation", () => {
+			const testCases = [
+				{ title: "", price: 10, description: "empty title" },
+				{ price: 10, description: "missing title" },
+			];
 
-it("returns an error if an invalid price is provided", async () => {
-	// Signup a user
-	const cookie = global.signup();
+			testCases.forEach(({ title, price, description }) => {
+				it(`should return 400 when ${description}`, async () => {
+					const response = await createTicket({ title, price });
+					expect(response.status).toEqual(400);
+				});
+			});
+		});
 
-	// Send a POST request with an invalid price
-	const res = await request(app)
-		.post("/api/tickets")
-		.set("Cookie", global.signup())
-		.send({ title: "test", price: -10 });
+		describe("Price Validation", () => {
+			const testCases = [
+				{ title: "test", price: -10, description: "negative price" },
+				{ title: "test", description: "missing price" },
+			];
 
-	// Send a POST request without a price
-	const res2 = await request(app)
-		.post("/api/tickets")
-		.set("Cookie", global.signup())
-		.send({ title: "test" });
+			testCases.forEach(({ title, price, description }) => {
+				it(`should return 400 when ${description}`, async () => {
+					const response = await createTicket({ title, price });
+					expect(response.status).toEqual(400);
+				});
+			});
+		});
+	});
 
-	// Expect the responses to have the correct status codes
-	expect(res.status).toEqual(400);
-	expect(res2.status).toEqual(400);
-});
+	describe("Ticket Creation", () => {
+		const validTicket = {
+			title: "Concert Ticket",
+			price: 20,
+		};
 
-it("creates a ticket with valid inputs", async () => {
-	// Create a ticket before the request
-	let tickets = await Ticket.find({});
+		it("should create a ticket with valid inputs", async () => {
+			// Verify initial state
+			const initialTickets = await Ticket.find({});
+			expect(initialTickets).toHaveLength(0);
 
-	// Expect there was no ticket created
-	expect(tickets.length).toEqual(0);
+			// Create ticket
+			const response = await createTicket(validTicket);
+			expect(response.status).toEqual(201);
 
-	// Send a POST request to create a ticket
-	// And expect the response status to be 201
-	const res = await request(app)
-		.post("/api/tickets")
-		.set("Cookie", global.signup())
-		.send({ title: "test", price: 10 })
-		.expect(201);
-
-	// Add in a check to make sure a ticket was created
-	tickets = await Ticket.find({});
-	expect(tickets.length).toEqual(1);
-	expect(tickets[0].title).toEqual("test");
-	expect(tickets[0].price).toEqual(10);
+			// Verify ticket was created correctly
+			const tickets = await Ticket.find({});
+			expect(tickets).toHaveLength(1);
+			expect(tickets[0]).toMatchObject(validTicket);
+		});
+	});
 });
