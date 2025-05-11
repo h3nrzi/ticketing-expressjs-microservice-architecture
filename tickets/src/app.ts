@@ -10,6 +10,7 @@ import {
 	currentUser,
 } from "@h3nrzi-ticket/common";
 import { newTicketRouter } from "./routes/new";
+import { showTicketRouter } from "./routes/show";
 
 // ==========================================
 // Initialize Express Application
@@ -52,7 +53,7 @@ app.use("/api/tickets/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // ==========================================
 
 app.use(newTicketRouter);
-
+app.use(showTicketRouter);
 // ==========================================
 // Error Handling
 // ==========================================
