@@ -1,6 +1,8 @@
 import { requireAuth, validateRequest } from "@h3nrzi-ticket/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
+import { Ticket } from "../models/ticket";
+
 const router = express.Router();
 
 router.post(
@@ -14,7 +16,21 @@ router.post(
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
-		return res.send("ok");
+		// Extract the title and price from the request body
+		const { title, price } = req.body;
+
+		// Create a new ticket
+		const ticket = Ticket.build({
+			title,
+			price,
+			userId: req.currentUser!.id,
+		});
+
+		// Save the ticket to the database
+		await ticket.save();
+
+		// Send the ticket as a response
+		res.status(201).send(ticket);
 	}
 );
 
