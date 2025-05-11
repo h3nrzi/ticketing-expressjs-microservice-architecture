@@ -1,13 +1,15 @@
-import mongoose, { Schema, Model, Document } from "mongoose";
+import mongoose, { Model, Document, Schema } from "mongoose";
 import { PasswordManager } from "@h3nrzi-ticket/common";
 
-// Interface for User attributes
+//----------------------------------------
+// Type Definitions
+//----------------------------------------
+
 interface UserAttrs {
 	email: string;
 	password: string;
 }
 
-// Interface for User document
 interface UserDoc extends Document {
 	email: string;
 	password: string;
@@ -15,14 +17,14 @@ interface UserDoc extends Document {
 	createdAt: string;
 }
 
-// Interface for User model
 interface UserModel extends Model<UserDoc> {
 	build: (attrs: UserAttrs) => UserDoc;
 }
 
-//---------------------------------------------------//
+//----------------------------------------
+// Schema Definition
+//----------------------------------------
 
-// Schema for User model
 const userSchema = new Schema(
 	{
 		email: {
@@ -48,6 +50,10 @@ const userSchema = new Schema(
 	}
 );
 
+//----------------------------------------
+// Schema Methods
+//----------------------------------------
+
 // Static method to build a User
 userSchema.statics.build = (attrs: UserAttrs) => {
 	return new User(attrs);
@@ -62,9 +68,10 @@ userSchema.pre("save", async function (done) {
 	done();
 });
 
-//---------------------------------------------------//
+//----------------------------------------
+// Model Creation & Export
+//----------------------------------------
 
-// Build User model
 const User = mongoose.model<UserDoc, UserModel>("User", userSchema);
 
 export default User;
