@@ -32,19 +32,45 @@ it("returns a status other than 401 if the user is signed in", async () => {
 });
 
 it("returns an error if an invalid title is provided", async () => {
-	// await request(app)
-	// 	.post("/api/tickets")
-	// 	.set("Cookie", global.signin())
-	// 	.send({ title: "", price: 10 })
-	// 	.expect(400);
+	// Signup a user
+	const cookie = global.signup();
+
+	// Send a POST request with an invalid title
+	const res = await request(app)
+		.post("/api/tickets")
+		.set("Cookie", cookie!)
+		.send({ title: "", price: 10 });
+
+	// Send a POST request without a title
+	const res2 = await request(app)
+		.post("/api/tickets")
+		.set("Cookie", cookie!)
+		.send({ price: 10 });
+
+	// Expect the responses to have the correct status codes
+	expect(res.status).toEqual(400);
+	expect(res2.status).toEqual(400);
 });
 
 it("returns an error if an invalid price is provided", async () => {
-	// await request(app)
-	// 	.post("/api/tickets")
-	// 	.set("Cookie", global.signin())
-	// 	.send({ title: "test", price: -10 })
-	// 	.expect(400);
+	// Signup a user
+	const cookie = global.signup();
+
+	// Send a POST request with an invalid price
+	const res = await request(app)
+		.post("/api/tickets")
+		.set("Cookie", cookie!)
+		.send({ title: "test", price: -10 });
+
+	// Send a POST request without a price
+	const res2 = await request(app)
+		.post("/api/tickets")
+		.set("Cookie", cookie!)
+		.send({ title: "test" });
+
+	// Expect the responses to have the correct status codes
+	expect(res.status).toEqual(400);
+	expect(res2.status).toEqual(400);
 });
 
 it("creates a ticket with valid inputs", async () => {
