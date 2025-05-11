@@ -5,7 +5,9 @@ import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
 import { NotFoundError, errorHandler } from "@h3nrzi-ticket/common";
+import { newTicketRouter } from "./routes/new";
 
+// Initialize the express app
 const app = express();
 
 // To enable trust proxy for secure cookies
@@ -27,6 +29,9 @@ app.use(
 
 // Swagger UI setup
 app.use("/api/tickets/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Routes
+app.use(newTicketRouter);
 
 // Catch-all route for handling undefined routes
 app.all("*", async () => {
