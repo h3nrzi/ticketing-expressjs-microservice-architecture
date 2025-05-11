@@ -4,41 +4,63 @@ import express from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
-import { NotFoundError, errorHandler } from "@h3nrzi-ticket/common";
+import {
+	NotFoundError,
+	errorHandler,
+	currentUser,
+} from "@h3nrzi-ticket/common";
 import { newTicketRouter } from "./routes/new";
 
-// Initialize the express app
+// ==========================================
+// Initialize Express Application
+// ==========================================
+
 const app = express();
 
-// To enable trust proxy for secure cookies
+// ==========================================
+// Security & Trust Configuration
+// ==========================================
+
 app.set("trust proxy", true);
 
-// To parse JSON requests
+// ==========================================
+// Middleware Configuration
+// ==========================================
+
 app.use(bodyParser.json());
 
-// To handle cookie sessions
 app.use(
 	cookieSession({
-		signed: false, // Disable signing of cookies
-		secure: false, // Only send over HTTPS in production
-		httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
-		// sameSite: "none", // Allow cookies to be sent to any site
-		// path: "/", // Set the path to the root of the domain
+		signed: false,
+		secure: false,
+		httpOnly: true,
+		// sameSite: "none",
+		// path: "/",
 	})
 );
 
-// Swagger UI setup
+app.use(currentUser);
+
+// ==========================================
+// API Documentation
+// ==========================================
+
 app.use("/api/tickets/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+// ==========================================
 // Routes
+// ==========================================
+
 app.use(newTicketRouter);
 
-// Catch-all route for handling undefined routes
+// ==========================================
+// Error Handling
+// ==========================================
+
 app.all("*", async () => {
 	throw new NotFoundError("Route not found!");
 });
 
-// Handle errors
 app.use(errorHandler);
 
 export default app;
