@@ -1,10 +1,6 @@
 import request from "supertest";
 import app from "../../app";
-
-const VALID_USER = {
-	email: "test@gmail.com",
-	password: "password",
-};
+import { VALID_USER, signupUser } from "./test-utils";
 
 describe("GET /api/users/currentuser", () => {
 	describe("Authentication Required (200)", () => {
@@ -28,7 +24,7 @@ describe("GET /api/users/currentuser", () => {
 	describe("Successful Authentication (200)", () => {
 		it("responds with current user details if authenticated", async () => {
 			// Sign up a user and get the cookie
-			const cookie = await global.signup(VALID_USER.email, VALID_USER.password);
+			const cookie = await signupUser();
 
 			// Make request to current-user endpoint with the cookie
 			const res = await request(app)

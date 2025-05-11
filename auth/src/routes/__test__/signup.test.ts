@@ -1,13 +1,6 @@
 import request from "supertest";
 import app from "../../app";
-
-const VALID_USER = {
-	email: "test@gmail.com",
-	password: "password",
-};
-
-const INVALID_EMAIL = "testgmail.com"; // missing @
-const INVALID_PASSWORD = "p"; // less than 4 characters
+import { VALID_USER, INVALID_EMAIL, INVALID_PASSWORD } from "./test-utils";
 
 describe("POST /api/users/signup", () => {
 	describe("Input Validation", () => {

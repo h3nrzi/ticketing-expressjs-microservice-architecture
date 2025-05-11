@@ -1,13 +1,11 @@
 import request from "supertest";
 import app from "../../app";
-
-const VALID_USER = {
-	email: "test@gmail.com",
-	password: "password",
-};
-
-const INVALID_EMAIL = "testgmail.com"; // missing @
-const INVALID_PASSWORD = "p"; // less than 4 characters
+import {
+	VALID_USER,
+	INVALID_EMAIL,
+	INVALID_PASSWORD,
+	signupUser,
+} from "./test-utils";
 
 describe("POST /api/users/signin", () => {
 	describe("Bad Request Errors (400)", () => {
@@ -34,7 +32,7 @@ describe("POST /api/users/signin", () => {
 		describe("Invalid Credentials", () => {
 			it("fails if email is invalid", async () => {
 				// Sign up a user
-				await global.signup(VALID_USER.email, VALID_USER.password);
+				await signupUser();
 
 				// Signin user with invalid email
 				const res = await request(app).post("/api/users/signin").send({
@@ -48,7 +46,7 @@ describe("POST /api/users/signin", () => {
 
 			it("fails if password is invalid", async () => {
 				// Sign up a user
-				await global.signup(VALID_USER.email, VALID_USER.password);
+				await signupUser();
 
 				// Signin user with invalid password
 				const res = await request(app).post("/api/users/signin").send({
@@ -77,7 +75,7 @@ describe("POST /api/users/signin", () => {
 	describe("Successful Signin (200)", () => {
 		it("responds with cookie and user details, if user exists", async () => {
 			// Sign up a user
-			await global.signup(VALID_USER.email, VALID_USER.password);
+			await signupUser();
 
 			// Signin user
 			const res = await request(app).post("/api/users/signin").send(VALID_USER);
