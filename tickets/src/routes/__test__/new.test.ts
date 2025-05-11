@@ -2,7 +2,7 @@ import request from "supertest";
 import app from "../../app";
 
 it("has a route handler listening to /api/tickets for post requests", async () => {
-	// Send a POST request to the /api/tickets route
+	// Send a POST request
 	const res = await request(app).post("/api/tickets").send({});
 
 	// Expect the response status to not be 404
@@ -10,7 +10,7 @@ it("has a route handler listening to /api/tickets for post requests", async () =
 });
 
 it("can only be accessed if the user is signed in", async () => {
-	// Send a POST request to the /api/tickets route
+	// Send a POST request
 	const res = await request(app).post("/api/tickets").send({});
 
 	// Expect the response status to be 401
@@ -19,9 +19,9 @@ it("can only be accessed if the user is signed in", async () => {
 
 it("returns a status other than 401 if the user is signed in", async () => {
 	// Signup a user
-	const cookie = await global.signup("test@test.com", "password");
+	const cookie = global.signup();
 
-	// Send a POST request to the /api/tickets route
+	// Send a POST request
 	const res = await request(app)
 		.post("/api/tickets")
 		.set("Cookie", cookie!)
