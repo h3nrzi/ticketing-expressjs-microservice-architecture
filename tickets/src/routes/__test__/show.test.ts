@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 it("returns 404 if the ticket is not found", async () => {
 	// Get a ticket that doesn't exist and expect a 404
 	await request(app)
-		.get(`/api/tickets/${new mongoose.Types.ObjectId()}`)
+		.get(`/api/tickets/${new mongoose.Types.ObjectId().toHexString()}`)
 		.expect(404);
 });
 

@@ -12,6 +12,7 @@ import {
 import { newTicketRouter } from "./routes/new";
 import { showTicketRouter } from "./routes/show";
 import { indexTicketsRouter } from "./routes";
+import { updateTicketRouter } from "./routes/update";
 
 // ==========================================
 // Initialize Express Application
@@ -56,6 +57,7 @@ app.use("/api/tickets/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(newTicketRouter);
 app.use(showTicketRouter);
 app.use(indexTicketsRouter);
+app.use(updateTicketRouter);
 // ==========================================
 // Error Handling
 // ==========================================
