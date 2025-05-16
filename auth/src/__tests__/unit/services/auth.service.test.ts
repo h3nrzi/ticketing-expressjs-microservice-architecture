@@ -17,10 +17,7 @@ describe("AuthService", () => {
 
 	describe("signup", () => {
 		it("should create a new user successfully", async () => {
-			const result = await authService.signup(
-				VALID_USER.email,
-				VALID_USER.password
-			);
+			const result = await authService.signup(VALID_USER.email, VALID_USER.password);
 
 			expect(result.user).toBeDefined();
 			expect(result.user.email).toBe(VALID_USER.email);
@@ -30,9 +27,9 @@ describe("AuthService", () => {
 		it("should throw BadRequestError if email is already in use", async () => {
 			await authService.signup(VALID_USER.email, VALID_USER.password);
 
-			await expect(
-				authService.signup(VALID_USER.email, VALID_USER.password)
-			).rejects.toThrow(BadRequestError);
+			await expect(authService.signup(VALID_USER.email, VALID_USER.password)).rejects.toThrow(
+				BadRequestError,
+			);
 		}, 30000);
 	});
 
@@ -42,10 +39,7 @@ describe("AuthService", () => {
 		});
 
 		it("should sign in user with valid credentials", async () => {
-			const result = await authService.signin(
-				VALID_USER.email,
-				VALID_USER.password
-			);
+			const result = await authService.signin(VALID_USER.email, VALID_USER.password);
 
 			expect(result.user).toBeDefined();
 			expect(result.user.email).toBe(VALID_USER.email);
@@ -53,24 +47,21 @@ describe("AuthService", () => {
 		}, 30000);
 
 		it("should throw BadRequestError with invalid email", async () => {
-			await expect(
-				authService.signin("nonexistent@test.com", VALID_USER.password)
-			).rejects.toThrow(BadRequestError);
+			await expect(authService.signin("nonexistent@test.com", VALID_USER.password)).rejects.toThrow(
+				BadRequestError,
+			);
 		}, 30000);
 
 		it("should throw BadRequestError with invalid password", async () => {
-			await expect(
-				authService.signin(VALID_USER.email, "wrongpassword")
-			).rejects.toThrow(BadRequestError);
+			await expect(authService.signin(VALID_USER.email, "wrongpassword")).rejects.toThrow(
+				BadRequestError,
+			);
 		}, 30000);
 	});
 
 	describe("getCurrentUser", () => {
 		it("should return user if exists", async () => {
-			const { user } = await authService.signup(
-				VALID_USER.email,
-				VALID_USER.password
-			);
+			const { user } = await authService.signup(VALID_USER.email, VALID_USER.password);
 
 			const result = await authService.getCurrentUser(user.id);
 

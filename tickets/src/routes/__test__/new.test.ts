@@ -3,10 +3,7 @@ import app from "../../app";
 import { Ticket } from "../../models/ticket";
 
 const createTicket = (data = {}) => {
-	return request(app)
-		.post("/api/tickets")
-		.set("Cookie", global.signup())
-		.send(data);
+	return request(app).post("/api/tickets").set("Cookie", global.signup()).send(data);
 };
 
 describe("POST /api/tickets", () => {

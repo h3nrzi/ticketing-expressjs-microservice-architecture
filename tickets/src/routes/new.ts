@@ -10,9 +10,7 @@ router.post(
 	requireAuth,
 	[
 		body("title").not().isEmpty().withMessage("Title is required"),
-		body("price")
-			.isFloat({ gt: 0 })
-			.withMessage("Price must be greater than 0"),
+		body("price").isFloat({ gt: 0 }).withMessage("Price must be greater than 0"),
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
@@ -31,7 +29,7 @@ router.post(
 
 		// Send the ticket as a response
 		res.status(201).send(ticket);
-	}
+	},
 );
 
 export { router as newTicketRouter };

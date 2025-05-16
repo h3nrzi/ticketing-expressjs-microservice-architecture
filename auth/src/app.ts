@@ -5,11 +5,7 @@ import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
 import { authRouter } from "./routes/auth.routes";
 import { swaggerSpec } from "./swagger";
-import {
-	currentUser,
-	errorHandler,
-	NotFoundError,
-} from "@h3nrzi-ticket/common";
+import { currentUser, errorHandler, NotFoundError } from "@h3nrzi-ticket/common";
 
 const app = express();
 
@@ -27,7 +23,7 @@ app.use(
 		httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
 		// sameSite: "none", // Allow cookies to be sent to any site
 		// path: "/", // Set the path to the root of the domain
-	})
+	}),
 );
 
 // Add current user middleware

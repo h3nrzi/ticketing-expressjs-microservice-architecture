@@ -47,7 +47,7 @@ const ticketSchema = new Schema(
 				delete ret.version;
 			},
 		},
-	}
+	},
 );
 
 //----------------------------------------

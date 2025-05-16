@@ -4,11 +4,7 @@ import express from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./config/swagger";
-import {
-	NotFoundError,
-	errorHandler,
-	currentUser,
-} from "@h3nrzi-ticket/common";
+import { NotFoundError, errorHandler, currentUser } from "@h3nrzi-ticket/common";
 import { newTicketRouter } from "./routes/new";
 import { showTicketRouter } from "./routes/show";
 import { indexTicketsRouter } from "./routes";
@@ -39,7 +35,7 @@ app.use(
 		httpOnly: true,
 		// sameSite: "none",
 		// path: "/",
-	})
+	}),
 );
 
 app.use(currentUser);

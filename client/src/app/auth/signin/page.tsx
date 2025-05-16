@@ -46,9 +46,7 @@ const SignInPage = () => {
 							errors={state?.errors}
 						/>
 
-						<SubmitButton className="btn btn-primary w-100 mb-3">
-							Login
-						</SubmitButton>
+						<SubmitButton className="btn btn-primary w-100 mb-3">Login</SubmitButton>
 
 						<Link href="/auth/signup" className="btn btn-secondary w-100 mb-3">
 							Don&apos;t have an account? Sign Up

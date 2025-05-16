@@ -1,7 +1,7 @@
 components:
   schemas:
     # User schema
-    User: 
+    User:
       type: object
       properties:
         id:
@@ -15,16 +15,16 @@ components:
         - id
         - email
     # Current user response schema
-    CurrentUserResponse: 
+    CurrentUserResponse:
       type: object
       properties:
         currentUser:
-          $ref: '#/components/schemas/User'
+          $ref: "#/components/schemas/User"
           nullable: true
       required:
         - currentUser
-    # Sign up request schema 
-    SignUpRequest: 
+    # Sign up request schema
+    SignUpRequest:
       type: object
       properties:
         email:
@@ -39,7 +39,7 @@ components:
         - email
         - password
     # Sign in request schema
-    SignInRequest: 
+    SignInRequest:
       type: object
       properties:
         email:
@@ -67,4 +67,4 @@ components:
               field:
                 type: string
       required:
-        - errors 
+        - errors

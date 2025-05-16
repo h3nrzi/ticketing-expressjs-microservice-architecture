@@ -15,9 +15,7 @@ router.patch(
 	requireAuth,
 	[
 		body("title").not().isEmpty().withMessage("Title is required"),
-		body("price")
-			.isFloat({ gt: 0 })
-			.withMessage("Price must be provided and greater than 0"),
+		body("price").isFloat({ gt: 0 }).withMessage("Price must be provided and greater than 0"),
 	],
 	validateRequest,
 	async (req: Request, res: Response) => {
@@ -37,7 +35,7 @@ router.patch(
 		await ticket.save();
 
 		return res.status(200).send(ticket);
-	}
+	},
 );
 
 export { router as updateTicketRouter };

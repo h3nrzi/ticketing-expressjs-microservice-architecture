@@ -24,10 +24,7 @@ export default function UserNav({ email }: UserNavProps) {
 	return (
 		<>
 			<span className="nav-item nav-link">{email}</span>
-			<button
-				onClick={handleSignOut}
-				className="nav-item nav-link btn border btn-sm"
-			>
+			<button onClick={handleSignOut} className="nav-item nav-link btn border btn-sm">
 				Sign Out
 			</button>
 		</>

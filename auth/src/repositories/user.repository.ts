@@ -1,8 +1,4 @@
-import {
-	IUser,
-	IUserDocument,
-	IUserRepository,
-} from "../interfaces/user.interface";
+import { IUser, IUserDocument, IUserRepository } from "../interfaces/user.interface";
 import { User } from "../entities/user.entity";
 
 export class UserRepository implements IUserRepository {
@@ -10,9 +6,7 @@ export class UserRepository implements IUserRepository {
 		return User.findOne({ email });
 	}
 
-	async create(
-		userData: Omit<IUser, "id" | "createdAt" | "updatedAt">
-	): Promise<IUserDocument> {
+	async create(userData: Omit<IUser, "id" | "createdAt" | "updatedAt">): Promise<IUserDocument> {
 		const user = User.build(userData);
 		await user.save();
 		return user;
