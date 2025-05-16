@@ -1,6 +1,7 @@
 import { UserRepository } from "../../../repositories/user.repository";
 import { VALID_USER } from "../../helpers/test-utils";
 import { setupTestDB } from "../../helpers/test-utils";
+import mongoose from "mongoose";
 
 describe("UserRepository", () => {
 	setupTestDB();
@@ -48,7 +49,8 @@ describe("UserRepository", () => {
 		});
 
 		it("should return null when user not found", async () => {
-			const foundUser = await userRepository.findById("nonexistentid");
+			const nonExistentId = new mongoose.Types.ObjectId().toHexString();
+			const foundUser = await userRepository.findById(nonExistentId);
 			expect(foundUser).toBeNull();
 		});
 	});

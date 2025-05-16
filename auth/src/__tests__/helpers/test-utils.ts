@@ -17,6 +17,14 @@ export const setupTestDB = () => {
 
 	// Connect to the in-memory database before running tests
 	beforeAll(async () => {
+		// Set JWT key for testing
+		process.env.JWT_KEY = "asdf";
+
+		// Check if there's an existing connection
+		if (mongoose.connection.readyState === 1) {
+			return;
+		}
+
 		mongo = await MongoMemoryServer.create();
 		const mongoUri = mongo.getUri();
 		await mongoose.connect(mongoUri);
@@ -32,8 +40,10 @@ export const setupTestDB = () => {
 
 	// Disconnect and stop the server after all tests
 	afterAll(async () => {
-		await mongoose.connection.close();
-		await mongo.stop();
+		if (mongo) {
+			await mongoose.connection.close();
+			await mongo.stop();
+		}
 	});
 };
 
@@ -50,3 +60,12 @@ export const createTestUser = async (userData: Partial<IUser> = {}) => {
 
 	return response.body;
 };
+
+// Add a simple test to satisfy Jest's requirement
+describe("Test Utilities", () => {
+	it("should export valid test user data", () => {
+		expect(VALID_USER).toBeDefined();
+		expect(VALID_USER.email).toBe("test@test.com");
+		expect(VALID_USER.password).toBe("password123");
+	});
+});

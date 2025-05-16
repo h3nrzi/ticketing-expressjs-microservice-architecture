@@ -116,8 +116,8 @@ describe("Auth Controller Integration Tests", () => {
 				.set("Cookie", cookies)
 				.expect(200);
 
-			expect(response.body).toHaveProperty("id");
-			expect(response.body.email).toBe(VALID_USER.email);
+			expect(response.body.currentUser).toBeDefined();
+			expect(response.body.currentUser.email).toBe(VALID_USER.email);
 		});
 
 		it("should return null when not authenticated", async () => {
@@ -125,7 +125,7 @@ describe("Auth Controller Integration Tests", () => {
 				.get("/api/users/currentuser")
 				.expect(200);
 
-			expect(response.body).toBeNull();
+			expect(response.body.currentUser).toBeNull();
 		});
 	});
 
@@ -148,7 +148,10 @@ describe("Auth Controller Integration Tests", () => {
 
 			const signoutCookies = response.get("Set-Cookie");
 			expect(signoutCookies).toBeDefined();
-			expect(signoutCookies?.[0]).toContain("jwt=;");
+			expect(signoutCookies?.[0]).toContain("session=;");
+			expect(signoutCookies?.[0]).toContain(
+				"expires=Thu, 01 Jan 1970 00:00:00 GMT"
+			);
 		});
 	});
 });
