@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
 				delete ret.__v;
 			},
 		},
-	},
+	}
 );
 
 userSchema.pre("save", async function (done) {
