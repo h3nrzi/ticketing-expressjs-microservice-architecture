@@ -3,12 +3,13 @@ import cookieSession from "cookie-session";
 import express from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
-import { swaggerSpec } from "./config/swagger";
-import { NotFoundError, errorHandler } from "@h3nrzi-ticket/common";
-import { currentUserRouter } from "./routes/current-user";
-import { signinRouter } from "./routes/signin";
-import { signoutRouter } from "./routes/signout";
-import { signupRouter } from "./routes/signup";
+import { authRouter } from "./routes/auth.routes";
+import { swaggerSpec } from "./swagger";
+import {
+	currentUser,
+	errorHandler,
+	NotFoundError,
+} from "@h3nrzi-ticket/common";
 
 const app = express();
 
@@ -29,14 +30,14 @@ app.use(
 	})
 );
 
+// Add current user middleware
+app.use(currentUser);
+
 // Swagger UI setup
 app.use("/api/users/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Handle user authentication routes
-app.use(signupRouter);
-app.use(signinRouter);
-app.use(currentUserRouter);
-app.use(signoutRouter);
+app.use(authRouter);
 
 // Catch-all route for handling undefined routes
 app.all("*", async () => {

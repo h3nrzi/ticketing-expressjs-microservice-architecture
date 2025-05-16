@@ -4,8 +4,8 @@ import fs from "fs";
 import path from "path";
 
 // Paths to YAML files
-const schemasPath = path.join(__dirname, "../swagger/schemas.yaml");
-const pathsPath = path.join(__dirname, "../swagger/paths.yaml");
+const schemasPath = path.join(__dirname, "./schemas.yaml");
+const pathsPath = path.join(__dirname, "./paths.yaml");
 
 // Read YAML files
 const schemasYaml = fs.readFileSync(schemasPath, "utf8");
