@@ -1,5 +1,5 @@
-import { IUser, IUserDocument, IUserRepository } from "../interfaces/user.interface";
-import { User } from "../entities/user.entity";
+import { IUser, IUserDocument, IUserRepository } from "./interfaces/user.interface";
+import { User } from "./entities/user.entity";
 
 export class UserRepository implements IUserRepository {
 	async findByEmail(email: string): Promise<IUserDocument | null> {

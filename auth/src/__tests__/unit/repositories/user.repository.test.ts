@@ -1,4 +1,4 @@
-import { UserRepository } from "../../../repositories/user.repository";
+import { UserRepository } from "../../../users/user.repository";
 import { VALID_USER } from "../../helpers/test-utils";
 import { setupTestDB } from "../../helpers/test-utils";
 import mongoose from "mongoose";

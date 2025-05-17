@@ -3,7 +3,7 @@ import cookieSession from "cookie-session";
 import express from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
-import { authRouter } from "./routes/auth.routes";
+import { authRouter } from "./users/auth.routes";
 import { swaggerSpec } from "./swagger";
 import { currentUser, errorHandler, NotFoundError } from "@h3nrzi-ticket/common";
 
@@ -23,7 +23,7 @@ app.use(
 		httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
 		// sameSite: "none", // Allow cookies to be sent to any site
 		// path: "/", // Set the path to the root of the domain
-	}),
+	})
 );
 
 // Add current user middleware

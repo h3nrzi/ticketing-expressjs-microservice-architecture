@@ -1,6 +1,6 @@
 import { BadRequestError, JwtService } from "@h3nrzi-ticket/common";
-import { IAuthService, IUserDocument } from "../interfaces/user.interface";
-import { UserRepository } from "../repositories/user.repository";
+import { IAuthService, IUserDocument } from "./interfaces/user.interface";
+import { UserRepository } from "./user.repository";
 
 export class AuthService implements IAuthService {
 	constructor(private userRepository: UserRepository) {}

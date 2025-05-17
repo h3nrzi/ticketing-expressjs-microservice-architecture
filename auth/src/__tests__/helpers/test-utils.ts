@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import request from "supertest";
-import { IUser } from "../../interfaces/user.interface";
+import { IUser } from "../../users/interfaces/user.interface";
 import app from "../../app";
 
 export const VALID_USER = {
