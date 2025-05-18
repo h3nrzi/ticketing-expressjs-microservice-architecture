@@ -2,24 +2,41 @@ import nats from "node-nats-streaming";
 
 console.clear();
 
-// connect to nats
-const stan = nats.connect("ticketing", "A", {
-	url: "http://localhost:4222",
-});
+// ================================
+// Connect to NATS
+// ================================
 
-// listen for connection
-stan.on("connect", () => {
-	console.log("Publisher connected to NATS");
+const stan = nats.connect(
+	"ticketing", // the cluster id
+	"ABC", // the client id
+	{
+		url: "http://localhost:4222", // the url of the nats server
+	}
+);
 
-	// create a data to publish
-	const data = JSON.stringify({
-		id: "123",
-		title: "concert",
-		price: 20,
-	});
+// ================================
+// Listen for connection
+// ================================
 
-	// publish the event
-	stan.publish("ticket:created", data, () => {
-		console.log("Event published");
-	});
-});
+stan.on(
+	"connect", // the event to listen for
+	() => {
+		console.log("Publisher connected to NATS");
+
+		// create a data to publish
+		const data = {
+			id: "123",
+			title: "concert",
+			price: 20,
+		};
+
+		// publish the event
+		stan.publish(
+			"ticket:created", // the subject
+			JSON.stringify(data), // the data to publish
+			() => {
+				console.log("Event published");
+			}
+		);
+	}
+);
