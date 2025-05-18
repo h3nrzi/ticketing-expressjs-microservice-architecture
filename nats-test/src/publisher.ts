@@ -32,7 +32,7 @@ stan.on(
 
 		// publish the event
 		stan.publish(
-			"ticket:created", // the subject
+			"ticket:created", // the channel to publish to
 			JSON.stringify(data), // the data to publish
 			() => {
 				console.log("Event published");
