@@ -24,10 +24,14 @@ stan.on(
 	() => {
 		console.log("Listener connected to NATS");
 
+		// set the options for the subscription
+		const options = stan.subscriptionOptions().setManualAckMode(true); // manually acknowledge the message
+
 		// subscribe to a channel
 		const subscription = stan.subscribe(
 			"ticket:created", // the channel to subscribe to
-			"orders-service-queue-group" // the name of the queue group
+			"orders-service-queue-group", // the name of the queue group
+			options // the options for the subscription
 		);
 
 		// listen for messages
@@ -38,6 +42,9 @@ stan.on(
 				msg.getSequence(), // the sequence of the message
 				msg.getData() // the data of the message
 			);
+
+			// acknowledge the message
+			msg.ack();
 		});
 	}
 );
