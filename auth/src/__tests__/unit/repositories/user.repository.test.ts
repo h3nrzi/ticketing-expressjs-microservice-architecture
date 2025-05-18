@@ -21,7 +21,9 @@ describe("UserRepository", () => {
 		});
 
 		it("should return null when user not found", async () => {
-			const foundUser = await userRepository.findByEmail("nonexistent@test.com");
+			const foundUser = await userRepository.findByEmail(
+				"nonexistent@test.com",
+			);
 			expect(foundUser).toBeNull();
 		});
 	});

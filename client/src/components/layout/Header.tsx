@@ -13,7 +13,11 @@ export default async function Header() {
 					Ticketing
 				</Link>
 				<div className="navbar-nav ms-auto">
-					{data?.currentUser ? <UserNav email={data.currentUser.email} /> : <AuthLinks />}
+					{data?.currentUser ? (
+						<UserNav email={data.currentUser.email} />
+					) : (
+						<AuthLinks />
+					)}
 				</div>
 			</div>
 		</nav>

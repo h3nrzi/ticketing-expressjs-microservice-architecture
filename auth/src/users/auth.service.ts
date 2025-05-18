@@ -5,7 +5,10 @@ import { UserRepository } from "./user.repository";
 export class AuthService implements IAuthService {
 	constructor(private userRepository: UserRepository) {}
 
-	async signup(email: string, password: string): Promise<{ user: IUserDocument; token: string }> {
+	async signup(
+		email: string,
+		password: string,
+	): Promise<{ user: IUserDocument; token: string }> {
 		const existingUser = await this.userRepository.findByEmail(email);
 		if (existingUser) {
 			throw new BadRequestError("Email in use");
@@ -17,7 +20,10 @@ export class AuthService implements IAuthService {
 		return { user, token };
 	}
 
-	async signin(email: string, password: string): Promise<{ user: IUserDocument; token: string }> {
+	async signin(
+		email: string,
+		password: string,
+	): Promise<{ user: IUserDocument; token: string }> {
 		const user = await this.userRepository.findByEmail(email);
 		if (!user) {
 			throw new BadRequestError("Invalid credentials");

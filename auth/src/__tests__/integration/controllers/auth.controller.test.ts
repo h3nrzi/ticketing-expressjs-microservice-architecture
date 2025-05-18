@@ -1,13 +1,21 @@
 import request from "supertest";
 import app from "../../../app";
-import { setupTestDB, VALID_USER, INVALID_EMAIL, INVALID_PASSWORD } from "../../helpers/test-utils";
+import {
+	setupTestDB,
+	VALID_USER,
+	INVALID_EMAIL,
+	INVALID_PASSWORD,
+} from "../../helpers/test-utils";
 
 describe("Auth Controller Integration Tests", () => {
 	setupTestDB();
 
 	describe("POST /api/users/signup", () => {
 		it("should create a new user with valid credentials", async () => {
-			const response = await request(app).post("/api/users/signup").send(VALID_USER).expect(201);
+			const response = await request(app)
+				.post("/api/users/signup")
+				.send(VALID_USER)
+				.expect(201);
 
 			expect(response.body).toHaveProperty("id");
 			expect(response.body.email).toBe(VALID_USER.email);
@@ -41,7 +49,10 @@ describe("Auth Controller Integration Tests", () => {
 		it("should reject signup with duplicate email", async () => {
 			await request(app).post("/api/users/signup").send(VALID_USER).expect(201);
 
-			const response = await request(app).post("/api/users/signup").send(VALID_USER).expect(400);
+			const response = await request(app)
+				.post("/api/users/signup")
+				.send(VALID_USER)
+				.expect(400);
 
 			expect(response.body.errors[0].message).toBeDefined();
 		});
@@ -53,7 +64,10 @@ describe("Auth Controller Integration Tests", () => {
 		});
 
 		it("should sign in with valid credentials", async () => {
-			const response = await request(app).post("/api/users/signin").send(VALID_USER).expect(200);
+			const response = await request(app)
+				.post("/api/users/signin")
+				.send(VALID_USER)
+				.expect(200);
 
 			expect(response.body).toHaveProperty("id");
 			expect(response.body.email).toBe(VALID_USER.email);
@@ -107,7 +121,9 @@ describe("Auth Controller Integration Tests", () => {
 		});
 
 		it("should return null when not authenticated", async () => {
-			const response = await request(app).get("/api/users/currentuser").expect(200);
+			const response = await request(app)
+				.get("/api/users/currentuser")
+				.expect(200);
 
 			expect(response.body.currentUser).toBeNull();
 		});
@@ -133,7 +149,9 @@ describe("Auth Controller Integration Tests", () => {
 			const signoutCookies = response.get("Set-Cookie");
 			expect(signoutCookies).toBeDefined();
 			expect(signoutCookies?.[0]).toContain("session=;");
-			expect(signoutCookies?.[0]).toContain("expires=Thu, 01 Jan 1970 00:00:00 GMT");
+			expect(signoutCookies?.[0]).toContain(
+				"expires=Thu, 01 Jan 1970 00:00:00 GMT",
+			);
 		});
 	});
 });

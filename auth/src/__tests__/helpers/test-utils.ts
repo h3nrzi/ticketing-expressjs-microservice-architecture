@@ -53,7 +53,10 @@ export const createTestUser = async (userData: Partial<IUser> = {}) => {
 		password: userData.password || VALID_USER.password,
 	};
 
-	const response = await request(app).post("/api/users/signup").send(user).expect(201);
+	const response = await request(app)
+		.post("/api/users/signup")
+		.send(user)
+		.expect(201);
 
 	return response.body;
 };

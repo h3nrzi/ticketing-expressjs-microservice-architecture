@@ -15,7 +15,13 @@ const FormField = ({ label, name, type, placeholder, errors }: Props) => (
 		<label className="form-label" htmlFor={name}>
 			{label}
 		</label>
-		<input className="form-control" type={type} name={name} id={name} placeholder={placeholder} />
+		<input
+			className="form-control"
+			type={type}
+			name={name}
+			id={name}
+			placeholder={placeholder}
+		/>
 		<ErrorDisplay errors={errors} field={name} />
 	</div>
 );

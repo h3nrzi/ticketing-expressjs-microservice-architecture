@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
 				delete ret.__v;
 			},
 		},
-	}
+	},
 );
 
 // ===============================
@@ -49,7 +49,9 @@ userSchema.pre("save", async function (done) {
 // ===============================
 
 // Compare password for authentication
-userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
+userSchema.methods.comparePassword = async function (
+	candidatePassword: string,
+): Promise<boolean> {
 	return bcrypt.compare(candidatePassword, this.password);
 };
 
@@ -62,8 +64,13 @@ interface UserModel extends mongoose.Model<IUserDocument> {
 }
 
 // Create new user instances
-userSchema.statics.build = (attrs: Omit<IUser, "id" | "createdAt" | "updatedAt">) => {
+userSchema.statics.build = (
+	attrs: Omit<IUser, "id" | "createdAt" | "updatedAt">,
+) => {
 	return new User(attrs);
 };
 
-export const User = mongoose.model<IUserDocument, UserModel>("User", userSchema);
+export const User = mongoose.model<IUserDocument, UserModel>(
+	"User",
+	userSchema,
+);
