@@ -1,7 +1,9 @@
 import nats from "node-nats-streaming";
 
+console.clear();
+
 // connect to nats
-const stan = nats.connect("ticketing", "abc", {
+const stan = nats.connect("ticketing", "A", {
 	url: "http://localhost:4222",
 });
 
