@@ -35,11 +35,13 @@ stan.on(
 		const options = stan
 			.subscriptionOptions()
 			.setManualAckMode(true) // manually acknowledge the message
-			.setDeliverAllAvailable(); // deliver all messages from the beginning
+			.setDeliverAllAvailable() // deliver all messages from the beginning
+			.setDurableName("listener-service"); // the name of the durable subscription
 
 		// subscribe to a channel and listen for messages
 		const subscription = stan.subscribe(
 			"ticket:created", // the channel to subscribe to
+			"queue-group-name", // the name of the queue group
 			options // the options for the subscription
 		);
 
