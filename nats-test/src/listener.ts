@@ -49,6 +49,10 @@ process.on("SIGINT", () => stan.close());
 // close the connection when the process is terminated
 process.on("SIGTERM", () => stan.close());
 
+// ================================
+// Listener class
+// ================================
+
 abstract class Listener {
 	abstract subject: string;
 	abstract queueGroupName: string;
