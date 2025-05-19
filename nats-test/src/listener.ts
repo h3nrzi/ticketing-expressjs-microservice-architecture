@@ -32,12 +32,14 @@ stan.on(
 		console.log("Listener connected to NATS");
 
 		// set the options for the subscription
-		const options = stan.subscriptionOptions().setManualAckMode(true); // manually acknowledge the message
+		const options = stan
+			.subscriptionOptions()
+			.setManualAckMode(true) // manually acknowledge the message
+			.setDeliverAllAvailable(); // deliver all messages from the beginning
 
 		// subscribe to a channel and listen for messages
 		const subscription = stan.subscribe(
 			"ticket:created", // the channel to subscribe to
-			"orders-service-queue-group", // the name of the queue group
 			options // the options for the subscription
 		);
 
