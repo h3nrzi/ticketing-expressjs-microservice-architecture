@@ -1,6 +1,6 @@
+import jwt from "jsonwebtoken";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import jwt from "jsonwebtoken";
 
 // ==========================================
 // Type Definitions
@@ -28,6 +28,9 @@ beforeAll(async () => {
 
 beforeEach(async () => {
 	// Get all collections
+	if (!mongoose.connection.db) {
+		throw new Error("MongoDB connection not established");
+	}
 	const collections = await mongoose.connection.db.collections();
 
 	// Delete all documents in each collection
@@ -39,7 +42,9 @@ afterAll(async () => {
 	if (mongo) await mongo.stop();
 
 	// Close the Mongoose connection
-	await mongoose.connection.close();
+	if (mongoose.connection.readyState !== 0) {
+		await mongoose.connection.close();
+	}
 });
 
 // ==========================================
