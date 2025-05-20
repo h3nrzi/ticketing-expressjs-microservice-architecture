@@ -7,12 +7,15 @@ export class TicketController {
 
 	async getAllTickets(req: Request, res: Response): Promise<void> {
 		const tickets = await this.ticketService.getAllTickets();
-
 		res.status(200).send(tickets);
 	}
 
 	async getTicketById(req: Request, res: Response): Promise<void> {
-		const ticket = await this.ticketService.getTicketById(req.params.id);
+		// extract data from request
+		const { id: ticketId } = req.params;
+
+		// get the ticket
+		const ticket = await this.ticketService.getTicketById(ticketId);
 
 		res.status(200).send(ticket);
 	}
@@ -26,25 +29,40 @@ export class TicketController {
 	// }
 
 	async createTicket(req: Request, res: Response): Promise<void> {
+		// extract data from request
+		const { id: currentUserId } = req.currentUser!;
+
+		// create the ticket
 		const ticket = await this.ticketService.createTicket(
 			req.body as CreateTicketDto,
-			req.currentUser!.id
+			currentUserId
 		);
 
 		res.status(201).send(ticket);
 	}
 
 	async updateTicket(req: Request, res: Response): Promise<void> {
+		// extract data from request
+		const { id: ticketId } = req.params;
+		const { id: currentUserId } = req.currentUser!;
+
+		// update the ticket
 		const ticket = await this.ticketService.updateTicket(
-			req.params.id,
-			req.body as UpdateTicketDto
+			ticketId,
+			req.body as UpdateTicketDto,
+			currentUserId
 		);
 
 		res.status(200).send(ticket);
 	}
 
 	async deleteTicket(req: Request, res: Response): Promise<void> {
-		await this.ticketService.deleteTicket(req.params.id);
+		// extract data from request
+		const { id: ticketId } = req.params;
+		const { id: currentUserId } = req.currentUser!;
+
+		// delete the ticket
+		await this.ticketService.deleteTicket(ticketId, currentUserId);
 
 		res.status(204).send();
 	}

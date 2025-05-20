@@ -1,6 +1,6 @@
 import { requireAuth, validateRequest } from "@h3nrzi-ticket/common";
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param, query } from "express-validator";
 import { TicketController } from "./ticket.controller";
 import { TicketRepository } from "./ticket.repository";
 import { TicketService } from "./ticket.service";
@@ -16,18 +16,12 @@ router.get(
 	ticketController.getAllTickets.bind(ticketController)
 );
 
-router.post(
-	"/",
-	requireAuth,
-	[
-		body("title").not().isEmpty().withMessage("Title is required"),
-		body("price")
-			.isFloat({ gt: 0 })
-			.withMessage("Price must be greater than 0"),
-	],
+router.post("/", requireAuth, [
+	body("title").not().isEmpty().withMessage("Title is required"),
+	body("price").isFloat({ gt: 0 }).withMessage("Price must be greater than 0"),
 	validateRequest,
-	ticketController.createTicket.bind(ticketController)
-);
+	ticketController.createTicket.bind(ticketController),
+]);
 
 router.get(
 	//
@@ -35,23 +29,19 @@ router.get(
 	ticketController.getTicketById.bind(ticketController)
 );
 
-router.patch(
-	"/:id",
+router.patch("/:id", [
 	requireAuth,
-	[
-		body("title").not().isEmpty().withMessage("Title is required"),
-		body("price")
-			.isFloat({ gt: 0 })
-			.withMessage("Price must be greater than 0"),
-	],
+	body("title").not().isEmpty().withMessage("Title is required"),
+	body("price").isFloat({ gt: 0 }).withMessage("Price must be greater than 0"),
 	validateRequest,
-	ticketController.updateTicket.bind(ticketController)
-);
+	ticketController.updateTicket.bind(ticketController),
+]);
 
-router.delete(
-	"/:id",
+router.delete("/:id", [
 	requireAuth,
-	ticketController.deleteTicket.bind(ticketController)
-);
+	param("id").not().isEmpty().withMessage("Ticket ID is required"),
+	validateRequest,
+	ticketController.deleteTicket.bind(ticketController),
+]);
 
 export { router as ticketRoutes };

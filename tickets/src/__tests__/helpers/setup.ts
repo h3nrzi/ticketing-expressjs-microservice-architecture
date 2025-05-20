@@ -6,8 +6,14 @@ import mongoose from "mongoose";
 // Type Definitions
 // ==========================================
 
+export interface TestUser {
+	id: string;
+	email: string;
+}
+
 declare global {
 	var signup: () => string[];
+	var createTestUser: () => TestUser;
 }
 
 // ==========================================
@@ -16,7 +22,7 @@ declare global {
 
 let mongo: MongoMemoryServer;
 
-beforeAll(async () => {
+export const setupTestDB = async () => {
 	// Set JWT key for testing
 	process.env.JWT_KEY = "asdf";
 
@@ -24,52 +30,55 @@ beforeAll(async () => {
 	mongo = await MongoMemoryServer.create();
 	const mongoUri = mongo.getUri();
 	await mongoose.connect(mongoUri);
-});
+};
 
-beforeEach(async () => {
-	// Get all collections
+export const clearDatabase = async () => {
 	if (!mongoose.connection.db) {
 		throw new Error("MongoDB connection not established");
 	}
 	const collections = await mongoose.connection.db.collections();
-
-	// Delete all documents in each collection
 	for (let collection of collections) await collection.deleteMany();
-});
+};
 
-afterAll(async () => {
-	// Stop the in-memory MongoDB instance
+export const teardownTestDB = async () => {
 	if (mongo) await mongo.stop();
-
-	// Close the Mongoose connection
 	if (mongoose.connection.readyState !== 0) {
 		await mongoose.connection.close();
 	}
-});
+};
 
 // ==========================================
 // Helper Functions
 // ==========================================
 
+export const createTestUser = (): TestUser => ({
+	id: new mongoose.Types.ObjectId().toHexString(),
+	email: "test@test.com",
+});
+
+global.createTestUser = createTestUser;
+
 global.signup = () => {
-	// Build a JWT payload
-	const payload = {
-		id: new mongoose.Types.ObjectId().toHexString(),
-		email: "test@test.com",
-	};
-
-	// Create the JWT
+	const payload = createTestUser();
 	const token = jwt.sign(payload, process.env.JWT_KEY!);
-
-	// Build a session object
 	const session = { jwt: token };
-
-	// Turn the session into a JSON
 	const sessionJSON = JSON.stringify(session);
-
-	// Take JSON and encode it as base64
 	const base64 = Buffer.from(sessionJSON).toString("base64");
-
-	// Return a string that's the cookie with the encoded data
 	return [`session=${base64}`];
 };
+
+// ==========================================
+// Jest Setup
+// ==========================================
+
+beforeAll(async () => {
+	await setupTestDB();
+});
+
+beforeEach(async () => {
+	await clearDatabase();
+});
+
+afterAll(async () => {
+	await teardownTestDB();
+});

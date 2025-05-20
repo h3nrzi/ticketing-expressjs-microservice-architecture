@@ -8,4 +8,5 @@ module.exports = {
 	},
 	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 	setupFilesAfterEnv: ["<rootDir>/src/__tests__/helpers/setup.ts"],
+	testTimeout: 30000,
 };
