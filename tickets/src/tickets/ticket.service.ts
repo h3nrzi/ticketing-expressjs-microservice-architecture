@@ -5,17 +5,12 @@ import { NotFoundError } from "@h3nrzi-ticket/common";
 export class TicketService implements ITicketService {
 	constructor(private readonly ticketRepository: TicketRepository) {}
 
-	async createTicket(
-		createTicketDto: CreateTicketDto,
-		userId: string
-	): Promise<ITicketDocument> {
-		const ticket = await this.ticketRepository.create(createTicketDto, userId);
-		await ticket.save();
-		return ticket;
+	async getAllTickets(): Promise<ITicketDocument[]> {
+		return this.ticketRepository.findAll();
 	}
 
 	async getTicketById(id: string): Promise<ITicketDocument | null> {
-		const ticket = await this.ticketRepository.findById(id);
+		const ticket = await this.ticketRepository.findByTicketId(id);
 		if (!ticket) {
 			throw new NotFoundError("Ticket not found");
 		}
@@ -23,8 +18,17 @@ export class TicketService implements ITicketService {
 		return ticket;
 	}
 
-	async getTicketsByUserId(userId: string): Promise<ITicketDocument[]> {
-		return this.ticketRepository.findByUserId(userId);
+	// async getTicketsByUserId(userId: string): Promise<ITicketDocument[]> {
+	// 	return this.ticketRepository.findByUserId(userId);
+	// }
+
+	async createTicket(
+		createTicketDto: CreateTicketDto,
+		userId: string
+	): Promise<ITicketDocument> {
+		const ticket = await this.ticketRepository.create(createTicketDto, userId);
+		await ticket.save();
+		return ticket;
 	}
 
 	async updateTicket(

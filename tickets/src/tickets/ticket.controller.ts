@@ -5,6 +5,26 @@ import { Request, Response } from "express";
 export class TicketController {
 	constructor(private readonly ticketService: TicketService) {}
 
+	async getAllTickets(req: Request, res: Response): Promise<void> {
+		const tickets = await this.ticketService.getAllTickets();
+
+		res.status(200).send(tickets);
+	}
+
+	async getTicketById(req: Request, res: Response): Promise<void> {
+		const ticket = await this.ticketService.getTicketById(req.params.id);
+
+		res.status(200).send(ticket);
+	}
+
+	// async getTicketsByUserId(req: Request, res: Response): Promise<void> {
+	// 	const tickets = await this.ticketService.getTicketsByUserId(
+	// 		req.currentUser!.id
+	// 	);
+
+	// 	res.status(200).send(tickets);
+	// }
+
 	async createTicket(req: Request, res: Response): Promise<void> {
 		const ticket = await this.ticketService.createTicket(
 			req.body as CreateTicketDto,
@@ -12,20 +32,6 @@ export class TicketController {
 		);
 
 		res.status(201).send(ticket);
-	}
-
-	async getTicket(req: Request, res: Response): Promise<void> {
-		const ticket = await this.ticketService.getTicketById(req.params.id);
-
-		res.status(200).send(ticket);
-	}
-
-	async getTickets(req: Request, res: Response): Promise<void> {
-		const tickets = await this.ticketService.getTicketsByUserId(
-			req.currentUser!.id
-		);
-
-		res.status(200).send(tickets);
 	}
 
 	async updateTicket(req: Request, res: Response): Promise<void> {

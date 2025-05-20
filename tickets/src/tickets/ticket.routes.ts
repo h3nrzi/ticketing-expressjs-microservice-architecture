@@ -10,6 +10,12 @@ const ticketRepository = new TicketRepository();
 const ticketService = new TicketService(ticketRepository);
 const ticketController = new TicketController(ticketService);
 
+router.get(
+	//
+	"/",
+	ticketController.getAllTickets.bind(ticketController)
+);
+
 router.post(
 	"/",
 	requireAuth,
@@ -24,15 +30,9 @@ router.post(
 );
 
 router.get(
-	"/",
-	requireAuth,
-	ticketController.getTickets.bind(ticketController)
-);
-
-router.get(
+	//
 	"/:id",
-	requireAuth,
-	ticketController.getTicket.bind(ticketController)
+	ticketController.getTicketById.bind(ticketController)
 );
 
 router.patch(
