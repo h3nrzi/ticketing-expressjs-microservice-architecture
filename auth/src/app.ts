@@ -27,7 +27,7 @@ app.use(
 		httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
 		// sameSite: "none", // Allow cookies to be sent to any site
 		// path: "/", // Set the path to the root of the domain
-	}),
+	})
 );
 
 // Add current user middleware
@@ -37,7 +37,7 @@ app.use(currentUser);
 app.use("/api/users/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Handle user authentication routes
-app.use(authRouter);
+app.use("/api/users", authRouter);
 
 // Catch-all route for handling undefined routes
 app.all("*", async () => {

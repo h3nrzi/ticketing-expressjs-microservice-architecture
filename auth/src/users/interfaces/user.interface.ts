@@ -14,7 +14,7 @@ export interface IUserDocument extends IUser {
 export interface IUserRepository {
 	findByEmail(email: string): Promise<IUserDocument | null>;
 	create(
-		user: Omit<IUser, "id" | "createdAt" | "updatedAt">,
+		user: Omit<IUser, "id" | "createdAt" | "updatedAt">
 	): Promise<IUserDocument>;
 	findById(id: string): Promise<IUserDocument | null>;
 }
@@ -22,11 +22,11 @@ export interface IUserRepository {
 export interface IAuthService {
 	signup(
 		email: string,
-		password: string,
+		password: string
 	): Promise<{ user: IUserDocument; token: string }>;
 	signin(
 		email: string,
-		password: string,
+		password: string
 	): Promise<{ user: IUserDocument; token: string }>;
 	getCurrentUser(userId: string): Promise<IUserDocument | null>;
 }

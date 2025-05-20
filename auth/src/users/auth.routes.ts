@@ -12,7 +12,7 @@ const authController = new AuthController(authService);
 
 router.post(
 	// route
-	"/api/users/signup",
+	"/signup",
 	// validation rules
 	[
 		body("email").isEmail().withMessage("Email must be valid"),
@@ -24,12 +24,12 @@ router.post(
 	// validateRequest is a middleware that validates the request
 	validateRequest,
 	// bind the controller method to the router
-	authController.signup.bind(authController),
+	authController.signup.bind(authController)
 );
 
 router.post(
 	// route
-	"/api/users/signin",
+	"/signin",
 	// validation rules
 	[
 		body("email").isEmail().withMessage("Email must be valid"),
@@ -38,21 +38,21 @@ router.post(
 	// validateRequest is a middleware that validates the request
 	validateRequest,
 	// bind the controller method to the router
-	authController.signin.bind(authController),
+	authController.signin.bind(authController)
 );
 
 router.get(
 	// route
-	"/api/users/currentuser",
+	"/currentuser",
 	// bind the controller method to the router
-	authController.getCurrentUser.bind(authController),
+	authController.getCurrentUser.bind(authController)
 );
 
 router.post(
 	// route
-	"/api/users/signout",
+	"/signout",
 	// bind the controller method to the router
-	authController.signout.bind(authController),
+	authController.signout.bind(authController)
 );
 
 export { router as authRouter };
