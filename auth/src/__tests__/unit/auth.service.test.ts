@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { AuthService } from "../../../users/auth.service";
-import { UserRepository } from "../../../users/user.repository";
+import { AuthService } from "../../users/auth.service";
+import { UserRepository } from "../../users/user.repository";
 import { BadRequestError } from "@h3nrzi-ticket/common";
-import { VALID_USER, setupTestDB } from "../../helpers/test-utils";
+import { VALID_USER, setupTestDB } from "../helpers/test-utils";
 
 describe("AuthService", () => {
 	setupTestDB();
@@ -19,7 +19,7 @@ describe("AuthService", () => {
 		it("should create a new user successfully", async () => {
 			const result = await authService.signup(
 				VALID_USER.email,
-				VALID_USER.password,
+				VALID_USER.password
 			);
 
 			expect(result.user).toBeDefined();
@@ -31,7 +31,7 @@ describe("AuthService", () => {
 			await authService.signup(VALID_USER.email, VALID_USER.password);
 
 			await expect(
-				authService.signup(VALID_USER.email, VALID_USER.password),
+				authService.signup(VALID_USER.email, VALID_USER.password)
 			).rejects.toThrow(BadRequestError);
 		}, 30000);
 	});
@@ -44,7 +44,7 @@ describe("AuthService", () => {
 		it("should sign in user with valid credentials", async () => {
 			const result = await authService.signin(
 				VALID_USER.email,
-				VALID_USER.password,
+				VALID_USER.password
 			);
 
 			expect(result.user).toBeDefined();
@@ -54,13 +54,13 @@ describe("AuthService", () => {
 
 		it("should throw BadRequestError with invalid email", async () => {
 			await expect(
-				authService.signin("nonexistent@test.com", VALID_USER.password),
+				authService.signin("nonexistent@test.com", VALID_USER.password)
 			).rejects.toThrow(BadRequestError);
 		}, 30000);
 
 		it("should throw BadRequestError with invalid password", async () => {
 			await expect(
-				authService.signin(VALID_USER.email, "wrongpassword"),
+				authService.signin(VALID_USER.email, "wrongpassword")
 			).rejects.toThrow(BadRequestError);
 		}, 30000);
 	});
@@ -69,7 +69,7 @@ describe("AuthService", () => {
 		it("should return user if exists", async () => {
 			const { user } = await authService.signup(
 				VALID_USER.email,
-				VALID_USER.password,
+				VALID_USER.password
 			);
 
 			const result = await authService.getCurrentUser(user.id);

@@ -1,11 +1,11 @@
 import request from "supertest";
-import app from "../../../app";
+import app from "../../app";
 import {
 	setupTestDB,
 	VALID_USER,
 	INVALID_EMAIL,
 	INVALID_PASSWORD,
-} from "../../helpers/test-utils";
+} from "../helpers/test-utils";
 
 describe("Auth Controller Integration Tests", () => {
 	setupTestDB();
@@ -150,7 +150,7 @@ describe("Auth Controller Integration Tests", () => {
 			expect(signoutCookies).toBeDefined();
 			expect(signoutCookies?.[0]).toContain("session=;");
 			expect(signoutCookies?.[0]).toContain(
-				"expires=Thu, 01 Jan 1970 00:00:00 GMT",
+				"expires=Thu, 01 Jan 1970 00:00:00 GMT"
 			);
 		});
 	});

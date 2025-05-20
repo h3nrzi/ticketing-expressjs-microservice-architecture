@@ -1,6 +1,6 @@
-import { UserRepository } from "../../../users/user.repository";
-import { VALID_USER } from "../../helpers/test-utils";
-import { setupTestDB } from "../../helpers/test-utils";
+import { UserRepository } from "../../users/user.repository";
+import { VALID_USER } from "../helpers/test-utils";
+import { setupTestDB } from "../helpers/test-utils";
 import mongoose from "mongoose";
 
 describe("UserRepository", () => {
@@ -22,7 +22,7 @@ describe("UserRepository", () => {
 
 		it("should return null when user not found", async () => {
 			const foundUser = await userRepository.findByEmail(
-				"nonexistent@test.com",
+				"nonexistent@test.com"
 			);
 			expect(foundUser).toBeNull();
 		});
