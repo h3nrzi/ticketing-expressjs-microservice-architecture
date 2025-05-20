@@ -1,4 +1,3 @@
-import { User } from "../users/entities/user.entity";
 import { signup } from "./helpers/users.helpers";
 
 describe("Signup", () => {
@@ -7,67 +6,124 @@ describe("Signup", () => {
 		password: "password123",
 	};
 
-	beforeEach(async () => {
-		await User.deleteMany({});
+	const createInvalidEmailUser = (email: string) => ({
+		...validUser,
+		email,
 	});
 
-	it("returns a 201 on successful signup", async () => {
-		const response = await signup(validUser).expect(201);
-
-		expect(response.body).toHaveProperty("id");
-		expect(response.body.email).toEqual(validUser.email);
-		const cookie = response.get("Set-Cookie");
-		expect(cookie).toBeDefined();
-		if (cookie) {
-			expect(cookie[0]).toMatch(/session=/);
-		}
+	const createInvalidPasswordUser = (password: string) => ({
+		...validUser,
+		password,
 	});
 
-	it("returns a 400 with an invalid email", async () => {
-		const response = await signup({
-			email: "invalid-email",
-			password: "password123",
-		}).expect(400);
-
+	const expectValidationError = (response: any, message: string) => {
 		expect(response.body.errors).toBeDefined();
-		expect(response.body.errors[0].message).toEqual("Email must be valid");
+		expect(response.body.errors[0].message).toEqual(message);
+	};
+
+	describe("Successful signup", () => {
+		it("returns a 201 on successful signup", async () => {
+			const response = await signup(validUser).expect(201);
+
+			expect(response.body).toHaveProperty("id");
+			expect(response.body.email).toEqual(validUser.email);
+		});
+
+		it("sets a cookie after successful signup", async () => {
+			const response = await signup(validUser).expect(201);
+
+			const cookie = response.get("Set-Cookie");
+			expect(cookie).toBeDefined();
+			if (cookie) {
+				expect(cookie[0]).toMatch(/session=/);
+			}
+		});
 	});
 
-	it("returns a 400 with an invalid password", async () => {
-		const response = await signup({
-			email: "test@test.com",
-			password: "123", // too short
-		}).expect(400);
+	describe("Email validation", () => {
+		const testCases = [
+			{
+				description: "invalid email format",
+				email: "invalid-email",
+				expectedMessage: "Email must be valid",
+			},
+			{
+				description: "empty email",
+				email: "",
+				expectedMessage: "Email must be valid",
+			},
+			{
+				description: "whitespace-only email",
+				email: "   ",
+				expectedMessage: "Email must be valid",
+			},
+			{
+				description: "email exceeding maximum length",
+				email: "a".repeat(255) + "@test.com",
+				expectedMessage: "Email must be valid",
+			},
+			{
+				description: "email with special characters",
+				email: "test!@#$%^&*()@test.com",
+				expectedMessage: "Email must be valid",
+			},
+		];
 
-		expect(response.body.errors).toBeDefined();
-		expect(response.body.errors[0].message).toEqual(
-			"Password must be between 4 and 20 characters"
-		);
+		testCases.forEach(({ description, email, expectedMessage }) => {
+			it(`returns a 400 with ${description}`, async () => {
+				const response = await signup(createInvalidEmailUser(email)).expect(
+					400
+				);
+				expectValidationError(response, expectedMessage);
+			});
+		});
+
+		it("disallows duplicate emails", async () => {
+			await signup(validUser).expect(201);
+			const response = await signup(validUser).expect(400);
+			expectValidationError(response, "Email in use");
+		});
 	});
 
-	it("returns a 400 with missing email and password", async () => {
-		const response = await signup({} as any).expect(400);
+	describe("Password validation", () => {
+		const testCases = [
+			{
+				description: "too short password",
+				password: "123",
+				expectedMessage: "Password must be between 4 and 20 characters",
+			},
+			{
+				description: "empty password",
+				password: "",
+				expectedMessage: "Password must be between 4 and 20 characters",
+			},
+			{
+				description: "whitespace-only password",
+				password: "   ",
+				expectedMessage: "Password must be between 4 and 20 characters",
+			},
+			{
+				description: "password exceeding maximum length",
+				password: "a".repeat(21),
+				expectedMessage: "Password must be between 4 and 20 characters",
+			},
+		];
 
-		expect(response.body.errors).toBeDefined();
-		expect(response.body.errors.length).toBeGreaterThan(0);
+		testCases.forEach(({ description, password, expectedMessage }) => {
+			it(`returns a 400 with ${description}`, async () => {
+				const response = await signup(
+					createInvalidPasswordUser(password)
+				).expect(400);
+				expectValidationError(response, expectedMessage);
+			});
+		});
 	});
 
-	it("disallows duplicate emails", async () => {
-		await signup(validUser).expect(201);
-
-		const response = await signup(validUser).expect(400);
-
-		expect(response.body.errors).toBeDefined();
-		expect(response.body.errors[0].message).toEqual("Email in use");
-	});
-
-	it("sets a cookie after successful signup", async () => {
-		const response = await signup(validUser).expect(201);
-
-		const cookie = response.get("Set-Cookie");
-		expect(cookie).toBeDefined();
-		if (cookie) {
-			expect(cookie[0]).toMatch(/session=/);
-		}
+	describe("Input validation", () => {
+		it("returns a 400 with missing email and password", async () => {
+			const response = await signup({} as any).expect(400);
+			expect(response.body.errors).toBeDefined();
+			expect(response.body.errors.length).toBeGreaterThan(0);
+		});
 	});
 });
