@@ -19,20 +19,22 @@ const stan = nats.connect(
 // Listen for connection
 // ================================
 
-stan.on(
-	"connect", // the event to listen for
-	() => {
-		console.log("Publisher connected to NATS");
+stan.on("connect", async () => {
+	console.log("Publisher connected to NATS");
 
-		// create a data to publish
-		const data = {
-			id: "123",
-			title: "concert",
-			price: 20,
-		};
+	// create a data to publish
+	const data = {
+		id: "123",
+		title: "concert",
+		price: 20,
+	};
 
-		// publish the event
-		const publisher = new TicketCreatedPublisher(stan);
-		publisher.publish(data);
+	// publish the event
+	const publisher = new TicketCreatedPublisher(stan);
+
+	try {
+		await publisher.publish(data);
+	} catch (err) {
+		console.log(err);
 	}
-);
+});

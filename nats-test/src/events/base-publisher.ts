@@ -11,9 +11,13 @@ export abstract class BasePublisher<T extends Event> {
 
 	constructor(private readonly client: Stan) {}
 
-	publish(data: T["data"]) {
-		this.client.publish(this.subject, JSON.stringify(data), () => {
-			console.log("Event published to subject", this.subject);
+	publish(data: T["data"]): Promise<void> {
+		return new Promise((resolve, reject) => {
+			this.client.publish(this.subject, JSON.stringify(data), (err) => {
+				if (err) reject(err);
+				console.log("Event published to subject", this.subject);
+				resolve();
+			});
 		});
 	}
 }
