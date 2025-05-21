@@ -2,7 +2,7 @@ import {
 	BasePublisher,
 	Subjects,
 	TicketCreatedEvent,
-} from "@h3nrzi-ticket/common/build/events";
+} from "@h3nrzi-ticket/common";
 import { Stan } from "node-nats-streaming";
 
 export class TicketCreatedPublisher extends BasePublisher<TicketCreatedEvent> {

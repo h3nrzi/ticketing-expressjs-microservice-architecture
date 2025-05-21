@@ -1,4 +1,6 @@
 import { NotAuthorizedError, NotFoundError } from "@h3nrzi-ticket/common";
+import { Stan } from "node-nats-streaming";
+import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
 import { ITicketDocument } from "./interfaces/ticket.interface";
 import { TicketRepository } from "./ticket.repository";
@@ -22,7 +24,10 @@ export interface ITicketService {
 	): Promise<ITicketDocument | null>;
 }
 export class TicketService implements ITicketService {
-	constructor(private readonly ticketRepository: TicketRepository) {}
+	constructor(
+		private readonly ticketRepository: TicketRepository,
+		private readonly stan: Stan
+	) {}
 
 	async getAllTickets() {
 		// return all tickets
@@ -49,7 +54,17 @@ export class TicketService implements ITicketService {
 		const ticket = await this.ticketRepository.create(createTicketDto, userId);
 
 		// save the ticket in the db and return the saved ticket
-		return await ticket.save();
+		await ticket.save();
+
+		// publish the ticket created event
+		new TicketCreatedPublisher(this.stan).publish({
+			id: ticket.id,
+			title: ticket.title,
+			price: ticket.price,
+			userId: ticket.userId,
+		});
+
+		return ticket;
 	}
 
 	async updateTicket(
