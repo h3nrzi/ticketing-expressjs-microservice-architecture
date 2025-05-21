@@ -7,10 +7,6 @@ describe("Signout", () => {
 		password: "password123",
 	};
 
-	beforeEach(async () => {
-		await User.deleteMany({});
-	});
-
 	describe("Cookie Management", () => {
 		it("clears the cookie after signing out", async () => {
 			// First sign up

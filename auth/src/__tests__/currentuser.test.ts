@@ -7,10 +7,6 @@ describe("Current User", () => {
 		password: "password123",
 	};
 
-	beforeEach(async () => {
-		await User.deleteMany({});
-	});
-
 	it("responds with null if not authenticated", async () => {
 		const response = await getCurrentUser().expect(200);
 		expect(response.body.currentUser).toEqual(null);
