@@ -1,4 +1,5 @@
 import nats from "node-nats-streaming";
+import { TicketCreatedPublisher } from "./events/ticket-created-publisher";
 
 console.clear();
 
@@ -31,12 +32,7 @@ stan.on(
 		};
 
 		// publish the event
-		stan.publish(
-			"ticket:created", // the channel to publish to
-			JSON.stringify(data), // the data to publish
-			() => {
-				console.log("Event published");
-			}
-		);
+		const publisher = new TicketCreatedPublisher(stan);
+		publisher.publish(data);
 	}
 );

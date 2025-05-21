@@ -31,10 +31,8 @@ stan.on(
 		// log the connection
 		console.log("Listener connected to NATS");
 
-		// create a new listener
+		// create a new listener and listen for messages
 		const listener = new TicketCreatedListener(stan);
-
-		// listen for messages
 		listener.listen();
 	}
 );
