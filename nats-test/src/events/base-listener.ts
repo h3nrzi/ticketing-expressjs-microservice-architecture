@@ -1,16 +1,18 @@
 import { Message, Stan } from "node-nats-streaming";
+import { Subjects } from "./subjects";
 
-export abstract class BaseListener {
-	abstract subject: string;
-	abstract queueGroupName: string;
-	abstract onMessage(data: any, msg: Message): void;
+interface Event {
+	subject: Subjects;
+	data: any;
+}
+
+export abstract class BaseListener<T extends Event> {
+	abstract readonly subject: T["subject"];
+	abstract readonly queueGroupName: string;
+	abstract onMessage(data: T["data"], msg: Message): void;
 	protected readonly ackWait = 5 * 1000;
 
 	constructor(private readonly client: Stan) {}
-
-	// ================================
-	// Set the options for the subscription
-	// ================================
 
 	subscriptionOptions() {
 		return this.client
@@ -21,10 +23,6 @@ export abstract class BaseListener {
 			.setDurableName(this.queueGroupName); // the name of the durable subscription
 	}
 
-	// ================================
-	// Parse the message
-	// ================================
-
 	parseMessage(msg: Message) {
 		// get the data from the message
 		const data = msg.getData();
@@ -34,10 +32,6 @@ export abstract class BaseListener {
 			? JSON.parse(data)
 			: JSON.parse(data.toString("utf8"));
 	}
-
-	// ================================
-	// Listen for messages
-	// ================================
 
 	listen() {
 		// subscribe to the subject
