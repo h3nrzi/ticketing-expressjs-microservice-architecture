@@ -1,5 +1,4 @@
-import { User } from "../users/entities/user.entity";
-import { signup, signin, signout } from "./helpers/users.helpers";
+import { signin, signout, signup } from "./helpers/users.helpers";
 
 describe("Signout", () => {
 	const validUser = {
