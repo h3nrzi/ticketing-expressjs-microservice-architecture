@@ -17,6 +17,16 @@ async function startServer() {
 			"http://nats-srv:4222"
 		);
 
+		// Handle NATS connection close event
+		natsWrapper.client.on("close", () => {
+			console.log("NATS connection closed!");
+			process.exit();
+		});
+
+		// Handle NATS connection SIGINT and SIGTERM event
+		process.on("SIGINT", () => natsWrapper.client.close());
+		process.on("SIGTERM", () => natsWrapper.client.close());
+
 		// Connect to MongoDB
 		await mongoose.connect(process.env.MONGO_URI!);
 		console.log("Connected to MongoDB!");

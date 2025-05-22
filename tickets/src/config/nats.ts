@@ -20,15 +20,6 @@ class NatsWrapper {
 	}
 
 	/**
-	 * @description Set the client of the NATS wrapper
-	 * @setter
-	 * @param {Stan} client - The client of the NATS wrapper
-	 */
-	set client(client: Stan) {
-		throw new Error("Cannot set client");
-	}
-
-	/**
 	 * @description Connect to the NATS server
 	 * @param {string} clusterId - The cluster ID
 	 * @param {string} clientId - The client ID
@@ -36,16 +27,19 @@ class NatsWrapper {
 	 * @returns {Promise<void>} - A promise that resolves to void
 	 */
 	connect(clusterId: string, clientId: string, url: string): Promise<void> {
+		// connect to the NATS server
 		this._client = stan.connect(clusterId, clientId, {
 			url,
 		});
 
 		return new Promise<void>((resolve, reject) => {
+			// handle the connect event
 			this.client.on("connect", () => {
 				console.log("Connected to NATS");
 				resolve();
 			});
 
+			// handle the error event
 			this.client.on("error", (err) => {
 				reject(err);
 			});
