@@ -3,7 +3,7 @@ import cookieSession from "cookie-session";
 import express from "express";
 import "express-async-errors";
 import swaggerUi from "swagger-ui-express";
-import { authRouter } from "./users/auth.routes";
+import { authRouter } from "./auth.routes";
 import { swaggerSpec } from "./swagger";
 import {
 	currentUser,

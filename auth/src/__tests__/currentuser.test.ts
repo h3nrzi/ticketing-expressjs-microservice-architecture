@@ -1,5 +1,4 @@
-import { User } from "../users/entities/user.entity";
-import { signup, getCurrentUser } from "./helpers/users.helpers";
+import { getCurrentUser, signup } from "./helpers/users.helpers";
 
 describe("Current User", () => {
 	const validUser = {
