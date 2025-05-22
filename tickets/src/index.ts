@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import app from "./app";
-import { natsWrapper } from "./config/nats";
+import { natsWrapper } from "./config/nats-wrapper";
 
 async function startServer() {
 	try {

@@ -4,7 +4,7 @@ import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publ
 import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
 import { ITicketDocument } from "./interfaces/ticket.interface";
 import { TicketRepository } from "./ticket.repository";
-import { natsWrapper } from "../config/nats";
+import { natsWrapper } from "../config/nats-wrapper";
 
 export interface ITicketService {
 	getAllTickets(): Promise<ITicketDocument[]>;
