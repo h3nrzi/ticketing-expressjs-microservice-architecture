@@ -9,7 +9,7 @@ import {
 	errorHandler,
 	currentUser,
 } from "@h3nrzi-ticket/common";
-import { ticketRoutes } from "./tickets/ticket.routes";
+import { ticketRoutes } from "./ticket.routes";
 
 // ==========================================
 // Initialize Express Application
