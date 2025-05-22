@@ -1,5 +1,6 @@
 import { NotAuthorizedError, NotFoundError } from "@h3nrzi-ticket/common";
 import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
+import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher";
 import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
 import { ITicketDocument } from "./interfaces/ticket.interface";
 import { TicketRepository } from "./ticket.repository";
@@ -23,6 +24,7 @@ export interface ITicketService {
 		currentUserId: string
 	): Promise<ITicketDocument | null>;
 }
+
 export class TicketService implements ITicketService {
 	constructor(private readonly ticketRepository: TicketRepository) {}
 
@@ -54,7 +56,7 @@ export class TicketService implements ITicketService {
 		await ticket.save();
 
 		// publish the ticket created event
-		new TicketCreatedPublisher(natsWrapper.client).publish({
+		await new TicketCreatedPublisher(natsWrapper.client).publish({
 			id: ticket.id,
 			title: ticket.title,
 			price: ticket.price,
@@ -77,8 +79,19 @@ export class TicketService implements ITicketService {
 			throw new NotAuthorizedError();
 		}
 
-		// update the ticket and return the updated ticket
-		return await this.ticketRepository.update(ticketId, updateTicketDto);
+		// update the ticket
+		await this.ticketRepository.update(ticketId, updateTicketDto);
+
+		// publish the ticket updated event
+		await new TicketUpdatedPublisher(natsWrapper.client).publish({
+			id: ticket.id,
+			title: ticket.title,
+			price: ticket.price,
+			userId: ticket.userId,
+		});
+
+		// return the updated ticket
+		return ticket;
 	}
 
 	async deleteTicket(ticketId: string, currentUserId: string) {
