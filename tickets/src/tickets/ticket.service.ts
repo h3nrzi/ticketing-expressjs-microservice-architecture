@@ -1,9 +1,9 @@
 import { NotAuthorizedError, NotFoundError } from "@h3nrzi-ticket/common";
-import { Stan } from "node-nats-streaming";
 import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
 import { ITicketDocument } from "./interfaces/ticket.interface";
 import { TicketRepository } from "./ticket.repository";
+import { natsWrapper } from "../config/nats";
 
 export interface ITicketService {
 	getAllTickets(): Promise<ITicketDocument[]>;
@@ -24,10 +24,7 @@ export interface ITicketService {
 	): Promise<ITicketDocument | null>;
 }
 export class TicketService implements ITicketService {
-	constructor(
-		private readonly ticketRepository: TicketRepository,
-		private readonly stan: Stan
-	) {}
+	constructor(private readonly ticketRepository: TicketRepository) {}
 
 	async getAllTickets() {
 		// return all tickets
@@ -57,7 +54,7 @@ export class TicketService implements ITicketService {
 		await ticket.save();
 
 		// publish the ticket created event
-		new TicketCreatedPublisher(this.stan).publish({
+		new TicketCreatedPublisher(natsWrapper.client).publish({
 			id: ticket.id,
 			title: ticket.title,
 			price: ticket.price,
