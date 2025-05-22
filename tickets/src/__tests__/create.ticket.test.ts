@@ -1,5 +1,5 @@
 import { createTicket } from "./helpers/ticket.helpers";
-import { natsWrapper } from "../__mocks__/nats";
+import { natsWrapper } from "../__mocks__/nats-wrapper";
 
 // Mock the nats wrapper
 jest.mock("../config/nats");

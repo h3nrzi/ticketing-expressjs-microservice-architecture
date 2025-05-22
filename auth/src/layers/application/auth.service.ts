@@ -1,13 +1,13 @@
 import { BadRequestError, JwtService } from "@h3nrzi-ticket/common";
-import { IAuthService, IUserDocument } from "./interfaces/user.interface";
-import { UserRepository } from "./user.repository";
+import { IAuthService, IUserDocument } from "../domain/user.interface";
+import { UserRepository } from "../infrastructure/user.repository";
 
 export class AuthService implements IAuthService {
 	constructor(private userRepository: UserRepository) {}
 
 	async signup(
 		email: string,
-		password: string,
+		password: string
 	): Promise<{ user: IUserDocument; token: string }> {
 		const existingUser = await this.userRepository.findByEmail(email);
 		if (existingUser) {
@@ -22,7 +22,7 @@ export class AuthService implements IAuthService {
 
 	async signin(
 		email: string,
-		password: string,
+		password: string
 	): Promise<{ user: IUserDocument; token: string }> {
 		const user = await this.userRepository.findByEmail(email);
 		if (!user) {

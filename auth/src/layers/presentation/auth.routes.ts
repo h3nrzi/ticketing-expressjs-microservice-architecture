@@ -2,8 +2,8 @@ import { Router } from "express";
 import { body } from "express-validator";
 import { validateRequest } from "@h3nrzi-ticket/common";
 import { AuthController } from "./auth.controller";
-import { AuthService } from "./auth.service";
-import { UserRepository } from "./user.repository";
+import { AuthService } from "../application/auth.service";
+import { UserRepository } from "../infrastructure/user.repository";
 
 const router = Router();
 const userRepository = new UserRepository();
