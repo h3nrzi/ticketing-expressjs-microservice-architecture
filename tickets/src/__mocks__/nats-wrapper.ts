@@ -1,5 +1,7 @@
 export const natsWrapper = {
 	client: {
-		publish: jest.fn(),
+		publish: (subject: string, data: any, callback: () => void) => {
+			callback();
+		},
 	},
 };

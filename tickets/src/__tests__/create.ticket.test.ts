@@ -1,8 +1,9 @@
 import { createTicket } from "./helpers/ticket.helpers";
-import { natsWrapper } from "../__mocks__/nats-wrapper";
 
 // Mock the nats wrapper
-jest.mock("../config/nats");
+jest.mock("../config/nats-wrapper.ts", () =>
+	require("../__mocks__/nats-wrapper")
+);
 
 describe("POST /api/tickets", () => {
 	let cookie: string[];
