@@ -1,4 +1,4 @@
-import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
+import { CreateTicketDto, UpdateTicketDto } from "../core/dtos/ticket.dto";
 import { TicketModel } from "./entities/ticket.entity";
 import { ITicketDocument } from "./interfaces/ticket.interface";
 
