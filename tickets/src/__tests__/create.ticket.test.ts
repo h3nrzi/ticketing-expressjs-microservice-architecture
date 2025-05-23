@@ -1,3 +1,4 @@
+import { natsWrapper } from "../config/nats-wrapper";
 import { createTicket } from "./helpers/ticket.helpers";
 
 describe("POST /api/tickets", () => {
@@ -21,6 +22,13 @@ describe("POST /api/tickets", () => {
 					userId: expect.any(String),
 				})
 			);
+		});
+	});
+
+	describe("publishing an event", () => {
+		it("publishes an event", async () => {
+			const res = await createTicket(validTicket, cookie);
+			expect(natsWrapper.client.publish).toHaveBeenCalled();
 		});
 	});
 

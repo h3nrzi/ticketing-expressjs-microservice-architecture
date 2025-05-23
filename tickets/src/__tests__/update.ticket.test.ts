@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { createTicket, updateTicket } from "./helpers/ticket.helpers";
+import { natsWrapper } from "../config/nats-wrapper";
 
 describe("PATCH /api/tickets/:id", () => {
 	let cookie: string[];
@@ -27,6 +28,22 @@ describe("PATCH /api/tickets/:id", () => {
 			expect(res.status).toBe(200);
 			expect(res.body.title).toBe("Updated Concert");
 			expect(res.body.price).toBe(30);
+		});
+
+		it("publishes an event", async () => {
+			const createRes = await createTicket(
+				{ title: "Concert", price: 20 },
+				cookie
+			);
+			const id = createRes.body.id;
+
+			const res = await updateTicket(
+				id,
+				{ title: "Updated Concert", price: 30 },
+				cookie
+			);
+
+			expect(natsWrapper.client.publish).toHaveBeenCalledTimes(4);
 		});
 	});
 

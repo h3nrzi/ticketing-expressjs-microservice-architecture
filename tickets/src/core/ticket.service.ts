@@ -53,7 +53,7 @@ export class TicketService implements ITicketService {
 		const ticket = await this.ticketRepository.create(createTicketDto, userId);
 
 		// save the ticket in the db and return the saved ticket
-		await ticket.save();
+		const savedTicket = await ticket.save();
 
 		// publish the ticket created event
 		await new TicketCreatedPublisher(natsWrapper.client).publish({
@@ -63,7 +63,7 @@ export class TicketService implements ITicketService {
 			userId: ticket.userId,
 		});
 
-		return ticket;
+		return savedTicket;
 	}
 
 	async updateTicket(
@@ -80,7 +80,10 @@ export class TicketService implements ITicketService {
 		}
 
 		// update the ticket
-		await this.ticketRepository.update(ticketId, updateTicketDto);
+		const updatedTicket = await this.ticketRepository.update(
+			ticketId,
+			updateTicketDto
+		);
 
 		// publish the ticket updated event
 		await new TicketUpdatedPublisher(natsWrapper.client).publish({
@@ -91,7 +94,7 @@ export class TicketService implements ITicketService {
 		});
 
 		// return the updated ticket
-		return ticket;
+		return updatedTicket;
 	}
 
 	async deleteTicket(ticketId: string, currentUserId: string) {
