@@ -1,8 +1,19 @@
+# Use the node:alpine image
 FROM node:alpine
 
+# Set the working directory
 WORKDIR /app
-COPY package-lock.json package.json ./
-RUN npm install --omit=dev
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy package.json and pnpm-lock.yaml
+COPY pnpm-lock.yaml package.json ./
+
+# Install dependencies
+RUN pnpm install --prod
+
+# Copy the rest of the application
 COPY ./ ./
 
-CMD ["npm", "start"]
+CMD ["pnpm", "start"]
