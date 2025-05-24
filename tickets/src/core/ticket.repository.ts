@@ -1,6 +1,6 @@
-import { CreateTicketDto, UpdateTicketDto } from "../core/dtos/ticket.dto";
-import { TicketModel } from "./entities/ticket.entity";
-import { ITicketDocument } from "./interfaces/ticket.interface";
+import { CreateTicketDto, UpdateTicketDto } from "./ticket.dto";
+import { TicketModel } from "./ticket.entity";
+import { ITicketDocument } from "./ticket.interface";
 
 export interface ITicketRepository {
 	findAll(): Promise<ITicketDocument[]>;

@@ -1,9 +1,5 @@
 import mongoose from "mongoose";
-import {
-	ITicket,
-	ITicketDocument,
-	ITicketModel,
-} from "../interfaces/ticket.interface";
+import { ITicket, ITicketDocument, ITicketModel } from "./ticket.interface";
 
 // ==========================================
 // Ticket Schema
