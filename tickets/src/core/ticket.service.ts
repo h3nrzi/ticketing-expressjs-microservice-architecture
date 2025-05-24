@@ -1,6 +1,6 @@
 import { NotAuthorizedError, NotFoundError } from "@h3nrzi-ticket/common";
-import { TicketCreatedPublisher } from "./events/publishers/ticket-created-publisher";
-import { TicketUpdatedPublisher } from "./events/publishers/ticket-updated-publisher";
+import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
+import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher";
 import { CreateTicketDto, UpdateTicketDto } from "./ticket.dto";
 import { ITicketDocument } from "./ticket.interface";
 import { TicketRepository } from "./ticket.repository";
