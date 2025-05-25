@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema<IOrderDoc>(
 		status: {
 			type: String,
 			required: true,
-			enum: OrderStatus,
+			enum: Object.values(OrderStatus),
 			default: OrderStatus.Created,
 		},
 		expiresAt: {

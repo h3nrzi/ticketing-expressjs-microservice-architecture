@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@h3nrzi-ticket/common':
-        specifier: ^1.0.13
-        version: 1.0.13
+        specifier: ^1.0.14
+        version: 1.0.14
       '@types/body-parser':
         specifier: ^1.19.5
         version: 1.19.5
@@ -271,8 +271,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@h3nrzi-ticket/common@1.0.13':
-    resolution: {integrity: sha512-CeVx0291ZDzd1toLZ5h/oQXkV7oQOkXrIkHTzT//Qf/WB7Ddq/1j1St4dVWhkZSYnRPAEwJqclpBrWH2aQZm2A==}
+  '@h3nrzi-ticket/common@1.0.14':
+    resolution: {integrity: sha512-gdnU8IOkUduQZXEyfu3Vw1+/K8CTJuVchRsl2vDKn/cTIUwNjhTSrchhzwkOzUVHXx5XW1LDh86JrOBwRttCaQ==}
 
   '@istanbuljs/load-nyc-config@1.1.0':
     resolution: {integrity: sha512-VjeHSlIzpv/NyD3N0YuHfXOPDIixcA1q2ZV98wsMqcYlPmv2n3Yb2lYP9XMElnaFVXg5A7YLTeLu6V84uQDjmQ==}
@@ -2437,7 +2437,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@h3nrzi-ticket/common@1.0.13':
+  '@h3nrzi-ticket/common@1.0.14':
     dependencies:
       '@types/cookie-session': 2.0.49
       '@types/express': 4.17.22
