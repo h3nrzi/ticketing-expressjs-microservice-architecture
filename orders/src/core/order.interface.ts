@@ -1,11 +1,5 @@
 import mongoose from "mongoose";
-
-export enum OrderStatus {
-	Created = "created",
-	Pending = "pending",
-	Complete = "complete",
-	Failed = "failed",
-}
+import { OrderStatus } from "@h3nrzi-ticket/common";
 
 export interface IOrder {
 	userId: string; // id of user who created the order
