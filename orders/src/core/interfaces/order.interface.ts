@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { OrderStatus } from "@h3nrzi-ticket/common";
+import { ITicketDoc } from "./ticket.interface";
 
 export interface IOrder {
 	userId: string; // id of user who created the order
