@@ -1,14 +1,23 @@
 import { BadRequestError, JwtService } from "@h3nrzi-ticket/common";
-import { IAuthService, IUserDocument } from "../domain/user.interface";
-import { UserRepository } from "../infrastructure/user.repository";
+import { IUserDocument } from "../domain/user.interface";
+import { IUserRepository } from "../infrastructure/user.repository";
 
-export class AuthService implements IAuthService {
-	constructor(private userRepository: UserRepository) {}
-
-	async signup(
+export interface IAuthService {
+	signup(
 		email: string,
 		password: string
-	): Promise<{ user: IUserDocument; token: string }> {
+	): Promise<{ user: IUserDocument; token: string }>;
+	signin(
+		email: string,
+		password: string
+	): Promise<{ user: IUserDocument; token: string }>;
+	getCurrentUser(userId: string): Promise<IUserDocument | null>;
+}
+
+export class AuthService implements IAuthService {
+	constructor(private userRepository: IUserRepository) {}
+
+	async signup(email: string, password: string) {
 		const existingUser = await this.userRepository.findByEmail(email);
 		if (existingUser) {
 			throw new BadRequestError("Email in use");
@@ -20,10 +29,7 @@ export class AuthService implements IAuthService {
 		return { user, token };
 	}
 
-	async signin(
-		email: string,
-		password: string
-	): Promise<{ user: IUserDocument; token: string }> {
+	async signin(email: string, password: string) {
 		const user = await this.userRepository.findByEmail(email);
 		if (!user) {
 			throw new BadRequestError("Invalid credentials");
@@ -38,7 +44,7 @@ export class AuthService implements IAuthService {
 		return { user, token };
 	}
 
-	async getCurrentUser(userId: string): Promise<IUserDocument | null> {
+	async getCurrentUser(userId: string) {
 		return this.userRepository.findById(userId);
 	}
 }

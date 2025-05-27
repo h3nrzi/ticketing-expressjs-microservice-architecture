@@ -1,24 +1,22 @@
-import {
-	IUser,
-	IUserDocument,
-	IUserRepository,
-} from "../domain/user.interface";
+import { IUser, IUserDocument } from "../domain/user.interface";
 import { User } from "../domain/user.entity";
 
+export interface IUserRepository {
+	findByEmail(email: string): Promise<IUserDocument | null>;
+	create(user: IUser): Promise<IUserDocument>;
+	findById(id: string): Promise<IUserDocument | null>;
+}
+
 export class UserRepository implements IUserRepository {
-	async findByEmail(email: string): Promise<IUserDocument | null> {
+	findByEmail(email: string) {
 		return User.findOne({ email });
 	}
 
-	async create(
-		userData: Omit<IUser, "id" | "createdAt" | "updatedAt">
-	): Promise<IUserDocument> {
-		const user = User.build(userData);
-		await user.save();
-		return user;
+	create(userData: IUser) {
+		return User.create(userData);
 	}
 
-	async findById(id: string): Promise<IUserDocument | null> {
+	findById(id: string) {
 		return User.findById(id);
 	}
 }

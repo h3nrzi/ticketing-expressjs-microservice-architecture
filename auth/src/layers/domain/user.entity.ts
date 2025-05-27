@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import { IUser, IUserDocument } from "./user.interface";
 import bcrypt from "bcryptjs";
+import mongoose from "mongoose";
+import { IUserDocument, IUserModel } from "./user.interface";
 
 // ===============================
 // User Schema
@@ -45,7 +45,7 @@ userSchema.pre("save", async function (done) {
 });
 
 // ===============================
-// Document Methods
+// Methods
 // ===============================
 
 // Compare password for authentication
@@ -56,21 +56,10 @@ userSchema.methods.comparePassword = async function (
 };
 
 // ===============================
-// Static Methods
+// User Model
 // ===============================
 
-interface UserModel extends mongoose.Model<IUserDocument> {
-	build(attrs: Omit<IUser, "id" | "createdAt" | "updatedAt">): IUserDocument;
-}
-
-// Create new user instances
-userSchema.statics.build = (
-	attrs: Omit<IUser, "id" | "createdAt" | "updatedAt">
-) => {
-	return new User(attrs);
-};
-
-export const User = mongoose.model<IUserDocument, UserModel>(
+export const User = mongoose.model<IUserDocument, IUserModel>(
 	"User",
 	userSchema
 );
