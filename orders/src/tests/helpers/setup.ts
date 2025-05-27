@@ -16,7 +16,7 @@ beforeAll(async () => {
 	mongo = await MongoMemoryServer.create();
 	const mongoUri = mongo.getUri();
 	await mongoose.connect(mongoUri);
-}, 120000); // Increased timeout to 120 seconds
+});
 
 beforeEach(async () => {
 	const collections = await mongoose.connection.db.collections();
