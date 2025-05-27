@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import { Ticket } from "../core/entities/ticket.entity";
 import { createOrder } from "./helpers/requests";
 
 describe("POST /api/orders", () => {
 	let cookie: string[];
+	let otherCookie: string[];
 
 	beforeAll(() => {
 		cookie = global.signup();
+		otherCookie = global.signup();
 	});
 
 	describe("validation", () => {
@@ -15,7 +18,6 @@ describe("POST /api/orders", () => {
 			["invalid", { ticketId: "invalid" }],
 		])("fails if ticketId is %s", async (_, invalidData) => {
 			const res = await createOrder(invalidData, cookie);
-
 			expect(res.status).toBe(400);
 		});
 	});
@@ -34,8 +36,26 @@ describe("POST /api/orders", () => {
 			expect(res.status).toBe(404);
 		});
 
-		it("returns an error if the ticket is already reserved", async () => {});
+		it("returns an error if the ticket is already reserved", async () => {
+			// Create a ticket and reserve it
+			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			await createOrder({ ticketId: ticket.id }, cookie);
 
-		it("reserves a ticket", async () => {});
+			// Try to reserve the ticket again
+			const res = await createOrder({ ticketId: ticket.id }, otherCookie);
+
+			expect(res.status).toBe(400);
+		});
+
+		it("reserves a ticket", async () => {
+			// Create a ticket
+			const ticket = await Ticket.create({ title: "concert", price: 20 });
+
+			// Reserve the ticket
+			const res = await createOrder({ ticketId: ticket.id }, cookie);
+
+			expect(res.status).toBe(201);
+			expect(res.body.ticket.id).toEqual(ticket.id);
+		});
 	});
 });
