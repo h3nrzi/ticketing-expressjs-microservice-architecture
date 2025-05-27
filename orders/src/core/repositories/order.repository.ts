@@ -42,7 +42,7 @@ export class OrderRepository implements IOrderRepository {
 
 	// Create an order
 	create(order: IOrder) {
-		return Order.build(order);
+		return Order.create(order);
 	}
 
 	// Check if a ticket is reserved

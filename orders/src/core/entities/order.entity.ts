@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import { IOrder, IOrderDoc, IOrderModel } from "../interfaces/order.interface";
 import { OrderStatus } from "@h3nrzi-ticket/common";
+import mongoose from "mongoose";
+import { IOrderDoc, IOrderModel } from "../interfaces/order.interface";
 
 const orderSchema = new mongoose.Schema<IOrderDoc>(
 	{
@@ -34,10 +34,6 @@ const orderSchema = new mongoose.Schema<IOrderDoc>(
 		},
 	}
 );
-
-orderSchema.statics.build = (attrs: IOrder): Promise<IOrderDoc> => {
-	return Order.create(attrs);
-};
 
 export const Order = mongoose.model<IOrderDoc, IOrderModel>(
 	"Order",
