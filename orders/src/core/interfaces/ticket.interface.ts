@@ -5,7 +5,5 @@ export interface ITicket {
 	price: number;
 }
 
-export interface ITicketDoc extends mongoose.Document, ITicket {}
-export interface ITicketModel extends mongoose.Model<ITicketDoc> {
-	build(attrs: ITicket): ITicketDoc;
-}
+export interface ITicketDoc extends ITicket, mongoose.Document {}
+export interface ITicketModel extends mongoose.Model<ITicketDoc> {}
