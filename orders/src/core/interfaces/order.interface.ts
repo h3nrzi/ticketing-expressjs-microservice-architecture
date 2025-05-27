@@ -11,5 +11,5 @@ export interface IOrder {
 
 export interface IOrderDoc extends mongoose.Document, IOrder {}
 export interface IOrderModel extends mongoose.Model<IOrderDoc> {
-	build(attrs: IOrder): IOrderDoc;
+	build(attrs: IOrder): Promise<IOrderDoc>;
 }

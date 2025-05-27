@@ -28,8 +28,8 @@ const ticketSchema = new mongoose.Schema<ITicketDoc>(
 	}
 );
 
-ticketSchema.statics.build = (attrs: ITicket) => {
-	return new Ticket(attrs);
+ticketSchema.statics.build = (attrs: ITicket): Promise<ITicketDoc> => {
+	return Ticket.create(attrs);
 };
 
 export const Ticket = mongoose.model<ITicketDoc, ITicketModel>(

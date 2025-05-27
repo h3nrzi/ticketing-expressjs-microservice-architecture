@@ -35,8 +35,8 @@ const orderSchema = new mongoose.Schema<IOrderDoc>(
 	}
 );
 
-orderSchema.statics.build = (attrs: IOrder) => {
-	return new Order(attrs);
+orderSchema.statics.build = (attrs: IOrder): Promise<IOrderDoc> => {
+	return Order.create(attrs);
 };
 
 export const Order = mongoose.model<IOrderDoc, IOrderModel>(
