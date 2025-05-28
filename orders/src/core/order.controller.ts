@@ -8,16 +8,20 @@ export class OrderController {
 	async findOrdersByUserId(req: Request, res: Response) {
 		const userId = req.currentUser?.id as string;
 		const orders = await this.orderService.findOrdersByUserId(userId);
-
 		res.status(200).send(orders);
+	}
+
+	async findOrderById(req: Request, res: Response) {
+		const { id } = req.params;
+		const userId = req.currentUser?.id as string;
+		const order = await this.orderService.findOrderById(id, userId);
+		res.status(200).send(order);
 	}
 
 	async createOrder(req: Request, res: Response) {
 		const { ticketId } = req.body as ICreateOrderDto;
 		const userId = req.currentUser?.id as string;
-
 		const order = await this.orderService.createOrder(ticketId, userId);
-
 		res.status(201).send(order);
 	}
 }

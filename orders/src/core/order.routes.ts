@@ -1,6 +1,6 @@
 import { requireAuth, validateRequest } from "@h3nrzi-ticket/common";
 import express from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import mongoose from "mongoose";
 import { OrderController } from "./order.controller";
 import { OrderService } from "./order.service";
@@ -19,7 +19,8 @@ router.get(
 	orderController.findOrdersByUserId.bind(orderController)
 );
 
-router.post("/", requireAuth, [
+router.post("/", [
+	requireAuth,
 	body("ticketId")
 		.notEmpty()
 		.withMessage("TicketId must be provided")
@@ -29,9 +30,16 @@ router.post("/", requireAuth, [
 	orderController.createOrder.bind(orderController),
 ]);
 
-router.get("/:id", (req, res) => {
-	res.send("Hello World");
-});
+router.get("/:id", [
+	requireAuth,
+	param("id")
+		.notEmpty()
+		.withMessage("Order Id must be provided")
+		.custom((input: string) => mongoose.Types.ObjectId.isValid(input))
+		.withMessage("Order Id must be a valid MongoDB ID"),
+	validateRequest,
+	orderController.findOrderById.bind(orderController),
+]);
 
 router.delete("/:id", (req, res) => {
 	res.send("Hello World");

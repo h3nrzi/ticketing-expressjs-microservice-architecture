@@ -1,5 +1,6 @@
 import {
 	BadRequestError,
+	NotAuthorizedError,
 	NotFoundError,
 	OrderStatus,
 } from "@h3nrzi-ticket/common";
@@ -24,18 +25,26 @@ export class OrderService implements ICreateOrderService {
 		return this.orderRepository.findByUserId(userId, { path: "ticket" });
 	}
 
-	async findOrderById(id: string) {
-		return this.orderRepository.findById(id, { path: "ticket" });
+	async findOrderById(orderId: string, userId: string) {
+		// Find the order, if the order is not found, throw an error
+		const order = await this.orderRepository.findById(orderId, {
+			path: "ticket",
+		});
+		if (!order) throw new NotFoundError("Order not found");
+
+		// If the user is not the owner of the order, throw an error
+		if (order.userId !== userId) throw new NotAuthorizedError();
+
+		// Return the order
+		return order;
 	}
 
 	async createOrder(ticketId: string, userId: string) {
-		// Find the ticket the user is trying to order in the database
-		// If the ticket is not found, throw an error
+		// Find the ticket, if the ticket is not found, throw an error
 		const ticket = await this.ticketRepository.findById(ticketId);
 		if (!ticket) throw new NotFoundError("Ticket not found");
 
-		// Check if the ticket is already reserved
-		// If the ticket is reserved, throw an error
+		// Check if the ticket is already reserved, if the ticket is reserved, throw an error
 		const isReserved = await this.orderRepository.isReserved(ticket);
 		if (isReserved) throw new BadRequestError("Ticket is already reserved");
 
