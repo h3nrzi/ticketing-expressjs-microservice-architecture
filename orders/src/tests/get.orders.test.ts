@@ -1,5 +1,5 @@
 import { Ticket } from "../core/entities/ticket.entity";
-import { createOrder, getOrders } from "./helpers/requests";
+import { getOrdersRequest, postOrderRequest } from "./helpers/requests";
 
 describe("GET /api/orders", () => {
 	let cookie: string[];
@@ -12,14 +12,14 @@ describe("GET /api/orders", () => {
 
 	describe("Authentication", () => {
 		it("returns a 401 if the user is not authenticated", async () => {
-			const res = await getOrders([]);
+			const res = await getOrdersRequest([]);
 			expect(res.status).toBe(401);
 		});
 	});
 
 	describe("Business logics", () => {
 		it("returns an empty array if there are no orders", async () => {
-			const res = await getOrders(cookie);
+			const res = await getOrdersRequest(cookie);
 			expect(res.body).toEqual([]);
 		});
 
@@ -30,13 +30,13 @@ describe("GET /api/orders", () => {
 			const ticket3 = await Ticket.create({ title: "concert2", price: 20 });
 
 			// Create orders for users
-			await createOrder({ ticketId: ticket1.id }, cookie);
-			await createOrder({ ticketId: ticket2.id }, cookie);
-			await createOrder({ ticketId: ticket3.id }, otherCookie);
+			await postOrderRequest({ ticketId: ticket1.id }, cookie);
+			await postOrderRequest({ ticketId: ticket2.id }, cookie);
+			await postOrderRequest({ ticketId: ticket3.id }, otherCookie);
 
 			// Get the orders
-			const responseForUser1 = await getOrders(cookie);
-			const responseForUser2 = await getOrders(otherCookie);
+			const responseForUser1 = await getOrdersRequest(cookie);
+			const responseForUser2 = await getOrdersRequest(otherCookie);
 
 			expect(responseForUser1.body.length).toEqual(2);
 			expect(responseForUser2.body.length).toEqual(1);
@@ -44,9 +44,9 @@ describe("GET /api/orders", () => {
 
 		it("should populate the ticket", async () => {
 			const ticket = await Ticket.create({ title: "concert1", price: 20 });
-			await createOrder({ ticketId: ticket.id }, cookie);
+			await postOrderRequest({ ticketId: ticket.id }, cookie);
 
-			const res = await getOrders(cookie);
+			const res = await getOrdersRequest(cookie);
 			expect(res.body[0].ticket).toBeDefined();
 			expect(res.body[0].ticket.id).toEqual(ticket.id);
 		});
