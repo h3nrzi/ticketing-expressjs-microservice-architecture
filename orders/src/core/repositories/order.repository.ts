@@ -1,7 +1,7 @@
 import { PopulateOptions } from "mongoose";
 import { Order } from "../entities/order.entity";
-import { IOrder, IOrderDoc } from "../interfaces/order.interface";
 import { OrderStatus } from "@h3nrzi-ticket/common";
+import { IOrder, IOrderDoc } from "../interfaces/order.interface";
 import { ITicketDoc } from "../interfaces/ticket.interface";
 
 export interface IOrderRepository {
@@ -16,33 +16,28 @@ export interface IOrderRepository {
 }
 
 export class OrderRepository implements IOrderRepository {
-	// Find all orders
 	findAll(populate?: PopulateOptions) {
 		const orders = Order.find({});
 		if (populate) orders.populate(populate);
 		return orders;
 	}
 
-	// Find an order by id
 	findById(id: string, populate?: PopulateOptions) {
 		const order = Order.findById(id);
 		if (populate) order.populate(populate);
 		return order;
 	}
 
-	// Find orders by user id
 	findByUserId(userId: string, populate?: PopulateOptions) {
 		const orders = Order.find({ userId });
 		if (populate) orders.populate(populate);
 		return orders;
 	}
 
-	// Create an order
 	create(order: IOrder) {
 		return Order.create(order);
 	}
 
-	// Check if a ticket is reserved
 	async isReserved(ticket: ITicketDoc) {
 		const order = await Order.findOne({
 			ticket,

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Ticket } from "../core/entities/ticket.entity";
-import { postOrderRequest } from "./helpers/requests";
+import { deleteOrderRequest, postOrderRequest } from "./helpers/requests";
 
 describe("POST /api/orders", () => {
 	let cookie: string[];
@@ -37,27 +37,29 @@ describe("POST /api/orders", () => {
 		});
 
 		it("returns an error if the ticket is already reserved", async () => {
-			// Create a ticket and reserve it
 			const ticket = await Ticket.create({ title: "concert", price: 20 });
 			await postOrderRequest({ ticketId: ticket.id }, cookie);
-
-			// Try to reserve the ticket again
 			const res = await postOrderRequest({ ticketId: ticket.id }, otherCookie);
-
 			expect(res.status).toBe(400);
 		});
 
 		it("reserves a ticket", async () => {
-			// Create a ticket
 			const ticket = await Ticket.create({ title: "concert", price: 20 });
-
-			// Reserve the ticket
 			const res = await postOrderRequest({ ticketId: ticket.id }, cookie);
-
 			expect(res.status).toBe(201);
 			expect(res.body.ticket.id).toEqual(ticket.id);
 		});
 
+		it("could reserve a ticket after it has cancelled", async () => {
+			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
+			await deleteOrderRequest(order.body.id, cookie);
+			const res = await postOrderRequest({ ticketId: ticket.id }, cookie);
+			expect(res.status).toBe(201);
+			expect(res.body.ticket.id).toEqual(ticket.id);
+		});
+
+		it.todo("should reserve a ticket after it has expired");
 		it.todo("emits an order created event");
 	});
 });
