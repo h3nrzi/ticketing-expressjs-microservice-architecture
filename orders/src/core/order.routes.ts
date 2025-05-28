@@ -1,6 +1,6 @@
 import { requireAuth, validateRequest } from "@h3nrzi-ticket/common";
 import express from "express";
-import { body, param } from "express-validator";
+import { body } from "express-validator";
 import mongoose from "mongoose";
 import { OrderController } from "./order.controller";
 import { OrderService } from "./order.service";
@@ -13,12 +13,26 @@ const ticketRepository = new TicketRepository();
 const orderService = new OrderService(orderRepository, ticketRepository);
 const orderController = new OrderController(orderService);
 
-router.get(
-	"/",
+/**
+ * @route GET /api/orders
+ * @description Get all orders for the current user
+ * @access Private
+ * @returns {Order[]} 200 - The orders were found successfully
+ * @returns {Error} 401 - The user is not authenticated or the user cannot access this resource
+ */
+router.get("/", [
 	requireAuth,
-	orderController.findOrdersByUserId.bind(orderController)
-);
+	orderController.findOrdersByUserId.bind(orderController),
+]);
 
+/**
+ * @route POST /api/orders
+ * @description Create a new order
+ * @access Private
+ * @returns {Order} 201 - The order was created successfully
+ * @returns {Error} 400 - Bad Request
+ * @returns {Error} 401 - The user is not authenticated or the user cannot access this resource
+ */
 router.post("/", [
 	requireAuth,
 	body("ticketId")
@@ -30,19 +44,29 @@ router.post("/", [
 	orderController.createOrder.bind(orderController),
 ]);
 
+/**
+ * @route GET /api/orders/:id
+ * @description Get an order by ID
+ * @access Private
+ * @returns {Order} 200 - The order was found successfully
+ * @returns {Error} 401 - The user is not authenticated or the user cannot access this resource
+ */
 router.get("/:id", [
 	requireAuth,
-	param("id")
-		.notEmpty()
-		.withMessage("Order Id must be provided")
-		.custom((input: string) => mongoose.Types.ObjectId.isValid(input))
-		.withMessage("Order Id must be a valid MongoDB ID"),
 	validateRequest,
 	orderController.findOrderById.bind(orderController),
 ]);
 
-router.delete("/:id", (req, res) => {
-	res.send("Hello World");
-});
+/**
+ * @route DELETE /api/orders/:id
+ * @description Cancel an order
+ * @access Private
+ * @returns {Order} 200 - The order was cancelled successfully
+ * @returns {Error} 401 - The user is not authenticated or the user cannot access this resource
+ */
+router.delete("/:id", [
+	requireAuth,
+	orderController.cancelOrder.bind(orderController),
+]);
 
 export { router as orderRoutes };

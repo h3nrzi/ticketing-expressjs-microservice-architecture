@@ -63,4 +63,17 @@ export class OrderService implements ICreateOrderService {
 		// Return the new order
 		return newOrder;
 	}
+
+	async cancelOrder(orderId: string, userId: string) {
+		// Find the order, if the order is not found, throw an error
+		// If the user is not the owner of the order, throw an error
+		const order = await this.findOrderById(orderId, userId);
+
+		// Update the order status to cancelled
+		order.status = OrderStatus.Cancelled;
+		await order.save();
+
+		// Return the updated order
+		return order;
+	}
 }

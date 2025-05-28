@@ -24,4 +24,11 @@ export class OrderController {
 		const order = await this.orderService.createOrder(ticketId, userId);
 		res.status(201).send(order);
 	}
+
+	async cancelOrder(req: Request, res: Response) {
+		const { id } = req.params;
+		const userId = req.currentUser?.id as string;
+		const order = await this.orderService.cancelOrder(id, userId);
+		res.status(200).send(order);
+	}
 }
