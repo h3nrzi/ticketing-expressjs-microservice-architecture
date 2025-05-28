@@ -41,5 +41,14 @@ describe("GET /api/orders", () => {
 			expect(responseForUser1.body.length).toEqual(2);
 			expect(responseForUser2.body.length).toEqual(1);
 		});
+
+		it("should populate the ticket", async () => {
+			const ticket = await Ticket.create({ title: "concert1", price: 20 });
+			await createOrder({ ticketId: ticket.id }, cookie);
+
+			const res = await getOrders(cookie);
+			expect(res.body[0].ticket).toBeDefined();
+			expect(res.body[0].ticket.id).toEqual(ticket.id);
+		});
 	});
 });

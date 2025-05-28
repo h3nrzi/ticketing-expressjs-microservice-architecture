@@ -24,6 +24,10 @@ export class OrderService implements ICreateOrderService {
 		return this.orderRepository.findByUserId(userId, { path: "ticket" });
 	}
 
+	async findOrderById(id: string) {
+		return this.orderRepository.findById(id, { path: "ticket" });
+	}
+
 	async createOrder(ticketId: string, userId: string) {
 		// Find the ticket the user is trying to order in the database
 		// If the ticket is not found, throw an error
