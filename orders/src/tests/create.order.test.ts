@@ -57,5 +57,7 @@ describe("POST /api/orders", () => {
 			expect(res.status).toBe(201);
 			expect(res.body.ticket.id).toEqual(ticket.id);
 		});
+
+		it.todo("emits an order created event");
 	});
 });
