@@ -11,6 +11,7 @@ const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes
 
 export interface ICreateOrderService {
 	createOrder(ticketId: string, userId: string): Promise<IOrderDoc>;
+	findOrdersByUserId(userId: string): Promise<IOrderDoc[]>;
 }
 
 export class OrderService implements ICreateOrderService {
@@ -18,6 +19,10 @@ export class OrderService implements ICreateOrderService {
 		private readonly orderRepository: IOrderRepository,
 		private readonly ticketRepository: ITicketRepository
 	) {}
+
+	async findOrdersByUserId(userId: string) {
+		return this.orderRepository.findByUserId(userId, { path: "ticket" });
+	}
 
 	async createOrder(ticketId: string, userId: string) {
 		// Find the ticket the user is trying to order in the database

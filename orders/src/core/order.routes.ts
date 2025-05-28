@@ -13,6 +13,12 @@ const ticketRepository = new TicketRepository();
 const orderService = new OrderService(orderRepository, ticketRepository);
 const orderController = new OrderController(orderService);
 
+router.get(
+	"/",
+	requireAuth,
+	orderController.findOrdersByUserId.bind(orderController)
+);
+
 router.post("/", requireAuth, [
 	body("ticketId")
 		.notEmpty()

@@ -5,14 +5,11 @@ import { OrderStatus } from "@h3nrzi-ticket/common";
 import { ITicketDoc } from "../interfaces/ticket.interface";
 
 export interface IOrderRepository {
-	findAll(populate: PopulateOptions | null): Promise<IOrderDoc[]>;
-	findById(
-		id: string,
-		populate: PopulateOptions | null
-	): Promise<IOrderDoc | null>;
+	findAll(populate?: PopulateOptions): Promise<IOrderDoc[]>;
+	findById(id: string, populate?: PopulateOptions): Promise<IOrderDoc | null>;
 	findByUserId(
 		userId: string,
-		populate: PopulateOptions | null
+		populate?: PopulateOptions
 	): Promise<IOrderDoc[]>;
 	create(order: IOrder): Promise<IOrderDoc>;
 	isReserved(ticket: ITicketDoc): Promise<boolean>;
@@ -20,21 +17,21 @@ export interface IOrderRepository {
 
 export class OrderRepository implements IOrderRepository {
 	// Find all orders
-	findAll(populate: PopulateOptions | null = null) {
+	findAll(populate?: PopulateOptions) {
 		const orders = Order.find({});
 		if (populate) orders.populate(populate);
 		return orders;
 	}
 
 	// Find an order by id
-	findById(id: string, populate: PopulateOptions | null = null) {
+	findById(id: string, populate?: PopulateOptions) {
 		const order = Order.findById(id);
 		if (populate) order.populate(populate);
 		return order;
 	}
 
 	// Find orders by user id
-	findByUserId(userId: string, populate: PopulateOptions | null = null) {
+	findByUserId(userId: string, populate?: PopulateOptions) {
 		const orders = Order.find({ userId });
 		if (populate) orders.populate(populate);
 		return orders;
