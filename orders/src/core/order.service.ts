@@ -7,6 +7,8 @@ import {
 import { IOrderDoc } from "./interfaces/order.interface";
 import { IOrderRepository } from "./repositories/order.repository";
 import { ITicketRepository } from "./repositories/ticket.repository";
+import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
+import { natsWrapper } from "../config/nats-wrapper";
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes
 
@@ -58,6 +60,19 @@ export class OrderService implements ICreateOrderService {
 			ticket,
 			status: OrderStatus.Created,
 			expiresAt: expiration,
+		});
+
+		// Publish the order created event
+		const orderCreatedPublisher = new OrderCreatedPublisher(natsWrapper.client);
+		await orderCreatedPublisher.publish({
+			id: newOrder.id,
+			userId: newOrder.userId,
+			status: newOrder.status,
+			expiresAt: newOrder.expiresAt.toISOString(),
+			ticket: {
+				id: newOrder.ticket.id,
+				price: newOrder.ticket.price,
+			},
 		});
 
 		// Return the new order
