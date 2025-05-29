@@ -9,6 +9,7 @@ import { IOrderRepository } from "./repositories/order.repository";
 import { ITicketRepository } from "./repositories/ticket.repository";
 import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
 import { natsWrapper } from "../config/nats-wrapper";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes
 
@@ -63,8 +64,7 @@ export class OrderService implements ICreateOrderService {
 		});
 
 		// Publish the order created event
-		const orderCreatedPublisher = new OrderCreatedPublisher(natsWrapper.client);
-		await orderCreatedPublisher.publish({
+		await new OrderCreatedPublisher(natsWrapper.client).publish({
 			id: newOrder.id,
 			userId: newOrder.userId,
 			status: newOrder.status,
@@ -87,6 +87,14 @@ export class OrderService implements ICreateOrderService {
 		// Update the order status to cancelled
 		order.status = OrderStatus.Cancelled;
 		await order.save();
+
+		// Publish the order cancelled event
+		await new OrderCancelledPublisher(natsWrapper.client).publish({
+			id: order.id,
+			ticket: {
+				id: order.ticket.id,
+			},
+		});
 
 		// Return the updated order
 		return order;
