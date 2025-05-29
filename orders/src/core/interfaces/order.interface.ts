@@ -9,5 +9,13 @@ export interface IOrder {
 	ticket: ITicketDoc; // ref to ticket document
 }
 
-export interface IOrderDoc extends IOrder, mongoose.Document {}
-export interface IOrderModel extends mongoose.Model<IOrderDoc> {}
+export interface IOrderDoc extends mongoose.Document {
+	userId: string;
+	status: OrderStatus;
+	expiresAt: Date;
+	ticket: ITicketDoc;
+}
+
+export interface IOrderModel extends mongoose.Model<IOrderDoc> {
+	build(attrs: IOrder): IOrderDoc;
+}

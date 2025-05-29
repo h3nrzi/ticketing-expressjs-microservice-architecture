@@ -1,5 +1,9 @@
 import mongoose from "mongoose";
-import { ITicketDoc, ITicketModel } from "../interfaces/ticket.interface";
+import {
+	ITicket,
+	ITicketDoc,
+	ITicketModel,
+} from "../interfaces/ticket.interface";
 
 const ticketSchema = new mongoose.Schema<ITicketDoc>(
 	{
@@ -23,6 +27,10 @@ const ticketSchema = new mongoose.Schema<ITicketDoc>(
 		},
 	}
 );
+
+ticketSchema.statics.build = (attrs: ITicket): ITicketDoc => {
+	return new Ticket(attrs);
+};
 
 export const Ticket = mongoose.model<ITicketDoc, ITicketModel>(
 	"Ticket",
