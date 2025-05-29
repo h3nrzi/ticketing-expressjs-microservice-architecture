@@ -5,10 +5,11 @@ import {
 	TicketCreatedEvent,
 } from "@h3nrzi-ticket/common";
 import { Ticket } from "../../core/entities/ticket.entity";
+import { queueGroupName } from "./queue-group-name";
 
 export class TicketCreatedListener extends BaseListener<TicketCreatedEvent> {
 	subject: TicketCreatedEvent["subject"] = Subjects.TicketCreated;
-	queueGroupName = "orders-service";
+	queueGroupName = queueGroupName;
 
 	async onMessage(data: TicketCreatedEvent["data"], msg: Message) {
 		const { id, title, price } = data;
