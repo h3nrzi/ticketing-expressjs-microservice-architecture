@@ -5,7 +5,7 @@ import {
 	OrderStatus,
 } from "@h3nrzi-ticket/common";
 import { IOrderDoc } from "./interfaces/order.interface";
-import { IOrderRepository } from "./repositories/order.repository";
+import { OrderRepository } from "./repositories/order.repository";
 import { ITicketRepository } from "./repositories/ticket.repository";
 import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
 import { natsWrapper } from "../config/nats-wrapper";
@@ -13,22 +13,17 @@ import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-pu
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes
 
-export interface ICreateOrderService {
-	createOrder(ticketId: string, userId: string): Promise<IOrderDoc>;
-	findOrdersByUserId(userId: string): Promise<IOrderDoc[]>;
-}
-
-export class OrderService implements ICreateOrderService {
+export class OrderService {
 	constructor(
-		private readonly orderRepository: IOrderRepository,
+		private readonly orderRepository: OrderRepository,
 		private readonly ticketRepository: ITicketRepository
 	) {}
 
-	async findOrdersByUserId(userId: string) {
+	async findOrdersByUserId(userId: string): Promise<IOrderDoc[]> {
 		return this.orderRepository.findByUserId(userId, { path: "ticket" });
 	}
 
-	async findOrderById(orderId: string, userId: string) {
+	async findOrderById(orderId: string, userId: string): Promise<IOrderDoc> {
 		// Find the order, if the order is not found, throw an error
 		const order = await this.orderRepository.findById(orderId, {
 			path: "ticket",
@@ -42,7 +37,7 @@ export class OrderService implements ICreateOrderService {
 		return order;
 	}
 
-	async createOrder(ticketId: string, userId: string) {
+	async createOrder(ticketId: string, userId: string): Promise<IOrderDoc> {
 		// Find the ticket, if the ticket is not found, throw an error
 		const ticket = await this.ticketRepository.findById(ticketId);
 		if (!ticket) throw new NotFoundError("Ticket not found");
@@ -56,12 +51,13 @@ export class OrderService implements ICreateOrderService {
 		expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
 		// Create the order and save it to the database
-		const newOrder = await this.orderRepository.create({
+		const newOrder = this.orderRepository.create({
 			userId,
 			ticket,
 			status: OrderStatus.Created,
 			expiresAt: expiration,
 		});
+		await newOrder.save();
 
 		// Publish the order created event
 		await new OrderCreatedPublisher(natsWrapper.client).publish({
@@ -79,7 +75,7 @@ export class OrderService implements ICreateOrderService {
 		return newOrder;
 	}
 
-	async cancelOrder(orderId: string, userId: string) {
+	async cancelOrder(orderId: string, userId: string): Promise<IOrderDoc> {
 		// Find the order, if the order is not found, throw an error
 		// If the user is not the owner of the order, throw an error
 		const order = await this.findOrderById(orderId, userId);

@@ -4,41 +4,33 @@ import { OrderStatus } from "@h3nrzi-ticket/common";
 import { IOrder, IOrderDoc } from "../interfaces/order.interface";
 import { ITicketDoc } from "../interfaces/ticket.interface";
 
-export interface IOrderRepository {
-	findAll(populate?: PopulateOptions): Promise<IOrderDoc[]>;
-	findById(id: string, populate?: PopulateOptions): Promise<IOrderDoc | null>;
-	findByUserId(
-		userId: string,
-		populate?: PopulateOptions
-	): Promise<IOrderDoc[]>;
-	create(order: IOrder): Promise<IOrderDoc>;
-	isReserved(ticket: ITicketDoc): Promise<boolean>;
-}
-
-export class OrderRepository implements IOrderRepository {
-	findAll(populate?: PopulateOptions) {
+export class OrderRepository {
+	findAll(populate?: PopulateOptions): Promise<IOrderDoc[]> {
 		const orders = Order.find({});
 		if (populate) orders.populate(populate);
 		return orders;
 	}
 
-	findById(id: string, populate?: PopulateOptions) {
+	findById(id: string, populate?: PopulateOptions): Promise<IOrderDoc | null> {
 		const order = Order.findById(id);
 		if (populate) order.populate(populate);
 		return order;
 	}
 
-	findByUserId(userId: string, populate?: PopulateOptions) {
+	findByUserId(
+		userId: string,
+		populate?: PopulateOptions
+	): Promise<IOrderDoc[]> {
 		const orders = Order.find({ userId });
 		if (populate) orders.populate(populate);
 		return orders;
 	}
 
-	create(order: IOrder) {
-		return Order.create(order);
+	create(order: IOrder): IOrderDoc {
+		return Order.build(order);
 	}
 
-	async isReserved(ticket: ITicketDoc) {
+	async isReserved(ticket: ITicketDoc): Promise<boolean> {
 		const order = await Order.findOne({
 			ticket,
 			status: {
