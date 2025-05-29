@@ -3,6 +3,7 @@ import { Ticket } from "../core/entities/ticket.entity";
 import { deleteOrderRequest, postOrderRequest } from "./helpers/requests";
 
 import mongoose from "mongoose";
+import { natsWrapper } from "../config/nats-wrapper";
 describe("DELETE /api/orders/:id", () => {
 	let cookie: string[];
 	let otherCookie: string[];
@@ -50,6 +51,11 @@ describe("DELETE /api/orders/:id", () => {
 			expect(res.body.status).toBe(OrderStatus.Cancelled);
 		});
 
-		it.todo("emits an order cancelled event");
+		it("emits an order cancelled event", async () => {
+			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
+			await deleteOrderRequest(order.body.id, cookie);
+			expect(natsWrapper.client.publish).toHaveBeenCalled();
+		});
 	});
 });

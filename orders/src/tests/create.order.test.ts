@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Ticket } from "../core/entities/ticket.entity";
 import { deleteOrderRequest, postOrderRequest } from "./helpers/requests";
+import { natsWrapper } from "../config/nats-wrapper";
 
 describe("POST /api/orders", () => {
 	let cookie: string[];
@@ -60,6 +61,11 @@ describe("POST /api/orders", () => {
 		});
 
 		it.todo("should reserve a ticket after it has expired");
-		it.todo("emits an order created event");
+
+		it("emits an order created event", async () => {
+			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			await postOrderRequest({ ticketId: ticket.id }, cookie);
+			expect(natsWrapper.client.publish).toHaveBeenCalled();
+		});
 	});
 });
