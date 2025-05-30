@@ -21,7 +21,7 @@ export class TicketUpdatedListener extends BaseListener<TicketUpdatedEvent> {
 			_id: id,
 			version: data.version - 1,
 		});
-		if (!ticket) throw new NotFoundError("Ticket not found");
+		if (!ticket) throw new Error("Ticket not found");
 
 		// update ticket
 		ticket.set({ title, price });
