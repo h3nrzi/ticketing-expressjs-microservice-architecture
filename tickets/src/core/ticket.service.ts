@@ -61,6 +61,7 @@ export class TicketService implements ITicketService {
 			title: ticket.title,
 			price: ticket.price,
 			userId: ticket.userId,
+			version: ticket.version,
 		});
 
 		return savedTicket;
@@ -91,6 +92,7 @@ export class TicketService implements ITicketService {
 			title: ticket.title,
 			price: ticket.price,
 			userId: ticket.userId,
+			version: ticket.version,
 		});
 
 		// return the updated ticket
