@@ -3,6 +3,7 @@ import {
 	ITicket,
 	ITicketDoc,
 	ITicketModel,
+	IEvent,
 } from "../interfaces/ticket.interface";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
@@ -33,6 +34,15 @@ ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attrs: ITicket): ITicketDoc => {
 	return new Ticket({ ...attrs, _id: attrs.id });
+};
+
+ticketSchema.statics.findByEvent = async (
+	event: IEvent
+): Promise<ITicketDoc | null> => {
+	return Ticket.findOne({
+		_id: event.id,
+		version: event.version - 1,
+	});
 };
 
 export const Ticket = mongoose.model<ITicketDoc, ITicketModel>(

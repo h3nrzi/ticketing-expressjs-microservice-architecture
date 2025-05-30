@@ -1,12 +1,12 @@
-import { Message } from "node-nats-streaming";
 import {
-	Subjects,
 	BaseListener,
+	Subjects,
 	TicketUpdatedEvent,
-	NotFoundError,
 } from "@h3nrzi-ticket/common";
+import { Message } from "node-nats-streaming";
 import { Ticket } from "../../core/entities/ticket.entity";
 import { queueGroupName } from "./queue-group-name";
+import { ITicketDoc } from "../../core/interfaces/ticket.interface";
 
 export class TicketUpdatedListener extends BaseListener<TicketUpdatedEvent> {
 	subject: TicketUpdatedEvent["subject"] = Subjects.TicketUpdated;
@@ -14,13 +14,10 @@ export class TicketUpdatedListener extends BaseListener<TicketUpdatedEvent> {
 
 	async onMessage(data: TicketUpdatedEvent["data"], msg: Message) {
 		// get data from event
-		const { id, title, price } = data;
+		const { id, title, price, version } = data;
 
 		// find ticket, if not found, throw error
-		const ticket = await Ticket.findById({
-			_id: id,
-			version: data.version - 1,
-		});
+		const ticket: ITicketDoc | null = await Ticket.findByEvent({ id, version });
 		if (!ticket) throw new Error("Ticket not found");
 
 		// update ticket

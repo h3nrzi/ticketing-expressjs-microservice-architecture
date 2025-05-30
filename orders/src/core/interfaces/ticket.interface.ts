@@ -13,6 +13,12 @@ export interface ITicketDoc extends mongoose.Document {
 	version: number;
 }
 
+export interface IEvent {
+	id: string;
+	version: number;
+}
+
 export interface ITicketModel extends mongoose.Model<ITicketDoc> {
 	build(attrs: ITicket): ITicketDoc;
+	findByEvent(event: IEvent): Promise<ITicketDoc | null>;
 }
