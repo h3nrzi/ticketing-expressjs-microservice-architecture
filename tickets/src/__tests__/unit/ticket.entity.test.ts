@@ -26,3 +26,20 @@ it("implements optimistic concurrency control", async () => {
 	// because the version is now 1, but the second instance has a version of 0
 	await expect(secondInstance?.save()).rejects.toThrow();
 });
+
+it("increments the version number on multiple saves", async () => {
+	const ticket = TicketModel.build({
+		title: "concert",
+		price: 5,
+		userId: "123",
+	});
+
+	await ticket.save();
+	expect(ticket.version).toEqual(0);
+
+	await ticket.save();
+	expect(ticket.version).toEqual(1);
+
+	await ticket.save();
+	expect(ticket.version).toEqual(2);
+});
