@@ -4,6 +4,7 @@ import {
 	ITicketDoc,
 	ITicketModel,
 } from "../interfaces/ticket.interface";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 const ticketSchema = new mongoose.Schema<ITicketDoc>(
 	{
@@ -22,11 +23,13 @@ const ticketSchema = new mongoose.Schema<ITicketDoc>(
 			transform(doc, ret) {
 				ret.id = ret._id;
 				delete ret._id;
-				delete ret.__v;
 			},
 		},
 	}
 );
+
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attrs: ITicket): ITicketDoc => {
 	return new Ticket({ ...attrs, _id: attrs.id });

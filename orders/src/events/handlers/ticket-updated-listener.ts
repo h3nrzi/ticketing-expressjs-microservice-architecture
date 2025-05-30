@@ -17,7 +17,10 @@ export class TicketUpdatedListener extends BaseListener<TicketUpdatedEvent> {
 		const { id, title, price } = data;
 
 		// find ticket, if not found, throw error
-		const ticket = await Ticket.findById(id);
+		const ticket = await Ticket.findById({
+			_id: id,
+			version: data.version - 1,
+		});
 		if (!ticket) throw new NotFoundError("Ticket not found");
 
 		// update ticket

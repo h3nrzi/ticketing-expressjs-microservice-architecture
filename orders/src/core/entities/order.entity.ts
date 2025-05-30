@@ -1,6 +1,7 @@
 import { OrderStatus } from "@h3nrzi-ticket/common";
 import mongoose from "mongoose";
 import { IOrder, IOrderDoc, IOrderModel } from "../interfaces/order.interface";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 const orderSchema = new mongoose.Schema<IOrderDoc>(
 	{
@@ -29,11 +30,13 @@ const orderSchema = new mongoose.Schema<IOrderDoc>(
 			transform(doc, ret) {
 				ret.id = ret._id;
 				delete ret._id;
-				delete ret.__v;
 			},
 		},
 	}
 );
+
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: IOrder): IOrderDoc => {
 	return new Order(attrs);

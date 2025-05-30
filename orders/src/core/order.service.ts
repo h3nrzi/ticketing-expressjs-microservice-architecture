@@ -69,6 +69,7 @@ export class OrderService {
 				id: newOrder.ticket.id,
 				price: newOrder.ticket.price,
 			},
+			version: newOrder.version,
 		});
 
 		// Return the new order
@@ -90,6 +91,7 @@ export class OrderService {
 			ticket: {
 				id: order.ticket.id,
 			},
+			version: order.version,
 		});
 
 		// Return the updated order
