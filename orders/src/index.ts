@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import app from "./app";
 import { natsWrapper } from "./config/nats-wrapper";
+import { TicketUpdatedListener } from "./events/handlers/ticket-updated-listener";
+import { TicketCreatedListener } from "./events/handlers/ticket-created-listener";
 
 (async () => {
 	try {
@@ -30,13 +32,19 @@ import { natsWrapper } from "./config/nats-wrapper";
 		process.on("SIGINT", () => natsWrapper.client.close());
 		process.on("SIGTERM", () => natsWrapper.client.close());
 
-		// 5. Connect to MongoDB
+		// 5. Listen to ticket created event
+		new TicketCreatedListener(natsWrapper.client).listen();
+
+		// 6. Listen to ticket updated event
+		new TicketUpdatedListener(natsWrapper.client).listen();
+
+		// 7. Connect to MongoDB
 		await mongoose.connect(process.env.MONGO_URI!);
 		console.log("Connected to MongoDB!");
 	} catch (err) {
 		console.error(err);
 	}
 
-	// 6. Start the server
+	// 8. Start the server
 	app.listen(3000, () => console.log("Listening on port 3000!"));
 })();
