@@ -1,5 +1,5 @@
 import { TicketService } from "./ticket.service";
-import { CreateTicketDto, UpdateTicketDto } from "./ticket.dto";
+import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
 import { Request, Response } from "express";
 
 export class TicketController {

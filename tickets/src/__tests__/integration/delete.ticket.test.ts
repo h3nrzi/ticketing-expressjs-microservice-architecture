@@ -3,7 +3,7 @@ import {
 	createTicket,
 	deleteTicket,
 	getTicket,
-} from "./helpers/ticket.helpers";
+} from "../helpers/ticket.helpers";
 
 describe("DELETE /api/tickets/:id", () => {
 	let cookie: string[];

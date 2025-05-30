@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { createTicket, updateTicket } from "./helpers/ticket.helpers";
-import { natsWrapper } from "../config/nats-wrapper";
+import { createTicket, updateTicket } from "../helpers/ticket.helpers";
+import { natsWrapper } from "../../config/nats-wrapper";
 
 describe("PATCH /api/tickets/:id", () => {
 	let cookie: string[];

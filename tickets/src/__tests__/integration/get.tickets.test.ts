@@ -1,4 +1,4 @@
-import { createTicket, getAllTickets } from "./helpers/ticket.helpers";
+import { createTicket, getAllTickets } from "../helpers/ticket.helpers";
 
 describe("GET /api/tickets", () => {
 	let cookie: string[];

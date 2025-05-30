@@ -6,7 +6,12 @@ export interface ITicket {
 	userId: string;
 }
 
-export interface ITicketDocument extends ITicket, Document {}
+export interface ITicketDocument extends Document {
+	title: string;
+	price: number;
+	userId: string;
+	version: number;
+}
 
 export interface ITicketModel extends Model<ITicketDocument> {
 	build(attrs: ITicket): ITicketDocument;

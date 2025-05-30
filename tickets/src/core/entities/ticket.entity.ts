@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
-import { ITicket, ITicketDocument, ITicketModel } from "./ticket.interface";
-
-// ==========================================
-// Ticket Schema
-// ==========================================
+import {
+	ITicket,
+	ITicketDocument,
+	ITicketModel,
+} from "../interfaces/ticket.interface";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 const ticketSchema = new mongoose.Schema<ITicketDocument>(
 	{
@@ -25,23 +26,17 @@ const ticketSchema = new mongoose.Schema<ITicketDocument>(
 			transform(doc, ret) {
 				ret.id = ret._id;
 				delete ret._id;
-				delete ret.__v;
 			},
 		},
 	}
 );
 
-// ==========================================
-// Methods
-// ==========================================
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attrs: ITicket) => {
 	return new TicketModel(attrs);
 };
-
-// ==========================================
-// Ticket Model
-// ==========================================
 
 export const TicketModel = mongoose.model<ITicketDocument, ITicketModel>(
 	"Ticket",

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { createTicket, getTicket } from "./helpers/ticket.helpers";
+import { createTicket, getTicket } from "../helpers/ticket.helpers";
 
 describe("GET /api/tickets/:id", () => {
 	let cookie: string[];

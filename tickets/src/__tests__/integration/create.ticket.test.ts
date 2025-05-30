@@ -1,5 +1,5 @@
-import { natsWrapper } from "../config/nats-wrapper";
-import { createTicket } from "./helpers/ticket.helpers";
+import { natsWrapper } from "../../config/nats-wrapper";
+import { createTicket } from "../helpers/ticket.helpers";
 
 describe("POST /api/tickets", () => {
 	let cookie: string[];
