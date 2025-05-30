@@ -12,11 +12,14 @@ export class TicketCreatedListener extends BaseListener<TicketCreatedEvent> {
 	queueGroupName = queueGroupName;
 
 	async onMessage(data: TicketCreatedEvent["data"], msg: Message) {
+		// get data from event
 		const { id, title, price } = data;
 
+		// create ticket
 		const ticket = Ticket.build({ id, title, price });
 		await ticket.save();
 
+		// ack the message
 		msg.ack();
 	}
 }
