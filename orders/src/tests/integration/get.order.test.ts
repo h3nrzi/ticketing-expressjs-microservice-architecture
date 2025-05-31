@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { Ticket } from "../core/entities/ticket.entity";
-import { postOrderRequest, getOrderRequest } from "./helpers/requests";
+import { Ticket } from "../../core/entities/ticket.entity";
+import { postOrderRequest, getOrderRequest } from "../helpers/requests";
 
 describe("GET /api/orders/:id", () => {
 	let cookie: string[];

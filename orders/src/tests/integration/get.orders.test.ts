@@ -1,5 +1,5 @@
-import { Ticket } from "../core/entities/ticket.entity";
-import { getOrdersRequest, postOrderRequest } from "./helpers/requests";
+import { Ticket } from "../../core/entities/ticket.entity";
+import { getOrdersRequest, postOrderRequest } from "../helpers/requests";
 
 describe("GET /api/orders", () => {
 	let cookie: string[];

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { Ticket } from "../core/entities/ticket.entity";
-import { deleteOrderRequest, postOrderRequest } from "./helpers/requests";
-import { natsWrapper } from "../config/nats-wrapper";
+import { Ticket } from "../../core/entities/ticket.entity";
+import { deleteOrderRequest, postOrderRequest } from "../helpers/requests";
+import { natsWrapper } from "../../config/nats-wrapper";
 
 describe("POST /api/orders", () => {
 	let cookie: string[];

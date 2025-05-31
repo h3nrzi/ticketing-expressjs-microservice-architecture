@@ -1,9 +1,9 @@
 import { OrderStatus } from "@h3nrzi-ticket/common";
-import { Ticket } from "../core/entities/ticket.entity";
-import { deleteOrderRequest, postOrderRequest } from "./helpers/requests";
+import { Ticket } from "../../core/entities/ticket.entity";
+import { deleteOrderRequest, postOrderRequest } from "../helpers/requests";
 
 import mongoose from "mongoose";
-import { natsWrapper } from "../config/nats-wrapper";
+import { natsWrapper } from "../../config/nats-wrapper";
 describe("DELETE /api/orders/:id", () => {
 	let cookie: string[];
 	let otherCookie: string[];
