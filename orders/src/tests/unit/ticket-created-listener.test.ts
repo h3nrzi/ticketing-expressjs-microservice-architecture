@@ -1,9 +1,10 @@
 import { TicketCreatedEvent } from "@h3nrzi-ticket/common";
-import { TicketCreatedListener } from "../../events/handlers/ticket-created-listener";
-import { natsWrapper } from "../../config/nats-wrapper";
 import mongoose from "mongoose";
-import { Ticket } from "../../core/entities/ticket.entity";
 import { Message } from "node-nats-streaming";
+import { natsWrapper } from "../../config/nats-wrapper";
+import { Ticket } from "../../core/entities/ticket.entity";
+import { ITicketDoc } from "../../core/interfaces/ticket.interface";
+import { TicketCreatedListener } from "../../events/handlers/ticket-created-listener";
 
 let listener: TicketCreatedListener;
 let data: TicketCreatedEvent["data"];
@@ -16,26 +17,14 @@ beforeEach(async () => {
 	// create a fake data event
 	data = {
 		id: new mongoose.Types.ObjectId().toHexString(),
-		version: 1,
+		version: 0,
 		title: "concert",
 		price: 10,
 		userId: new mongoose.Types.ObjectId().toHexString(),
 	};
 
 	// create a fake message object
-	msg = {
-		ack: jest.fn(),
-		getSubject: jest.fn(),
-		getSequence: jest.fn(),
-		getRawData: jest.fn(),
-		getData: jest.fn(),
-		getVersion: jest.fn(),
-		getTimestamp: jest.fn(),
-		getPublisher: jest.fn(),
-		getTimestampRaw: jest.fn(),
-		isRedelivered: jest.fn(),
-		getCrc32: jest.fn(),
-	} as Message;
+	msg = { ack: jest.fn() } as unknown as Message;
 });
 
 it("creates and saves a ticket", async () => {
@@ -43,10 +32,10 @@ it("creates and saves a ticket", async () => {
 	await listener.onMessage(data, msg);
 
 	// write assertions to make sure a ticket was created
-	const ticket = await Ticket.findById(data.id);
-	expect(ticket).toBeDefined();
-	expect(ticket!.title).toEqual(data.title);
-	expect(ticket!.price).toEqual(data.price);
+	const savedTicket: ITicketDoc | null = await Ticket.findById(data.id);
+	expect(savedTicket!.title).toEqual(data.title);
+	expect(savedTicket!.price).toEqual(data.price);
+	expect(savedTicket!.version).toEqual(data.version);
 });
 
 it("acks the message", async () => {
