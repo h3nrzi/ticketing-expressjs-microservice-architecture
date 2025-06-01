@@ -38,21 +38,36 @@ describe("POST /api/orders", () => {
 		});
 
 		it("returns an error if the ticket is already reserved", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			await postOrderRequest({ ticketId: ticket.id }, cookie);
 			const res = await postOrderRequest({ ticketId: ticket.id }, otherCookie);
 			expect(res.status).toBe(400);
 		});
 
 		it("reserves a ticket", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			const res = await postOrderRequest({ ticketId: ticket.id }, cookie);
 			expect(res.status).toBe(201);
 			expect(res.body.ticket.id).toEqual(ticket.id);
 		});
 
 		it("could reserve a ticket after it has cancelled", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
 			await deleteOrderRequest(order.body.id, cookie);
 			const res = await postOrderRequest({ ticketId: ticket.id }, cookie);
@@ -63,7 +78,12 @@ describe("POST /api/orders", () => {
 		it.todo("should reserve a ticket after it has expired");
 
 		it("emits an order created event", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			await postOrderRequest({ ticketId: ticket.id }, cookie);
 			expect(natsWrapper.client.publish).toHaveBeenCalled();
 		});

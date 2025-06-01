@@ -27,14 +27,19 @@ describe("GET /api/orders/:id", () => {
 		});
 
 		it("fails if the order does not belong to the user", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
 			const res = await getOrderRequest(order.body.id, otherCookie);
 			expect(res.status).toBe(401);
 		});
 	});
 
-	describe("Business logic", () => {
+	describe("business logic", () => {
 		it("fails if the order does not exist", async () => {
 			const id = new mongoose.Types.ObjectId().toHexString();
 			const res = await getOrderRequest(id, cookie);
@@ -42,7 +47,12 @@ describe("GET /api/orders/:id", () => {
 		});
 
 		it("returns the order if it exists", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
 			const res = await getOrderRequest(order.body.id, cookie);
 			expect(res.status).toBe(200);

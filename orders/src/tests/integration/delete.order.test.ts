@@ -29,7 +29,12 @@ describe("DELETE /api/orders/:id", () => {
 		});
 
 		it("fails if the order does not belong to the user", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
 			const res = await deleteOrderRequest(order.body.id, otherCookie);
 			expect(res.status).toBe(401);
@@ -44,7 +49,12 @@ describe("DELETE /api/orders/:id", () => {
 		});
 
 		it("cancels the order", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
 			const res = await deleteOrderRequest(order.body.id, cookie);
 			expect(res.status).toBe(200);
@@ -52,7 +62,12 @@ describe("DELETE /api/orders/:id", () => {
 		});
 
 		it("emits an order cancelled event", async () => {
-			const ticket = await Ticket.create({ title: "concert", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			const order = await postOrderRequest({ ticketId: ticket.id }, cookie);
 			await deleteOrderRequest(order.body.id, cookie);
 			expect(natsWrapper.client.publish).toHaveBeenCalled();

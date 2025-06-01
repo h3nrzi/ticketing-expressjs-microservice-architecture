@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Ticket } from "../../core/entities/ticket.entity";
 import { getOrdersRequest, postOrderRequest } from "../helpers/requests";
 
@@ -25,9 +26,24 @@ describe("GET /api/orders", () => {
 
 		it("returns a list of orders", async () => {
 			// Create tickets
-			const ticket1 = await Ticket.create({ title: "concert1", price: 20 });
-			const ticket2 = await Ticket.create({ title: "concert1", price: 20 });
-			const ticket3 = await Ticket.create({ title: "concert2", price: 20 });
+			const ticket1 = Ticket.build({
+				title: "concert1",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket1.save();
+			const ticket2 = Ticket.build({
+				title: "concert1",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket2.save();
+			const ticket3 = Ticket.build({
+				title: "concert2",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket3.save();
 
 			// Create orders for users
 			await postOrderRequest({ ticketId: ticket1.id }, cookie);
@@ -43,7 +59,12 @@ describe("GET /api/orders", () => {
 		});
 
 		it("should populate the ticket", async () => {
-			const ticket = await Ticket.create({ title: "concert1", price: 20 });
+			const ticket = Ticket.build({
+				title: "concert1",
+				price: 20,
+				id: new mongoose.Types.ObjectId().toHexString(),
+			});
+			await ticket.save();
 			await postOrderRequest({ ticketId: ticket.id }, cookie);
 
 			const res = await getOrdersRequest(cookie);

@@ -65,10 +65,7 @@ export class OrderService {
 			userId: newOrder.userId,
 			status: newOrder.status,
 			expiresAt: newOrder.expiresAt.toISOString(),
-			ticket: {
-				id: newOrder.ticket.id,
-				price: newOrder.ticket.price,
-			},
+			ticket: { id: newOrder.ticket.id, price: newOrder.ticket.price },
 			version: newOrder.version,
 		});
 
@@ -88,9 +85,7 @@ export class OrderService {
 		// Publish the order cancelled event
 		await new OrderCancelledPublisher(natsWrapper.client).publish({
 			id: order.id,
-			ticket: {
-				id: order.ticket.id,
-			},
+			ticket: { id: order.ticket.id },
 			version: order.version,
 		});
 
