@@ -42,6 +42,11 @@ describe("Positive Scenarios", () => {
 		const ticket = await TicketModel.findById(data.ticket.id);
 		expect(ticket?.orderId).toEqual(data.id);
 	});
+
+	it("should publish a ticket updated event", async () => {
+		await listener.onMessage(data, msg);
+		expect(natsWrapper.client.publish).toHaveBeenCalled();
+	});
 });
 
 describe("Negative Scenarios", () => {

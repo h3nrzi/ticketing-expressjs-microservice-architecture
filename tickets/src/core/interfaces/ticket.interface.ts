@@ -11,7 +11,7 @@ export interface ITicketDocument extends mongoose.Document {
 	price: number;
 	userId: string;
 	version: number;
-	orderId: string | null;
+	orderId?: string;
 }
 
 export interface ITicketModel extends mongoose.Model<ITicketDocument> {
