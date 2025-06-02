@@ -20,6 +20,10 @@ const ticketSchema = new mongoose.Schema<ITicketDocument>(
 			type: String,
 			required: true,
 		},
+		orderId: {
+			type: String,
+			default: null,
+		},
 	},
 	{
 		toJSON: {
