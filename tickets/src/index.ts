@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import app from "./app";
 import { natsWrapper } from "./config/nats-wrapper";
 import { OrderCreatedListener } from "./events/handlers/order-created-listener";
+import { OrderCancelledListener } from "./events/handlers/order-cancelled-listener";
 
 (async () => {
 	try {
@@ -33,6 +34,7 @@ import { OrderCreatedListener } from "./events/handlers/order-created-listener";
 
 		// ====== Event Listeners ======
 		new OrderCreatedListener(natsWrapper.client).listen();
+		new OrderCancelledListener(natsWrapper.client).listen();
 
 		// ====== Connect to MongoDB ======
 		await mongoose.connect(process.env.MONGO_URI!);
