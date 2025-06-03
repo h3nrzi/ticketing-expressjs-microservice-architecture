@@ -1,4 +1,8 @@
-import { NotAuthorizedError, NotFoundError } from "@h3nrzi-ticket/common";
+import {
+	BadRequestError,
+	NotAuthorizedError,
+	NotFoundError,
+} from "@h3nrzi-ticket/common";
 import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher";
 import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
@@ -36,9 +40,7 @@ export class TicketService implements ITicketService {
 	async getTicketById(ticketId: string) {
 		// check if the ticket exists, if not, throw an error
 		const ticket = await this.ticketRepository.findByTicketId(ticketId);
-		if (!ticket) {
-			throw new NotFoundError("Ticket not found");
-		}
+		if (!ticket) throw new NotFoundError("Ticket not found");
 
 		// return the ticket
 		return ticket;
@@ -75,10 +77,12 @@ export class TicketService implements ITicketService {
 		// check if the ticket exists, if not, throw an error
 		const ticket = await this.getTicketById(ticketId);
 
+		//
+		if (ticket.orderId)
+			throw new BadRequestError("Cannot edit a reserved ticket");
+
 		// check if the current user is the owner of the ticket, if not, throw an error
-		if (currentUserId !== ticket?.userId) {
-			throw new NotAuthorizedError();
-		}
+		if (currentUserId !== ticket?.userId) throw new NotAuthorizedError();
 
 		// update the ticket
 		const updatedTicket = await this.ticketRepository.update(
@@ -104,9 +108,7 @@ export class TicketService implements ITicketService {
 		const ticket = await this.getTicketById(ticketId);
 
 		// check if the current user is the owner of the ticket, if not, throw an error
-		if (currentUserId !== ticket?.userId) {
-			throw new NotAuthorizedError();
-		}
+		if (currentUserId !== ticket?.userId) throw new NotAuthorizedError();
 
 		// delete the ticket and return the deleted ticket
 		return await this.ticketRepository.delete(ticketId);

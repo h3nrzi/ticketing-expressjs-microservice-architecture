@@ -4,15 +4,11 @@ import app from "../../app";
 export interface TicketData {
 	title?: string;
 	price?: number;
+	orderId?: string;
 }
 
-export const createTicket = async (
-	{ title, price }: TicketData,
-	cookie?: string[]
-) => {
-	const ticket = { title, price };
-
-	const req = request(app).post("/api/tickets").send(ticket);
+export const createTicket = async (data: TicketData, cookie?: string[]) => {
+	const req = request(app).post("/api/tickets").send(data);
 	if (cookie) req.set("Cookie", cookie);
 	return req;
 };

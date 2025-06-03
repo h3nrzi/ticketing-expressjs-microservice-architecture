@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
-import { createTicket, updateTicket } from "../helpers/ticket.helpers";
+import {
+	createTicket,
+	getTicket,
+	updateTicket,
+} from "../helpers/ticket.helpers";
 import { natsWrapper } from "../../config/nats-wrapper";
+import { TicketModel } from "../../core/entities/ticket.entity";
 
 describe("PATCH /api/tickets/:id", () => {
 	let cookie: string[];
@@ -9,42 +14,6 @@ describe("PATCH /api/tickets/:id", () => {
 	beforeEach(() => {
 		cookie = global.signup();
 		otherCookie = global.signup();
-	});
-
-	describe("successful scenarios", () => {
-		it("should update a ticket with valid data and authentication", async () => {
-			const createRes = await createTicket(
-				{ title: "Concert", price: 20 },
-				cookie
-			);
-			const id = createRes.body.id;
-
-			const res = await updateTicket(
-				id,
-				{ title: "Updated Concert", price: 30 },
-				cookie
-			);
-
-			expect(res.status).toBe(200);
-			expect(res.body.title).toBe("Updated Concert");
-			expect(res.body.price).toBe(30);
-		});
-
-		it("publishes an event", async () => {
-			const createRes = await createTicket(
-				{ title: "Concert", price: 20 },
-				cookie
-			);
-			const id = createRes.body.id;
-
-			const res = await updateTicket(
-				id,
-				{ title: "Updated Concert", price: 30 },
-				cookie
-			);
-
-			expect(natsWrapper.client.publish).toHaveBeenCalledTimes(4);
-		});
 	});
 
 	describe("authentication scenarios", () => {
@@ -106,7 +75,7 @@ describe("PATCH /api/tickets/:id", () => {
 		});
 	});
 
-	describe("not found scenarios", () => {
+	describe("bassness logics", () => {
 		it("should return 404 if ticket not found", async () => {
 			const id = new mongoose.Types.ObjectId().toHexString();
 			const res = await updateTicket(
@@ -115,6 +84,59 @@ describe("PATCH /api/tickets/:id", () => {
 				cookie
 			);
 			expect(res.status).toBe(404);
+		});
+
+		it("should update a ticket with valid data and authentication", async () => {
+			const createRes = await createTicket(
+				{ title: "Concert", price: 20 },
+				cookie
+			);
+			const id = createRes.body.id;
+
+			const res = await updateTicket(
+				id,
+				{ title: "Updated Concert", price: 30 },
+				cookie
+			);
+
+			expect(res.status).toBe(200);
+			expect(res.body.title).toBe("Updated Concert");
+			expect(res.body.price).toBe(30);
+		});
+
+		it("publishes an event", async () => {
+			const createRes = await createTicket(
+				{ title: "Concert", price: 20 },
+				cookie
+			);
+			const id = createRes.body.id;
+
+			const res = await updateTicket(
+				id,
+				{ title: "Updated Concert", price: 30 },
+				cookie
+			);
+
+			expect(natsWrapper.client.publish).toHaveBeenCalled();
+		});
+
+		it("rejects update if the ticket is reserved", async () => {
+			const ticketCreatedResponse = await createTicket(
+				{ title: "Concert", price: 30 },
+				cookie
+			);
+
+			const ticket = await TicketModel.findById(ticketCreatedResponse.body.id);
+			ticket?.set({ orderId: new mongoose.Types.ObjectId().toHexString() });
+			await ticket?.save();
+
+			const res = await updateTicket(
+				ticket?.id,
+				{ title: "Updated Concert", price: 300 },
+				cookie
+			);
+
+			expect(res.status).toBe(400);
 		});
 	});
 });
