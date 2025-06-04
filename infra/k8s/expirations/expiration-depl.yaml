@@ -1,0 +1,52 @@
+# ===============================================
+# Deployment Definition
+# ===============================================
+
+apiVersion: apps/v1
+kind: Deployment
+
+# ------------------------------------------------------------------------------
+
+metadata:
+  name: expiration-depl
+
+# ------------------------------------------------------------------------------
+
+spec:
+  # Replicas is used to define the number of replicas of the deployment
+  replicas: 1
+
+  # Selector is used to select the pods to be managed by the deployment
+  selector:
+    matchLabels:
+      app: expiration
+
+  # Template is used to define the pod template
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+        - name: expiration
+          image: h3nrzi/expiration:latest
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          env:
+            - name: REDIS_HOST
+              value: expiration-redis-srv
+            - name: REDIS_PORT
+              value: "6379"
+            - name: NATS_URL
+              value: http://nats-srv:4222
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
