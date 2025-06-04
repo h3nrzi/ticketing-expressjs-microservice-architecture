@@ -1,17 +1,33 @@
+# ===============================================
+# Deployment Definition
+# ===============================================
+
 apiVersion: apps/v1
 kind: Deployment
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: auth-depl
+
+# ------------------------------------------------------------------------------
+
 spec:
+  # Replicas is used to define the number of replicas of the deployment
   replicas: 1
+
+  # Selector is used to select the pods to be managed by the deployment
   selector:
     matchLabels:
       app: auth
+
+  # Template is used to define the pod template
   template:
     metadata:
       labels:
         app: auth
     spec:
+      # Containers is used to define the containers to be run in the pod
       containers:
         - name: auth
           image: h3nrzi/auth
@@ -31,13 +47,28 @@ spec:
                   name: jwt-secret
                   key: JWT_KEY
 ---
+# ------------------------------------------------------------------------------
+
+# ===============================================
+# Service Definition
+# ===============================================
+
 apiVersion: v1
 kind: Service
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: auth-srv
+
+# ------------------------------------------------------------------------------
+
 spec:
+  # Selector is used to select the pods to be managed by the service
   selector:
     app: auth
+
+  # Ports is used to define the ports to be exposed by the service
   ports:
     - name: auth
       protocol: TCP

@@ -1,12 +1,27 @@
+# ===============================================
+# Deployment Definition
+# ===============================================
+
 apiVersion: apps/v1
 kind: Deployment
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: tickets-depl
+
+# ------------------------------------------------------------------------------
+
 spec:
+  # Replicas is used to define the number of replicas of the deployment
   replicas: 1
+
+  # Selector is used to select the pods to be managed by the deployment
   selector:
     matchLabels:
       app: tickets
+
+  # Template is used to define the pod template
   template:
     metadata:
       labels:
@@ -39,13 +54,28 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
 ---
+# ------------------------------------------------------------------------------
+
+# ===============================================
+# Service Definition
+# ===============================================
+
 apiVersion: v1
 kind: Service
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: tickets-srv
+
+# ------------------------------------------------------------------------------
+
 spec:
+  # Selector is used to select the pods to be managed by the service
   selector:
     app: tickets
+
+  # Ports is used to define the ports to be exposed by the service
   ports:
     - name: tickets
       protocol: TCP

@@ -1,12 +1,26 @@
+# ===============================================
+# Deployment Definition
+# ===============================================
+
 apiVersion: apps/v1
 kind: Deployment
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: tickets-mongo-depl
+
+# ------------------------------------------------------------------------------
+
 spec:
   replicas: 1
+
+  # Selector is used to select the pods to be managed by the deployment
   selector:
     matchLabels:
       app: tickets-mongo
+
+  # Template is used to define the pod template
   template:
     metadata:
       labels:
@@ -23,13 +37,28 @@ spec:
               memory: "256Mi"
               cpu: "250m"
 ---
+# ------------------------------------------------------------------------------
+
+# ===============================================
+# Service Definition
+# ===============================================
+
 apiVersion: v1
 kind: Service
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: tickets-mongo-srv
+
+# ------------------------------------------------------------------------------
+
 spec:
+  # Selector is used to select the pods to be managed by the service
   selector:
     app: tickets-mongo
+
+  # Ports is used to define the ports to be exposed by the service
   ports:
     - name: db
       protocol: TCP
