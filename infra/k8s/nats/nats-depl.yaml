@@ -1,11 +1,27 @@
+# ===============================================
+# Deployment Definition
+# ===============================================
+
 apiVersion: apps/v1
 kind: Deployment
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: nats-depl
+
+# ------------------------------------------------------------------------------
+
 spec:
+  # Replicas is used to define the number of replicas of the deployment
+  replicas: 1
+
+  # Selector is used to select the pods to be managed by the deployment
   selector:
     matchLabels:
       app: nats
+
+  # Template is used to define the pod template
   template:
     metadata:
       labels:
@@ -37,13 +53,27 @@ spec:
               memory: "256Mi"
               cpu: "250m"
 ---
+
+# ===============================================
+# Service Definition
+# ===============================================
+
 apiVersion: v1
 kind: Service
+
+# ------------------------------------------------------------------------------
+
 metadata:
   name: nats-srv
+
+# ------------------------------------------------------------------------------
+
 spec:
+  # Selector is used to select the pods to be managed by the service
   selector:
     app: nats
+
+  # Ports is used to define the ports to be exposed by the service
   ports:
     - name: client
       protocol: TCP
