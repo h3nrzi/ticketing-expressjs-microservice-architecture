@@ -1,7 +1,3 @@
-# ===============================================
-# Ingress Definition
-# ===============================================
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 
@@ -9,7 +5,7 @@ kind: Ingress
 
 metadata:
   # Name is used to define the name of the ingress
-  name: ingress-service
+  name: ingress-srv
 
   # Annotations is used to define the annotations for the ingress
   annotations:

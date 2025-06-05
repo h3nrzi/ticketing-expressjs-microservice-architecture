@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+
+# ------------------------------------------------------------------------------
+
+metadata:
+  name: nats-srv
+
+# ------------------------------------------------------------------------------
+
+spec:
+  # Selector is used to select the pods to be managed by the service
+  selector:
+    app: nats
+
+  # Ports is used to define the ports to be exposed by the service
+  ports:
+    - name: client
+      protocol: TCP
+      port: 4222
+      targetPort: 4222
+    - name: monitoring
+      protocol: TCP
+      port: 8222
+      targetPort: 8222
