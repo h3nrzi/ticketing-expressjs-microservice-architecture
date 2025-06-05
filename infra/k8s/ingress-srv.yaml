@@ -5,7 +5,7 @@ kind: Ingress
 
 metadata:
   # Name is used to define the name of the ingress
-  name: ingress-srv
+  name: ingress-service
 
   # Annotations is used to define the annotations for the ingress
   annotations:
