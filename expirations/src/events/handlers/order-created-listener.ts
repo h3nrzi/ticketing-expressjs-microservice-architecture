@@ -12,8 +12,13 @@ export class OrderCreatedListener extends BaseListener<OrderCreatedEvent> {
 	queueGroupName = queueGroupName;
 
 	async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
+		// calculate the expiration delay
+		const expirationDate = new Date(data.expiresAt);
+		const currentDate = new Date();
+		const expirationDelay = expirationDate.getTime() - currentDate.getTime();
+
 		// add a job to the expiration queue
-		await expirationQueue.add({ orderId: data.id });
+		await expirationQueue.add({ orderId: data.id }, { delay: expirationDelay });
 
 		// ack the message
 		msg.ack();
