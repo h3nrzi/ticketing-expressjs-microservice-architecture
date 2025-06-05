@@ -1,15 +1,27 @@
+# ===============================================
+# Skaffold Configuration
+# ===============================================
+
 apiVersion: skaffold/v2alpha3
 kind: Config
+
+# ------------------------------------------------------------------------------
 
 deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
 
+# ------------------------------------------------------------------------------
+
 build:
+  # Local is used to build the images locally
   local:
     push: false
+
+  # Artifacts is used to define the artifacts to be built
   artifacts:
+    # Auth Service
     - image: h3nrzi/auth
       context: auth
       docker:
@@ -18,6 +30,7 @@ build:
         manual:
           - src: "auth/src/**/*.ts"
             dest: .
+    # Tickets Service
     - image: h3nrzi/tickets
       context: tickets
       docker:
@@ -26,6 +39,7 @@ build:
         manual:
           - src: "tickets/src/**/*.ts"
             dest: .
+    # Orders Service
     - image: h3nrzi/orders
       context: orders
       docker:
@@ -34,6 +48,16 @@ build:
         manual:
           - src: "orders/src/**/*.ts"
             dest: .
+    # Expirations Service
+    - image: h3nrzi/expirations
+      context: expirations
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "expirations/src/**/*.ts"
+            dest: .
+    # Client Service
     # - image: h3nrzi/client
     #   context: client
     #   docker:

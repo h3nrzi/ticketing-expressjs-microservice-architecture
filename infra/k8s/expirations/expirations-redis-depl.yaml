@@ -8,7 +8,7 @@ kind: Deployment
 # ------------------------------------------------------------------------------
 
 metadata:
-  name: expiration-redis-depl
+  name: expirations-redis-depl
 
 # ------------------------------------------------------------------------------
 
@@ -19,16 +19,16 @@ spec:
   # Selector is used to select the pods to be managed by the deployment
   selector:
     matchLabels:
-      app: expiration-redis
+      app: expirations-redis
 
   # Template is used to define the pod template
   template:
     metadata:
       labels:
-        app: expiration-redis
+        app: expirations-redis
     spec:
       containers:
-        - name: expiration-redis
+        - name: expirations-redis
           image: redis:latest
           resources:
             limits:
@@ -51,14 +51,14 @@ kind: Service
 # ------------------------------------------------------------------------------
 
 metadata:
-  name: expiration-redis-srv
+  name: expirations-redis-srv
 
 # ------------------------------------------------------------------------------
 
 spec:
   # Selector is used to select the pods to be managed by the service
   selector:
-    app: expiration-redis
+    app: expirations-redis
 
   # Ports is used to define the ports to be exposed by the service
   ports:
