@@ -35,7 +35,7 @@ beforeEach(async () => {
 	msg = { ack: jest.fn() } as unknown as Message;
 });
 
-describe("Successful scenario", () => {
+describe("TicketUpdatedListener", () => {
 	it("finds, updates and saves a ticket", async () => {
 		// call the onMessage function with the data and message
 		await listener.onMessage(data, msg);
@@ -54,9 +54,7 @@ describe("Successful scenario", () => {
 		// write assertions to make sure the message was acked
 		expect(msg.ack).toHaveBeenCalled();
 	});
-});
 
-describe("Unsuccessful scenario", () => {
 	it("it does not call ack if the event version is not the next version", async () => {
 		// call the onMessage function with the data and message
 		const promise = listener.onMessage({ ...data, version: 1000 }, msg);

@@ -27,21 +27,23 @@ beforeEach(async () => {
 	msg = { ack: jest.fn() } as unknown as Message;
 });
 
-it("creates and saves a ticket", async () => {
-	// call the onMessage function with the data and message
-	await listener.onMessage(data, msg);
+describe("TicketCreatedListener", () => {
+	it("creates and saves a ticket", async () => {
+		// call the onMessage function with the data and message
+		await listener.onMessage(data, msg);
 
-	// write assertions to make sure a ticket was created
-	const savedTicket: ITicketDoc | null = await Ticket.findById(data.id);
-	expect(savedTicket!.title).toEqual(data.title);
-	expect(savedTicket!.price).toEqual(data.price);
-	expect(savedTicket!.version).toEqual(data.version);
-});
+		// write assertions to make sure a ticket was created
+		const savedTicket: ITicketDoc | null = await Ticket.findById(data.id);
+		expect(savedTicket!.title).toEqual(data.title);
+		expect(savedTicket!.price).toEqual(data.price);
+		expect(savedTicket!.version).toEqual(data.version);
+	});
 
-it("acks the message", async () => {
-	// call the onMessage function with the data and message
-	await listener.onMessage(data, msg);
+	it("acks the message", async () => {
+		// call the onMessage function with the data and message
+		await listener.onMessage(data, msg);
 
-	// write assertions to make sure the message was acked
-	expect(msg.ack).toHaveBeenCalled();
+		// write assertions to make sure the message was acked
+		expect(msg.ack).toHaveBeenCalled();
+	});
 });
