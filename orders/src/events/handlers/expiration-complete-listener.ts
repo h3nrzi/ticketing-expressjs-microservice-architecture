@@ -29,10 +29,7 @@ export class ExpirationCompleteListener extends BaseListener<ExpirationCompleteE
 		}
 
 		// Mark the order as cancelled
-		order.set({
-			status: OrderStatus.Cancelled,
-			ticket: null,
-		});
+		order.set({ status: OrderStatus.Cancelled });
 
 		// save the order
 		await order.save();
@@ -41,9 +38,7 @@ export class ExpirationCompleteListener extends BaseListener<ExpirationCompleteE
 		await new OrderCancelledPublisher(this.client).publish({
 			id: order.id,
 			version: order.version,
-			ticket: {
-				id: order.ticket.id,
-			},
+			ticket: { id: order.ticket.id },
 		});
 
 		// ack the message
