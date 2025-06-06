@@ -11,7 +11,7 @@ import { OrderCreatedPublisher } from "../events/publishers/order-created-publis
 import { natsWrapper } from "../config/nats-wrapper";
 import { OrderCancelledPublisher } from "../events/publishers/order-cancelled-publisher";
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes
+const EXPIRATION_WINDOW_SECONDS = 1 * 60; // 1 minutes
 
 export class OrderService {
 	constructor(
