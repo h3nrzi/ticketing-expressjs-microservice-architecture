@@ -1,0 +1,175 @@
+paths:
+  /api/users/currentuser:
+    get:
+      summary: Get current user information
+      description: Returns the current authenticated user's information. Returns null if not authenticated or if the session cookie is invalid.
+      tags:
+        - Users
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: Returns current user information or null if not authenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currentUser:
+                    oneOf:
+                      - type: object
+                        properties:
+                          id:
+                            type: string
+                            format: uuid
+                          email:
+                            type: string
+                            format: email
+                      - type: "null"
+                    description: User information if authenticated, null if not authenticated or invalid cookie
+
+  /api/users/signup:
+    post:
+      summary: Sign up a new user
+      description: Creates a new user account and sets a session cookie
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Valid email address
+                password:
+                  type: string
+                  minLength: 4
+                  description: Password with minimum length of 4 characters
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  email:
+                    type: string
+                    format: email
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                description: Session cookie for authentication
+        "400":
+          description: Invalid request or duplicate email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+
+  /api/users/signin:
+    post:
+      summary: Sign in a user
+      description: Authenticates a user and returns a session cookie
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: User's email address
+                password:
+                  type: string
+                  description: User's password
+      responses:
+        "200":
+          description: User signed in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  email:
+                    type: string
+                    format: email
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                description: Session cookie for authentication
+        "400":
+          description: Invalid credentials or missing fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        message:
+                          type: string
+
+  /api/users/signout:
+    post:
+      summary: Sign out a user
+      description: Clears the user's session cookie
+      tags:
+        - Users
+      security:
+        - cookieAuth: []
+      responses:
+        "204":
+          description: User signed out successfully
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                description: Empty session cookie to clear authentication

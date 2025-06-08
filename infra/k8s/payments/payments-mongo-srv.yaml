@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+
+# ------------------------------------------------------------------------------
+
+metadata:
+  name: payments-mongo-srv
+
+# ------------------------------------------------------------------------------
+
+spec:
+  # Selector is used to select the pods to be managed by the service
+  selector:
+    app: payments-mongo
+
+  # Ports is used to define the ports to be exposed by the service
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

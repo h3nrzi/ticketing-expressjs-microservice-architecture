@@ -1,0 +1,70 @@
+components:
+  schemas:
+    # User schema
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The user's unique identifier
+        email:
+          type: string
+          format: email
+          description: The user's email address
+      required:
+        - id
+        - email
+    # Current user response schema
+    CurrentUserResponse:
+      type: object
+      properties:
+        currentUser:
+          $ref: "#/components/schemas/User"
+          nullable: true
+      required:
+        - currentUser
+    # Sign up request schema
+    SignUpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: The user's email address
+        password:
+          type: string
+          format: password
+          description: The user's password
+      required:
+        - email
+        - password
+    # Sign in request schema
+    SignInRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: The user's email address
+        password:
+          type: string
+          format: password
+          description: The user's password
+      required:
+        - email
+        - password
+    # Error schema
+    Error:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+              field:
+                type: string
+      required:
+        - errors
