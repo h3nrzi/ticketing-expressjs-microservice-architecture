@@ -34,23 +34,15 @@ afterAll(async () => {
 // Helper Functions
 // ==========================================
 
-export interface TestUser {
-	id: string;
-	email: string;
-}
-
 declare global {
 	var signup: () => string[];
-	var createTestUser: () => TestUser;
 }
 
-export const createTestUser = (): TestUser => ({
-	id: new mongoose.Types.ObjectId().toHexString(),
-	email: "test@test.com",
-});
-
 global.signup = (): string[] => {
-	const payload = createTestUser();
+	const payload = {
+		id: new mongoose.Types.ObjectId().toHexString(),
+		email: "test@test.com",
+	};
 	const token = jwt.sign(payload, process.env.JWT_KEY!);
 	const session = { jwt: token };
 	const sessionJSON = JSON.stringify(session);
