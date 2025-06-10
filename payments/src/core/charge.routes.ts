@@ -1,13 +1,15 @@
 import express from "express";
 import { ChargeController } from "./charge.controller";
 import { ChargeService } from "./charge.service";
-import { ChargeRepository } from "./charge.repository";
+import { ChargeRepository } from "./repositories/charge.repository";
 import { requireAuth, validateRequest } from "@h3nrzi-ticket/common";
 import { body } from "express-validator";
+import { OrderRepository } from "./repositories/order.repository";
 
 const router = express.Router();
 const chargeRepository = new ChargeRepository();
-const chargeService = new ChargeService(chargeRepository);
+const orderRepository = new OrderRepository();
+const chargeService = new ChargeService(chargeRepository, orderRepository);
 const chargeController = new ChargeController(chargeService);
 
 /**
