@@ -1,6 +1,6 @@
-import { ChargeRepository } from "./repositories/charge.repository";
-import { CreateChargeDto } from "./dtos/charge.dto";
-import { IChargeDoc } from "./interfaces/charge.interface";
+import { PaymentRepository } from "./repositories/payment.repository";
+import { CreatePaymentDto } from "./dtos/payment.dto";
+import { IPaymentDoc } from "./interfaces/payment.interface";
 import { OrderRepository } from "./repositories/order.repository";
 import {
 	BadRequestError,
@@ -9,17 +9,17 @@ import {
 	OrderStatus,
 } from "@h3nrzi-ticket/common";
 
-export class ChargeService {
+export class PaymentService {
 	constructor(
-		private readonly chargeRepository: ChargeRepository,
+		private readonly paymentRepository: PaymentRepository,
 		private readonly orderRepository: OrderRepository
 	) {}
 
-	async createCharge(
-		createChargeDto: CreateChargeDto,
+	async createPayment(
+		createPaymentDto: CreatePaymentDto,
 		currentUserId: string
-	): Promise<IChargeDoc> {
-		const order = await this.orderRepository.getOrder(createChargeDto.orderId);
+	): Promise<IPaymentDoc> {
+		const order = await this.orderRepository.getOrder(createPaymentDto.orderId);
 		if (!order) throw new NotFoundError("Order not found");
 
 		if (order.userId !== currentUserId) throw new NotAuthorizedError();
@@ -30,6 +30,6 @@ export class ChargeService {
 		if (order.status === OrderStatus.Complete)
 			throw new BadRequestError("Order is already complete");
 
-		return this.chargeRepository.createCharge(createChargeDto, order);
+		return this.paymentRepository.createPayment(createPaymentDto, order);
 	}
 }

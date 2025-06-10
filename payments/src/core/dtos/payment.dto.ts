@@ -1,4 +1,4 @@
-export interface CreateChargeDto {
+export interface CreatePaymentDto {
 	orderId: string;
 	token: string;
 }
