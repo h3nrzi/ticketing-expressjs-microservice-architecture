@@ -6,38 +6,14 @@ import {
 import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
 import { TicketUpdatedPublisher } from "../events/publishers/ticket-updated-publisher";
 import { CreateTicketDto, UpdateTicketDto } from "./dtos/ticket.dto";
-import { ITicketDocument } from "./interfaces/ticket.interface";
 import { TicketRepository } from "./ticket.repository";
 import { natsWrapper } from "../config/nats-wrapper";
+import { ITicketDocument } from "./interfaces/ticket.interface";
 
-export interface ITicketService {
-	getAllTickets(): Promise<ITicketDocument[]>;
-	getTicketById(ticketId: string): Promise<ITicketDocument | null>;
-	// getTicketsByUserId(userId: string): Promise<ITicketDocument[]>;
-	createTicket(
-		createTicketDto: CreateTicketDto,
-		userId: string
-	): Promise<ITicketDocument>;
-	updateTicket(
-		ticketId: string,
-		updateTicketDto: UpdateTicketDto,
-		currentUserId: string
-	): Promise<ITicketDocument | null>;
-	deleteTicket(
-		ticketId: string,
-		currentUserId: string
-	): Promise<ITicketDocument | null>;
-}
-
-export class TicketService implements ITicketService {
+export class TicketService {
 	constructor(private readonly ticketRepository: TicketRepository) {}
 
-	async getAllTickets() {
-		// return all tickets
-		return this.ticketRepository.findAll();
-	}
-
-	async getTicketById(ticketId: string) {
+	async getTicketById(ticketId: string): Promise<ITicketDocument> {
 		// check if the ticket exists, if not, throw an error
 		const ticket = await this.ticketRepository.findByTicketId(ticketId);
 		if (!ticket) throw new NotFoundError("Ticket not found");
@@ -46,11 +22,10 @@ export class TicketService implements ITicketService {
 		return ticket;
 	}
 
-	// async getTicketsByUserId(userId: string) {
-	// 	return this.ticketRepository.findByUserId(userId);
-	// }
-
-	async createTicket(createTicketDto: CreateTicketDto, userId: string) {
+	async createTicket(
+		createTicketDto: CreateTicketDto,
+		userId: string
+	): Promise<ITicketDocument> {
 		// create the ticket
 		const ticket = await this.ticketRepository.create(createTicketDto, userId);
 
@@ -59,11 +34,11 @@ export class TicketService implements ITicketService {
 
 		// publish the ticket created event
 		await new TicketCreatedPublisher(natsWrapper.client).publish({
-			id: ticket.id,
-			title: ticket.title,
-			price: ticket.price,
-			userId: ticket.userId,
-			version: ticket.version,
+			id: savedTicket.id,
+			title: savedTicket.title,
+			price: savedTicket.price,
+			userId: savedTicket.userId,
+			version: savedTicket.version,
 		});
 
 		return savedTicket;
@@ -73,11 +48,11 @@ export class TicketService implements ITicketService {
 		ticketId: string,
 		updateTicketDto: UpdateTicketDto,
 		currentUserId: string
-	) {
+	): Promise<ITicketDocument> {
 		// check if the ticket exists, if not, throw an error
 		const ticket = await this.getTicketById(ticketId);
 
-		//
+		// check if the ticket is reserved, if it is, throw an error
 		if (ticket.orderId)
 			throw new BadRequestError("Cannot edit a reserved ticket");
 
@@ -86,31 +61,20 @@ export class TicketService implements ITicketService {
 
 		// update the ticket
 		const updatedTicket = await this.ticketRepository.update(
-			ticketId,
+			ticket,
 			updateTicketDto
 		);
 
 		// publish the ticket updated event
 		await new TicketUpdatedPublisher(natsWrapper.client).publish({
-			id: ticket.id,
-			title: ticket.title,
-			price: ticket.price,
-			userId: ticket.userId,
-			version: ticket.version,
+			id: updatedTicket.id,
+			title: updatedTicket.title,
+			price: updatedTicket.price,
+			userId: updatedTicket.userId,
+			version: updatedTicket.version,
 		});
 
 		// return the updated ticket
 		return updatedTicket;
-	}
-
-	async deleteTicket(ticketId: string, currentUserId: string) {
-		// check if the ticket exists, if not, throw an error
-		const ticket = await this.getTicketById(ticketId);
-
-		// check if the current user is the owner of the ticket, if not, throw an error
-		if (currentUserId !== ticket?.userId) throw new NotAuthorizedError();
-
-		// delete the ticket and return the deleted ticket
-		return await this.ticketRepository.delete(ticketId);
 	}
 }
