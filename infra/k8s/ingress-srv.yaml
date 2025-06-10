@@ -49,11 +49,11 @@ spec:
                 name: orders-srv
                 port:
                   number: 3000
-          # Client API
-          # - path: /?(.*)
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: client-srv
-          #       port:
-          #         number: 3000
+          # Charges API
+          - path: /api/charges/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: payments-srv
+                port:
+                  number: 3000

@@ -45,7 +45,7 @@ app.use(currentUser);
 // API Documentation
 // ==========================================
 
-app.use("/api/payments/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/api/charges/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ==========================================
 // Routes

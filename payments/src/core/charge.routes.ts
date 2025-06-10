@@ -11,10 +11,10 @@ const chargeService = new ChargeService(chargeRepository);
 const chargeController = new ChargeController(chargeService);
 
 /**
- * @route POST /api/payments
- * @description Create a new payment
+ * @route POST /api/charges
+ * @description Create a new charge
  * @access Private
- * @returns {Object} Payment object
+ * @returns {Object} Charge object
  */
 router.post("/", [
 	requireAuth,
