@@ -1,61 +1,15 @@
-import bodyParser from "body-parser";
-import cookieSession from "cookie-session";
 import express from "express";
-import "express-async-errors";
-import swaggerUi from "swagger-ui-express";
-import { swaggerSpec } from "./swagger/swagger";
-import {
-	NotFoundError,
-	errorHandler,
-	currentUser,
-} from "@h3nrzi-ticket/common";
+import { configureMiddleware } from "./config/middleware";
+import { configureSwagger } from "./config/swagger";
 import { paymentRoutes } from "./core/payment.routes";
-
-// ==========================================
-// Initialize Express Application
-// ==========================================
+import { errorHandler, NotFoundError } from "@h3nrzi-ticket/common";
 
 const app = express();
 
-// ==========================================
-// Security & Trust Configuration
-// ==========================================
-
-app.set("trust proxy", true);
-
-// ==========================================
-// Middleware Configuration
-// ==========================================
-
-app.use(bodyParser.json());
-
-app.use(
-	cookieSession({
-		signed: false,
-		secure: false,
-		httpOnly: true,
-		// sameSite: "none",
-		// path: "/",
-	})
-);
-
-app.use(currentUser);
-
-// ==========================================
-// API Documentation
-// ==========================================
-
-app.use("/api/payments/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-// ==========================================
-// Routes
-// ==========================================
+configureMiddleware(app);
+configureSwagger(app);
 
 app.use("/api/payments", paymentRoutes);
-
-// ==========================================
-// Error Handling
-// ==========================================
 
 app.all("*", async () => {
 	throw new NotFoundError("Route not found!");
