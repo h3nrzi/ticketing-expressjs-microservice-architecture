@@ -79,17 +79,16 @@ export class OrderService {
 		const order = await this.findOrderById(orderId, userId);
 
 		// Update the order status to cancelled
-		order.status = OrderStatus.Cancelled;
-		await order.save();
+		const cancelledOrder = await this.orderRepository.cancelOrder(order);
 
 		// Publish the order cancelled event
 		await new OrderCancelledPublisher(natsWrapper.client).publish({
-			id: order.id,
-			ticket: { id: order.ticket.id },
-			version: order.version,
+			id: cancelledOrder.id,
+			ticket: { id: cancelledOrder.ticket.id },
+			version: cancelledOrder.version,
 		});
 
 		// Return the updated order
-		return order;
+		return cancelledOrder;
 	}
 }

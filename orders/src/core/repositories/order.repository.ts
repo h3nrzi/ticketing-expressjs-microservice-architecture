@@ -43,4 +43,10 @@ export class OrderRepository {
 		}).populate("ticket");
 		return !!order;
 	}
+
+	async cancelOrder(orderToCancel: IOrderDoc): Promise<IOrderDoc> {
+		orderToCancel.status = OrderStatus.Cancelled;
+		await orderToCancel.save();
+		return orderToCancel;
+	}
 }
