@@ -9,7 +9,7 @@ import {
 	errorHandler,
 	currentUser,
 } from "@h3nrzi-ticket/common";
-import { paymentRoutes } from "./core/payment.routes";
+import { chargeRoutes } from "./core/charge.routes";
 
 // ==========================================
 // Initialize Express Application
@@ -51,7 +51,7 @@ app.use("/api/payments/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // Routes
 // ==========================================
 
-app.use("/api/payments", paymentRoutes);
+app.use("/api/charges", chargeRoutes);
 
 // ==========================================
 // Error Handling
