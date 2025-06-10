@@ -27,7 +27,7 @@ router.get("/", [
 
 /**
  * @route POST /api/orders
- * @description Create a new order
+ * @description Reserve a ticket
  * @access Private
  * @returns {Order} 201 - The order was created successfully
  * @returns {Error} 400 - Bad Request
