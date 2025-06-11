@@ -33,16 +33,11 @@ afterAll(async () => {
 // ==========================================
 
 declare global {
-	var signup: () => string[];
+	var signup: (payload: { id: string; email: string }) => string[];
 }
 
-global.signup = (): string[] => {
-	const payload = {
-		id: new mongoose.Types.ObjectId().toHexString(),
-		email: "test@test.com",
-	};
-
-	const token = jwt.sign(payload, "asdf");
+global.signup = (payload: { id: string; email: string }): string[] => {
+	const token = jwt.sign(payload, process.env.JWT_KEY!);
 	const session = { jwt: token };
 	const sessionJSON = JSON.stringify(session);
 	const base64 = Buffer.from(sessionJSON).toString("base64");
