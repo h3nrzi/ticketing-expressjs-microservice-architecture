@@ -25,9 +25,7 @@ beforeEach(async () => {
 
 afterAll(async () => {
 	if (mongo) await mongo.stop();
-	if (mongoose.connection.readyState !== 0) {
-		await mongoose.connection.close();
-	}
+	if (mongoose.connection.readyState !== 0) await mongoose.connection.close();
 });
 
 // ==========================================
@@ -43,10 +41,12 @@ global.signup = (): string[] => {
 		id: new mongoose.Types.ObjectId().toHexString(),
 		email: "test@test.com",
 	};
-	const token = jwt.sign(payload, process.env.JWT_KEY!);
+
+	const token = jwt.sign(payload, "asdf");
 	const session = { jwt: token };
 	const sessionJSON = JSON.stringify(session);
 	const base64 = Buffer.from(sessionJSON).toString("base64");
+
 	return [`session=${base64}`];
 };
 
@@ -54,8 +54,4 @@ global.signup = (): string[] => {
 // Mocking
 // ==========================================
 
-/**
- * Mock the nats wrapper
- * This is to avoid the nats wrapper being called during tests
- */
 jest.mock("../../config/nats-wrapper", () => require("../mocks/nats-wrapper"));
