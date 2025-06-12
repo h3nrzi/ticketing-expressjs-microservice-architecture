@@ -4,6 +4,7 @@ import { natsWrapper } from "./config/nats-wrapper";
 import { TicketUpdatedListener } from "./events/handlers/ticket-updated-listener";
 import { TicketCreatedListener } from "./events/handlers/ticket-created-listener";
 import { ExpirationCompleteListener } from "./events/handlers/expiration-complete-listener";
+import { PaymentSucceededListener } from "./events/handlers/payment-succeeded-listener";
 
 (async () => {
 	try {
@@ -37,6 +38,7 @@ import { ExpirationCompleteListener } from "./events/handlers/expiration-complet
 		new TicketCreatedListener(natsWrapper.client).listen();
 		new TicketUpdatedListener(natsWrapper.client).listen();
 		new ExpirationCompleteListener(natsWrapper.client).listen();
+		new PaymentSucceededListener(natsWrapper.client).listen();
 
 		// ====== Connect to MongoDB ======
 		await mongoose.connect(process.env.MONGO_URI!);
