@@ -9,6 +9,8 @@ import {
 	OrderStatus,
 } from "@h3nrzi-ticket/common";
 import { stripe } from "../stripe";
+import { PaymentSucceededPublisher } from "../events/publishers/payment-succeeded-event";
+import { natsWrapper } from "../config/nats-wrapper";
 
 export class PaymentService {
 	constructor(
@@ -53,6 +55,13 @@ export class PaymentService {
 		// update the order status to complete
 		order.set({ status: OrderStatus.Complete });
 		await order.save();
+
+		// Publish a payment succeeded event
+		await new PaymentSucceededPublisher(natsWrapper.client).publish({
+			id: payment.id,
+			orderId: order.id,
+			stripeId: charge.id,
+		});
 
 		// Return the payment
 		return payment;

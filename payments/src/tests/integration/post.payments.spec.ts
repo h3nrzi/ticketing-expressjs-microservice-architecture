@@ -4,6 +4,7 @@ import { Order } from "../../core/entities/order.entity";
 import { postPaymentsRequest } from "../helpers/requests";
 import { stripe } from "../../stripe";
 import { Payment } from "../../core/entities/payment.entity";
+import { natsWrapper } from "../../config/nats-wrapper";
 
 describe("POST /api/payments", () => {
 	let alexCookie: string[];
@@ -128,7 +129,7 @@ describe("POST /api/payments", () => {
 			expect(response.status).toBe(400);
 		});
 
-		it("should return 201 if the payment successfully is created", async () => {
+		it("should return 201 if the payment successfully is created and the stripe charge is successful", async () => {
 			const orderId = new mongoose.Types.ObjectId().toHexString();
 			const ticketPrice = Math.floor(Math.random() * 500);
 
@@ -146,12 +147,12 @@ describe("POST /api/payments", () => {
 				alexCookie
 			);
 
-			// Assertions
-			expect(response.status).toBe(201);
 			const stripeCharges = await stripe.charges.list({ limit: 50 });
 			const stripeCharge = stripeCharges.data.find(
 				(charge): boolean => charge.amount === ticketPrice * 100
 			);
+
+			expect(response.status).toBe(201);
 			expect(stripeCharge).not.toBeFalsy();
 		});
 
@@ -193,6 +194,24 @@ describe("POST /api/payments", () => {
 
 			const updatedOrder = await Order.findById(orderId);
 			expect(updatedOrder?.status).toEqual(OrderStatus.Complete);
+		});
+
+		it("should publish a payment succeeded event", async () => {
+			const orderId = new mongoose.Types.ObjectId().toHexString();
+			const ticketPrice = Math.floor(Math.random() * 500);
+
+			const order = Order.build({
+				id: orderId,
+				userId: alexUserPayload.id,
+				version: 0,
+				ticketPrice,
+				status: OrderStatus.Created,
+			});
+			await order.save();
+
+			await postPaymentsRequest({ orderId, token: "tok_visa" }, alexCookie);
+
+			expect(natsWrapper.client.publish).toHaveBeenCalled();
 		});
 	});
 });
