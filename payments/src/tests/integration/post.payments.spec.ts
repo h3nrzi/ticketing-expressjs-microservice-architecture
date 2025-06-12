@@ -2,6 +2,7 @@ import { OrderStatus } from "@h3nrzi-ticket/common";
 import mongoose from "mongoose";
 import { Order } from "../../core/entities/order.entity";
 import { postPaymentsRequest } from "../helpers/requests";
+import { stripe } from "../../stripe";
 
 describe("POST /api/payments", () => {
 	let cookie: string[];
@@ -128,12 +129,13 @@ describe("POST /api/payments", () => {
 
 		it("should return 201 if the payment successfully is created", async () => {
 			const orderId = new mongoose.Types.ObjectId().toHexString();
+			const ticketPrice = Math.floor(Math.random() * 500);
 
 			const order = Order.build({
 				id: orderId,
 				userId: userPayload.id,
 				version: 0,
-				ticketPrice: 10,
+				ticketPrice,
 				status: OrderStatus.Created,
 			});
 			await order.save();
@@ -142,7 +144,14 @@ describe("POST /api/payments", () => {
 				{ orderId, token: "tok_visa" },
 				cookie
 			);
+
+			// Assertions
 			expect(response.status).toBe(201);
+			const stripeCharges = await stripe.charges.list({ limit: 50 });
+			const stripeCharge = stripeCharges.data.find(
+				(charge): boolean => charge.amount === ticketPrice * 100
+			);
+			expect(stripeCharge).not.toBeFalsy();
 		});
 	});
 });
