@@ -2,11 +2,13 @@ import mongoose from "mongoose";
 
 export interface IPayment {
 	orderId: string;
+	stripeId: string;
 	amount: number;
 }
 
 export interface IPaymentDoc extends mongoose.Document {
 	orderId: string;
+	stripeId: string;
 	amount: number;
 }
 

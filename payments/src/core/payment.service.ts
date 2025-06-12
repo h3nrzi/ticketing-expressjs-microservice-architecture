@@ -36,13 +36,21 @@ export class PaymentService {
 			throw new BadRequestError("Order is cancelled");
 
 		// Create a charge
-		await stripe.charges.create({
+		const charge = await stripe.charges.create({
 			currency: "usd",
 			amount: order.ticketPrice * 100, // convert to cents
 			source: createPaymentDto.token,
 		});
 
 		// Create a payment
-		return this.paymentRepository.createPayment(createPaymentDto, order);
+		const payment = await this.paymentRepository.createPayment(
+			order.id,
+			charge.id,
+			order.ticketPrice
+		);
+		await payment.save();
+
+		// Return the payment
+		return payment;
 	}
 }

@@ -3,33 +3,34 @@ import mongoose from "mongoose";
 import { Order } from "../../core/entities/order.entity";
 import { postPaymentsRequest } from "../helpers/requests";
 import { stripe } from "../../stripe";
+import { Payment } from "../../core/entities/payment.entity";
 
 describe("POST /api/payments", () => {
-	let cookie: string[];
-	let otherCookie: string[];
-	let userPayload: { id: string; email: string };
-	let otherUserPayload: { id: string; email: string };
+	let alexCookie: string[];
+	let bobCookie: string[];
+	let alexUserPayload: { id: string; email: string };
+	let bobUserPayload: { id: string; email: string };
 
 	beforeAll(() => {
-		userPayload = {
+		alexUserPayload = {
 			id: new mongoose.Types.ObjectId().toHexString(),
-			email: "test@test.com",
+			email: "alex@test.com",
 		};
 
-		otherUserPayload = {
+		bobUserPayload = {
 			id: new mongoose.Types.ObjectId().toHexString(),
-			email: "test2@test.com",
+			email: "bob@test.com",
 		};
 
-		cookie = global.signup(userPayload);
-		otherCookie = global.signup(otherUserPayload);
+		alexCookie = global.signup(alexUserPayload);
+		bobCookie = global.signup(bobUserPayload);
 	});
 
 	describe("Validation DTO", () => {
 		it("should return 400 if orderId is not provided", async () => {
 			const response = await postPaymentsRequest(
 				{ orderId: "", token: "tok_visa" },
-				cookie
+				alexCookie
 			);
 			expect(response.status).toBe(400);
 		});
@@ -37,7 +38,7 @@ describe("POST /api/payments", () => {
 		it("should return 400 if token is not provided", async () => {
 			const response = await postPaymentsRequest(
 				{ orderId: new mongoose.Types.ObjectId().toHexString(), token: "" },
-				cookie
+				alexCookie
 			);
 			expect(response.status).toBe(400);
 		});
@@ -61,7 +62,7 @@ describe("POST /api/payments", () => {
 
 			const order = Order.build({
 				id: orderId,
-				userId: userPayload.id,
+				userId: alexUserPayload.id,
 				version: 0,
 				ticketPrice: 10,
 				status: OrderStatus.Created,
@@ -70,7 +71,7 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				otherCookie
+				bobCookie
 			);
 
 			expect(response.status).toBe(401);
@@ -84,7 +85,7 @@ describe("POST /api/payments", () => {
 					orderId: new mongoose.Types.ObjectId().toHexString(),
 					token: "tok_visa",
 				},
-				cookie
+				alexCookie
 			);
 			expect(response.status).toBe(404);
 		});
@@ -94,7 +95,7 @@ describe("POST /api/payments", () => {
 
 			const order = Order.build({
 				id: orderId,
-				userId: userPayload.id,
+				userId: alexUserPayload.id,
 				version: 0,
 				ticketPrice: 10,
 				status: OrderStatus.Cancelled,
@@ -103,7 +104,7 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				cookie
+				alexCookie
 			);
 			expect(response.status).toBe(400);
 		});
@@ -113,7 +114,7 @@ describe("POST /api/payments", () => {
 
 			const order = Order.build({
 				id: orderId,
-				userId: userPayload.id,
+				userId: alexUserPayload.id,
 				version: 0,
 				ticketPrice: 10,
 				status: OrderStatus.Complete,
@@ -122,7 +123,7 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				cookie
+				alexCookie
 			);
 			expect(response.status).toBe(400);
 		});
@@ -133,7 +134,7 @@ describe("POST /api/payments", () => {
 
 			const order = Order.build({
 				id: orderId,
-				userId: userPayload.id,
+				userId: alexUserPayload.id,
 				version: 0,
 				ticketPrice,
 				status: OrderStatus.Created,
@@ -142,7 +143,7 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				cookie
+				alexCookie
 			);
 
 			// Assertions
@@ -152,6 +153,27 @@ describe("POST /api/payments", () => {
 				(charge): boolean => charge.amount === ticketPrice * 100
 			);
 			expect(stripeCharge).not.toBeFalsy();
+		});
+
+		it("should save the payment to the database", async () => {
+			const orderId = new mongoose.Types.ObjectId().toHexString();
+			const ticketPrice = Math.floor(Math.random() * 500);
+
+			const order = Order.build({
+				id: orderId,
+				userId: alexUserPayload.id,
+				version: 0,
+				ticketPrice,
+				status: OrderStatus.Created,
+			});
+			await order.save();
+
+			await postPaymentsRequest({ orderId, token: "tok_visa" }, alexCookie);
+
+			const payment = await Payment.findOne({ orderId });
+			expect(payment).not.toBeNull();
+			expect(payment?.amount).toEqual(ticketPrice);
+			expect(payment?.stripeId).not.toBeNull();
 		});
 	});
 });

@@ -13,6 +13,10 @@ const paymentSchema = new mongoose.Schema<IPaymentDoc>(
 			type: String,
 			required: true,
 		},
+		stripeId: {
+			type: String,
+			required: true,
+		},
 	},
 	{
 		toJSON: {
