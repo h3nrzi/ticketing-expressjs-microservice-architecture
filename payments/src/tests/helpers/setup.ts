@@ -50,3 +50,4 @@ global.signup = (payload: { id: string; email: string }): string[] => {
 // ==========================================
 
 jest.mock("../../config/nats-wrapper", () => require("../mocks/nats-wrapper"));
+jest.mock("../../stripe", () => require("../mocks/stripe"));
