@@ -50,6 +50,10 @@ export class PaymentService {
 		);
 		await payment.save();
 
+		// update the order status to complete
+		order.set({ status: OrderStatus.Complete });
+		await order.save();
+
 		// Return the payment
 		return payment;
 	}

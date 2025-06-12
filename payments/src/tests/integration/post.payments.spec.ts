@@ -175,5 +175,24 @@ describe("POST /api/payments", () => {
 			expect(payment?.amount).toEqual(ticketPrice);
 			expect(payment?.stripeId).not.toBeNull();
 		});
+
+		it("should update the order status to complete", async () => {
+			const orderId = new mongoose.Types.ObjectId().toHexString();
+			const ticketPrice = Math.floor(Math.random() * 500);
+
+			const order = Order.build({
+				id: orderId,
+				userId: alexUserPayload.id,
+				version: 0,
+				ticketPrice,
+				status: OrderStatus.Created,
+			});
+			await order.save();
+
+			await postPaymentsRequest({ orderId, token: "tok_visa" }, alexCookie);
+
+			const updatedOrder = await Order.findById(orderId);
+			expect(updatedOrder?.status).toEqual(OrderStatus.Complete);
+		});
 	});
 });
