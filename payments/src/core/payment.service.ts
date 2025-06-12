@@ -27,13 +27,13 @@ export class PaymentService {
 		// Check if the order belongs to the current user, if not, throw an error
 		if (order.userId !== currentUserId) throw new NotAuthorizedError();
 
-		// Check if the order is cancelled, if so, throw an error
-		if (order.status === OrderStatus.Cancelled)
-			throw new BadRequestError("Order is cancelled");
-
 		// Check if the order is already complete, if so, throw an error
 		if (order.status === OrderStatus.Complete)
 			throw new BadRequestError("Order is already complete");
+
+		// Check if the order is cancelled, if so, throw an error
+		if (order.status === OrderStatus.Cancelled)
+			throw new BadRequestError("Order is cancelled");
 
 		// Create a charge
 		await stripe.charges.create({

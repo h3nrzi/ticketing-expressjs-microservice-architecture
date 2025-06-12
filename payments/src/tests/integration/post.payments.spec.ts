@@ -27,7 +27,7 @@ describe("POST /api/payments", () => {
 	describe("Validation DTO", () => {
 		it("should return 400 if orderId is not provided", async () => {
 			const response = await postPaymentsRequest(
-				{ orderId: "", token: "123" },
+				{ orderId: "", token: "tok_visa" },
 				cookie
 			);
 			expect(response.status).toBe(400);
@@ -47,7 +47,7 @@ describe("POST /api/payments", () => {
 			const response = await postPaymentsRequest(
 				{
 					orderId: new mongoose.Types.ObjectId().toHexString(),
-					token: "123abc",
+					token: "tok_visa",
 				},
 				[]
 			);
@@ -68,7 +68,7 @@ describe("POST /api/payments", () => {
 			await order.save();
 
 			const response = await postPaymentsRequest(
-				{ orderId, token: "123abc" },
+				{ orderId, token: "tok_visa" },
 				otherCookie
 			);
 
@@ -79,7 +79,10 @@ describe("POST /api/payments", () => {
 	describe("Business Logic", () => {
 		it("should return 404 if the order that is being paid does not exist", async () => {
 			const response = await postPaymentsRequest(
-				{ orderId: new mongoose.Types.ObjectId().toHexString(), token: "123" },
+				{
+					orderId: new mongoose.Types.ObjectId().toHexString(),
+					token: "tok_visa",
+				},
 				cookie
 			);
 			expect(response.status).toBe(404);
@@ -98,7 +101,7 @@ describe("POST /api/payments", () => {
 			await order.save();
 
 			const response = await postPaymentsRequest(
-				{ orderId, token: "123" },
+				{ orderId, token: "tok_visa" },
 				cookie
 			);
 			expect(response.status).toBe(400);
@@ -117,7 +120,7 @@ describe("POST /api/payments", () => {
 			await order.save();
 
 			const response = await postPaymentsRequest(
-				{ orderId, token: "123" },
+				{ orderId, token: "tok_visa" },
 				cookie
 			);
 			expect(response.status).toBe(400);
@@ -136,7 +139,7 @@ describe("POST /api/payments", () => {
 			await order.save();
 
 			const response = await postPaymentsRequest(
-				{ orderId, token: "123" },
+				{ orderId, token: "tok_visa" },
 				cookie
 			);
 			expect(response.status).toBe(201);
