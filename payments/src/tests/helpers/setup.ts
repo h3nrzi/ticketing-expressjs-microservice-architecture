@@ -8,6 +8,10 @@ import mongoose from "mongoose";
 
 let mongo: MongoMemoryServer;
 
+// Set Stripe key for testing
+process.env.STRIPE_KEY =
+	"sk_test_fake_key_for_testing";
+
 beforeAll(async () => {
 	// Set JWT key for testing
 	process.env.JWT_KEY = "asdf";
@@ -50,4 +54,4 @@ global.signup = (payload: { id: string; email: string }): string[] => {
 // ==========================================
 
 jest.mock("../../config/nats-wrapper", () => require("../mocks/nats-wrapper"));
-jest.mock("../../stripe", () => require("../mocks/stripe"));
+// jest.mock("../../stripe", () => require("../mocks/stripe"));
