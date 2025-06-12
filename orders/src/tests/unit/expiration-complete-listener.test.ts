@@ -8,7 +8,7 @@ import { Ticket } from "../../core/entities/ticket.entity";
 import { IOrderDoc } from "../../core/interfaces/order.interface";
 
 let listener: ExpirationCompleteListener;
-let data: ExpirationCompleteEvent["data"];
+let expirationEventData: ExpirationCompleteEvent["data"];
 let msg: Message;
 let order: IOrderDoc;
 
@@ -34,7 +34,7 @@ beforeEach(async () => {
 	await order.save();
 
 	// create a fake data event
-	data = { orderId: order.id };
+	expirationEventData = { orderId: order.id };
 
 	// create a fake message object
 	msg = {
@@ -44,18 +44,18 @@ beforeEach(async () => {
 
 describe("ExpirationCompleteListener", () => {
 	it("should update the order status to cancelled", async () => {
-		await listener.onMessage(data, msg);
+		await listener.onMessage(expirationEventData, msg);
 		const updatedOrder = await Order.findById(order.id);
 		expect(updatedOrder?.status).toEqual(OrderStatus.Cancelled);
 	});
 
 	it("should publish an order cancelled event", async () => {
-		await listener.onMessage(data, msg);
+		await listener.onMessage(expirationEventData, msg);
 		expect(natsWrapper.client.publish).toHaveBeenCalled();
 	});
 
 	it("should ack the message", async () => {
-		await listener.onMessage(data, msg);
+		await listener.onMessage(expirationEventData, msg);
 		expect(msg.ack).toHaveBeenCalled();
 	});
 
@@ -68,12 +68,12 @@ describe("ExpirationCompleteListener", () => {
 	it("should not publish an order cancelled event if the order is completed or cancelled", async () => {
 		order.status = OrderStatus.Complete;
 		await order.save();
-		await listener.onMessage(data, msg);
+		await listener.onMessage(expirationEventData, msg);
 		expect(natsWrapper.client.publish).toHaveBeenCalledTimes(3);
 
 		order.status = OrderStatus.Cancelled;
 		await order.save();
-		await listener.onMessage(data, msg);
+		await listener.onMessage(expirationEventData, msg);
 		expect(natsWrapper.client.publish).toHaveBeenCalledTimes(3);
 	});
 });

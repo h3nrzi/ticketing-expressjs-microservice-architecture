@@ -7,7 +7,7 @@ import { ITicketDoc } from "../../core/interfaces/ticket.interface";
 import { TicketUpdatedListener } from "../../events/handlers/ticket-updated-listener";
 
 let listener: TicketUpdatedListener;
-let data: TicketUpdatedEvent["data"];
+let ticketUpdatedEventData: TicketUpdatedEvent["data"];
 let msg: Message;
 
 beforeEach(async () => {
@@ -23,7 +23,7 @@ beforeEach(async () => {
 	await ticket.save();
 
 	// create a fake data event
-	data = {
+	ticketUpdatedEventData = {
 		id: ticket.id,
 		version: ticket.version + 1,
 		title: "new concert",
@@ -38,18 +38,20 @@ beforeEach(async () => {
 describe("TicketUpdatedListener", () => {
 	it("finds, updates and saves a ticket", async () => {
 		// call the onMessage function with the data and message
-		await listener.onMessage(data, msg);
+		await listener.onMessage(ticketUpdatedEventData, msg);
 
 		// write assertions to make sure a ticket was created
-		const savedTicket: ITicketDoc | null = await Ticket.findById(data.id);
-		expect(savedTicket!.title).toEqual(data.title);
-		expect(savedTicket!.price).toEqual(data.price);
-		expect(savedTicket!.version).toEqual(data.version);
+		const savedTicket: ITicketDoc | null = await Ticket.findById(
+			ticketUpdatedEventData.id
+		);
+		expect(savedTicket!.title).toEqual(ticketUpdatedEventData.title);
+		expect(savedTicket!.price).toEqual(ticketUpdatedEventData.price);
+		expect(savedTicket!.version).toEqual(ticketUpdatedEventData.version);
 	});
 
 	it("acks the message", async () => {
 		// call the onMessage function with the data and message
-		await listener.onMessage(data, msg);
+		await listener.onMessage(ticketUpdatedEventData, msg);
 
 		// write assertions to make sure the message was acked
 		expect(msg.ack).toHaveBeenCalled();
@@ -57,7 +59,10 @@ describe("TicketUpdatedListener", () => {
 
 	it("it does not call ack if the event version is not the next version", async () => {
 		// call the onMessage function with the data and message
-		const promise = listener.onMessage({ ...data, version: 1000 }, msg);
+		const promise = listener.onMessage(
+			{ ...ticketUpdatedEventData, version: 1000 },
+			msg
+		);
 
 		// write assertions to make sure the message was not acked
 		await expect(promise).rejects.toThrow();

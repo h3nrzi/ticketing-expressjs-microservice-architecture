@@ -7,7 +7,7 @@ import { ITicketDoc } from "../../core/interfaces/ticket.interface";
 import { TicketCreatedListener } from "../../events/handlers/ticket-created-listener";
 
 let listener: TicketCreatedListener;
-let data: TicketCreatedEvent["data"];
+let ticketCreatedEventData: TicketCreatedEvent["data"];
 let msg: Message;
 
 beforeEach(async () => {
@@ -15,7 +15,7 @@ beforeEach(async () => {
 	listener = new TicketCreatedListener(natsWrapper.client);
 
 	// create a fake data event
-	data = {
+	ticketCreatedEventData = {
 		id: new mongoose.Types.ObjectId().toHexString(),
 		version: 0,
 		title: "concert",
@@ -30,18 +30,20 @@ beforeEach(async () => {
 describe("TicketCreatedListener", () => {
 	it("creates and saves a ticket", async () => {
 		// call the onMessage function with the data and message
-		await listener.onMessage(data, msg);
+		await listener.onMessage(ticketCreatedEventData, msg);
 
 		// write assertions to make sure a ticket was created
-		const savedTicket: ITicketDoc | null = await Ticket.findById(data.id);
-		expect(savedTicket!.title).toEqual(data.title);
-		expect(savedTicket!.price).toEqual(data.price);
-		expect(savedTicket!.version).toEqual(data.version);
+		const savedTicket: ITicketDoc | null = await Ticket.findById(
+			ticketCreatedEventData.id
+		);
+		expect(savedTicket!.title).toEqual(ticketCreatedEventData.title);
+		expect(savedTicket!.price).toEqual(ticketCreatedEventData.price);
+		expect(savedTicket!.version).toEqual(ticketCreatedEventData.version);
 	});
 
 	it("acks the message", async () => {
 		// call the onMessage function with the data and message
-		await listener.onMessage(data, msg);
+		await listener.onMessage(ticketCreatedEventData, msg);
 
 		// write assertions to make sure the message was acked
 		expect(msg.ack).toHaveBeenCalled();
