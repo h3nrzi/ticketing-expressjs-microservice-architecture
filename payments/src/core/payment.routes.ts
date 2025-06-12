@@ -14,7 +14,7 @@ const paymentController = new PaymentController(paymentService);
 
 /**
  * @route POST /api/payments
- * @description Create a new payment
+ * @description Pay for an order
  * @access Private
  * @returns {Object} Payment object
  */
