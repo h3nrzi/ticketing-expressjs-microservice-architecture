@@ -1,5 +1,5 @@
 import { getCurrentUser } from "@/lib/api/users-api";
-import HomeContent from "@/components/home/HomeContent";
+import HomeContent from "@/components/home-content";
 
 export default async function Home() {
 	const { data, errors } = await getCurrentUser();

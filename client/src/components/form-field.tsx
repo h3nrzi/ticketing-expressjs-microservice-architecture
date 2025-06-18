@@ -1,5 +1,5 @@
 import React from "react";
-import ErrorDisplay from "@/components/ui/error-display";
+import ErrorDisplay from "@/components/error-display";
 import { ErrorResponse } from "@/types/ErrorResponse";
 
 interface Props {

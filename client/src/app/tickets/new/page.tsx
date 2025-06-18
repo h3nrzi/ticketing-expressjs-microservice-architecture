@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect } from "react";
-import ErrorDisplay from "@/components/ui/error-display";
+import ErrorDisplay from "@/components/error-display";
 import { useFormState } from "react-dom";
 import { createTicket } from "@/lib/actions/tickets-actions";
-import SubmitButton from "@/components/ui/submit-button";
+import SubmitButton from "@/components/submit-button";
 import { FormState } from "@/types/FormState";
-import FormField from "@/components/ui/form-field";
+import FormField from "@/components/form-field";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 

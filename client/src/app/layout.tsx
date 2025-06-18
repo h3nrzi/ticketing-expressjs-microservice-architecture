@@ -4,7 +4,7 @@ import "@/styles/globals.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "@/styles/custom-bootstrap.css";
 import { ClientToaster } from "./client-toaster";
-import Header from "@/components/layout/Header";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
 	title: "Create Next App",
