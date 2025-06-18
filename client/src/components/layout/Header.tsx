@@ -10,7 +10,10 @@ export default async function Header() {
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 			<div className="container">
 				<Link href="/" className="navbar-brand">
-					Ticketing
+					<span className="h1">🎟️</span>
+				</Link>
+				<Link href="/tickets" className="navbar-text">
+					Tickets
 				</Link>
 				<div className="navbar-nav ms-auto">
 					{data?.currentUser ? (
