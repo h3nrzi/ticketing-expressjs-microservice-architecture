@@ -1,6 +1,6 @@
 import Link from "next/link";
-import UserNav from "./UserNav";
-import AuthLinks from "./AuthLinks";
+import UserNav from "./user-nav";
+import AuthLinks from "./auth-links";
 import { getCurrentUser } from "@/lib/api/users-api";
 
 export default async function Header() {
