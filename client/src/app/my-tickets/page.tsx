@@ -2,7 +2,7 @@ import React from "react";
 import NewButton from "./new-button";
 import TicketDetails from "./ticket-details";
 
-const TicketsPage = () => {
+const MyTicketsPage = () => {
 	return (
 		<div className="m-5">
 			<NewButton />
@@ -11,4 +11,4 @@ const TicketsPage = () => {
 	);
 };
 
-export default TicketsPage;
+export default MyTicketsPage;

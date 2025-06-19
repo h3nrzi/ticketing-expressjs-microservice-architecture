@@ -1,7 +1,4 @@
-interface Ticket {
-	title: string;
-	price: number;
-}
+import { Ticket } from "../../types/Ticket";
 
 interface Props {
 	ticket: Ticket;

@@ -12,8 +12,8 @@ export default async function Header() {
 				<Link href="/" className="navbar-brand">
 					<span className="h1">🎟️</span>
 				</Link>
-				<Link href="/tickets" className="navbar-text">
-					Tickets
+				<Link href="/my-tickets" className="navbar-text">
+					My Tickets
 				</Link>
 				<div className="navbar-nav ms-auto">
 					{data?.currentUser ? (
