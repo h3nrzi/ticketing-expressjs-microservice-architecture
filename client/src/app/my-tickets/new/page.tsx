@@ -18,7 +18,7 @@ const NewTicketPage = () => {
 	useEffect(() => {
 		if (state?.success) {
 			toast.success("Ticket created successfully!");
-			// router.push("/tickets");
+			router.push("/my-tickets");
 		}
 	}, [state, router]);
 

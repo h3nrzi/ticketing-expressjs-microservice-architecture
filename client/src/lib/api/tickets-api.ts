@@ -1,7 +1,7 @@
-import axios, { AxiosError } from "axios";
-import { cookieManager } from "../utils/cookie-utils";
 import { ErrorResponse } from "@/types/ErrorResponse";
 import { Ticket } from "@/types/Ticket";
+import axios, { AxiosError } from "axios";
+import { cookieManager } from "../utils/cookie-utils";
 
 export async function getCurrentUserTickets() {
 	const token = cookieManager.get("session");
