@@ -11,6 +11,17 @@ const ticketService = new TicketService(ticketRepository);
 const ticketController = new TicketController(ticketService);
 
 /**
+ * @description Get All Tickets related to current user
+ * @route GET /api/tickets/currentuser
+ * @access Private
+ * @returns
+ */
+router.get("/currentuser", [
+	requireAuth,
+	ticketController.getTicketsByUserId.bind(ticketController),
+]);
+
+/**
  * @description Create a new ticket
  * @route POST /api/tickets
  * @access Private

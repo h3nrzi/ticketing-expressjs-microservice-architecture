@@ -13,6 +13,10 @@ import { ITicketDocument } from "./interfaces/ticket.interface";
 export class TicketService {
 	constructor(private readonly ticketRepository: TicketRepository) {}
 
+	async getTicketsByUserId(userId: string): Promise<ITicketDocument[]> {
+		return this.ticketRepository.findByUserId(userId);
+	}
+
 	async getTicketById(ticketId: string): Promise<ITicketDocument> {
 		// check if the ticket exists, if not, throw an error
 		const ticket = await this.ticketRepository.findByTicketId(ticketId);

@@ -3,6 +3,10 @@ import { TicketModel } from "./entities/ticket.entity";
 import { ITicketDocument } from "./interfaces/ticket.interface";
 
 export class TicketRepository {
+	async findByUserId(userId: string): Promise<ITicketDocument[]> {
+		return TicketModel.find({ userId });
+	}
+
 	async findByTicketId(ticketId: string): Promise<ITicketDocument | null> {
 		return TicketModel.findById(ticketId);
 	}
