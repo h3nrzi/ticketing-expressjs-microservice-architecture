@@ -1,14 +1,18 @@
 import axios, { AxiosError } from "axios";
 import { cookieManager } from "../utils/cookie-utils";
 import { ErrorResponse } from "@/types/ErrorResponse";
+import { User } from "@/types/User";
 
 export async function getCurrentUser() {
 	const token = cookieManager.get("session");
 
 	try {
-		const res = await axios.get("http://ticketing.dev/api/users/currentuser", {
-			headers: token ? { Cookie: token.value } : {},
-		});
+		const res = await axios.get<{ currentUser: User }>(
+			"http://ticketing.dev/api/users/currentuser",
+			{
+				headers: token ? { Cookie: token.value } : {},
+			}
+		);
 
 		const data = res.data;
 

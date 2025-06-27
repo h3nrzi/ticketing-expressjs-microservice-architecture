@@ -9,12 +9,19 @@ export default async function Header() {
 	return (
 		<nav className="navbar navbar-expand-lg navbar-light bg-light">
 			<div className="container">
+				{/* logo */}
 				<Link href="/" className="navbar-brand">
 					<span className="h1">🎟️</span>
 				</Link>
-				<Link href="/my-tickets" className="navbar-text">
-					My Tickets
-				</Link>
+
+				{/* if the user is logged in, show the my tickets link */}
+				{data?.currentUser && (
+					<Link href="/my-tickets" className="navbar-text">
+						My Tickets
+					</Link>
+				)}
+
+				{/* if the user is logged in, show the user nav, otherwise show the auth links */}
 				<div className="navbar-nav ms-auto">
 					{data?.currentUser ? (
 						<UserNav email={data.currentUser.email} />

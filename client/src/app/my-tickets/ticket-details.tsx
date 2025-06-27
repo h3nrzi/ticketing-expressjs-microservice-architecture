@@ -1,8 +1,13 @@
 import TicketCard from "@/app/my-tickets/ticket-card";
+import { getCurrentUser } from "@/lib/api/users-api";
 import { getCurrentUserTickets } from "@/lib/api/tickets-api";
+import { redirect } from "next/navigation";
 
 const TicketDetails = async () => {
 	const { data } = await getCurrentUserTickets();
+	const { data: userData } = await getCurrentUser();
+
+	if (!userData?.currentUser) redirect("/");
 
 	if (!data || data.length === 0) return <p>You do not have any ticket...</p>;
 
