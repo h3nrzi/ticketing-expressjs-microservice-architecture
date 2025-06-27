@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+
+# ------------------------------------------------------------------------------
+
+metadata:
+  name: expirations-redis-depl
+
+# ------------------------------------------------------------------------------
+
+spec:
+  # Replicas is used to define the number of replicas of the deployment
+  replicas: 1
+
+  # Selector is used to select the pods to be managed by the deployment
+  selector:
+    matchLabels:
+      app: expirations-redis
+
+  # Template is used to define the pod template
+  template:
+    metadata:
+      labels:
+        app: expirations-redis
+    spec:
+      containers:
+        - name: expirations-redis
+          image: redis:latest
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+
