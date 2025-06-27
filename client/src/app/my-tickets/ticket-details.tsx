@@ -1,4 +1,5 @@
 import { Ticket } from "@/types/Ticket";
+import Link from "next/link";
 
 const TicketDetails = async ({ tickets }: { tickets: Ticket[] }) => {
 	return (
@@ -12,7 +13,9 @@ const TicketDetails = async ({ tickets }: { tickets: Ticket[] }) => {
 			<tbody>
 				{tickets.map((ticket) => (
 					<tr key={ticket.id}>
-						<td>{ticket.title}</td>
+						<td>
+							<Link href={`/my-tickets/${ticket.id}`}>{ticket.title}</Link>
+						</td>
 						<td>${ticket.price}</td>
 					</tr>
 				))}
