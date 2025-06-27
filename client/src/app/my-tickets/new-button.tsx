@@ -4,7 +4,7 @@ const NewButton = () => {
 	return (
 		<div className="d-flex justify-content-end">
 			<Link href="/my-tickets/new">
-				<button className="btn btn-primary">Create New Ticket</button>
+				<button className="btn btn-primary rounded">+</button>
 			</Link>
 		</div>
 	);
