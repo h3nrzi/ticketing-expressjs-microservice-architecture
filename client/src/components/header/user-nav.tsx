@@ -1,35 +1,35 @@
 "use client";
 
-import axios, { AxiosError } from "axios";
+import { signout } from "@/lib/actions/auth-actions";
+import { FormState } from "@/types/FormState";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useFormState } from "react-dom";
 import toast from "react-hot-toast";
+import SubmitButton from "../submit-button";
 
 interface UserNavProps {
 	email: string;
 }
 
 export default function UserNav({ email }: UserNavProps) {
+	const initialState: FormState = { errors: [], success: false };
+	const [state, formAction] = useFormState(signout, initialState);
 	const router = useRouter();
 
-	const handleSignOut = async () => {
-		try {
-			await axios.post("/api/users/signout", {}, { withCredentials: true });
+	useEffect(() => {
+		if (state?.success) {
 			router.refresh();
 			toast.success("Logged out successfully! See you next time!");
-		} catch (error) {
-			console.error((error as AxiosError).response?.data);
 		}
-	};
+	}, [state, router]);
 
 	return (
 		<>
 			<span className="nav-item nav-link">{email}</span>
-			<button
-				onClick={handleSignOut}
-				className="nav-item nav-link btn border btn-sm"
-			>
-				Sign Out
-			</button>
+			<form action={formAction} className="nav-item nav-link">
+				<SubmitButton className="btn border btn-sm">Sign Out</SubmitButton>
+			</form>
 		</>
 	);
 }
