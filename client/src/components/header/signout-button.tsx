@@ -15,7 +15,7 @@ const SignoutButton = () => {
 
 	useEffect(() => {
 		if (state?.success) {
-			router.refresh();
+			// router.refresh();
 			toast.success("Logged out successfully! See you next time!");
 		}
 	}, [state, router]);

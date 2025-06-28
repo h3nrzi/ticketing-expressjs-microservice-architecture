@@ -49,7 +49,9 @@ export const signin = async (prevState: FormState, formData: FormData) => {
 
 export const signout = async () => {
 	try {
-		await axios.post("http://ticketing.dev/api/users/signout");
+		await axios.post("http://ticketing.dev/api/users/signout", {
+			withCredentials: true,
+		});
 
 		cookieManager.delete("session");
 
