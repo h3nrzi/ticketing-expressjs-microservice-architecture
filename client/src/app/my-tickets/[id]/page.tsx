@@ -1,9 +1,25 @@
+import { getTicketById } from "@/lib/api/tickets-api";
+import ReserveButton from "./reserve-button";
+
 interface Props {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }
 
 const TicketDetailsPage = async ({ params }: Props) => {
-	return <div>{params.id}</div>;
+	const { id } = await params;
+	const { data: ticket } = await getTicketById(id);
+
+	if (!ticket) return <div>Ticket not found</div>;
+
+	return (
+		<div className="row m-5">
+			<div className="col-8 p-5 rounded border">
+				<h1>{ticket.title}</h1>
+				<p>${ticket.price}</p>
+				<ReserveButton ticketId={id} />
+			</div>
+		</div>
+	);
 };
 
 export default TicketDetailsPage;

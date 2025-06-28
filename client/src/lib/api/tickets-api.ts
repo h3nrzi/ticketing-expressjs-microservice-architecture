@@ -21,3 +21,22 @@ export async function getCurrentUserTickets() {
 		return { errors };
 	}
 }
+
+export async function getTicketById(id: string) {
+	const token = cookieManager.get("session");
+
+	try {
+		const res = await axios.get<Ticket>(
+			`http://ticketing.dev/api/tickets/${id}`,
+			{ headers: token ? { Cookie: token.value } : {} }
+		);
+
+		const data = res.data;
+
+		return { data };
+	} catch (error) {
+		const errors = (error as AxiosError<ErrorResponse>).response?.data.errors;
+
+		return { errors };
+	}
+}
