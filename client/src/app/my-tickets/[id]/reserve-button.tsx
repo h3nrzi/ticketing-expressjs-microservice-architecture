@@ -21,7 +21,7 @@ const ReserveButton = ({ ticketId }: Props) => {
 	useEffect(() => {
 		if (state?.success) {
 			toast.success("Ticket reserved successfully!");
-			router.push("/my-tickets");
+			router.push("/orders");
 		}
 	}, [state, router]);
 

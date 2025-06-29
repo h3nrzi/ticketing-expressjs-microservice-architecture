@@ -21,6 +21,13 @@ export default async function Header() {
 					</Link>
 				)}
 
+				{/* if the user is logged in, show the orders link */}
+				{data?.currentUser && (
+					<Link href="/orders" className="navbar-text">
+						My Orders
+					</Link>
+				)}
+
 				{/* if the user is logged in, show the user nav, otherwise show the auth links */}
 				<div className="navbar-nav ms-auto">
 					{data?.currentUser ? (

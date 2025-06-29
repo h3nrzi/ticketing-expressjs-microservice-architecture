@@ -14,13 +14,13 @@ const orderService = new OrderService(orderRepository, ticketRepository);
 const orderController = new OrderController(orderService);
 
 /**
- * @route GET /api/orders
+ * @route GET /api/orders/currentuser
  * @description Get all orders for the current user
  * @access Private
  * @returns {Order[]} 200 - The orders were found successfully
  * @returns {Error} 401 - The user is not authenticated or the user cannot access this resource
  */
-router.get("/", [
+router.get("/currentuser", [
 	requireAuth,
 	orderController.findOrdersByUserId.bind(orderController),
 ]);
