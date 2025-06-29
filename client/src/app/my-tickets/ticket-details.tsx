@@ -15,6 +15,11 @@ const TicketDetails = async ({ tickets }: { tickets: Ticket[] }) => {
 					<tr key={ticket.id}>
 						<td>
 							<Link href={`/my-tickets/${ticket.id}`}>{ticket.title}</Link>
+							{ticket.orderId && (
+								<span className="badge badge-pill badge-info ml-1">
+									Reserved
+								</span>
+							)}
 						</td>
 						<td>${ticket.price}</td>
 					</tr>
