@@ -8,6 +8,7 @@ const TicketDetails = async ({ tickets }: { tickets: Ticket[] }) => {
 				<tr>
 					<th>نام تیکت</th>
 					<th>قیمت تیکت</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -22,6 +23,11 @@ const TicketDetails = async ({ tickets }: { tickets: Ticket[] }) => {
 							)}
 						</td>
 						<td>{ticket.price} دلار</td>
+						<td>
+							<Link href={`/my-tickets/${ticket.id}/edit`}>
+								<button className="btn btn-sm btn-secondary">ویرایش</button>
+							</Link>
+						</td>
 					</tr>
 				))}
 			</tbody>
