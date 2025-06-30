@@ -1,5 +1,4 @@
 import { getCurrentUserOrders } from "@/lib/api/orders-api";
-import Link from "next/link";
 
 const OrdersPage = async () => {
 	const { data: orders } = await getCurrentUserOrders();
@@ -12,7 +11,7 @@ const OrdersPage = async () => {
 			<ul>
 				{orders.map((order) => (
 					<li key={order.id}>
-						<Link href={`/orders/${order.id}`}>{order.id}</Link>
+						<a href={`/orders/${order.id}`}>{order.id}</a>
 						{order.status === "cancelled" && (
 							<span className="badge badge-danger ml-1">{order.status}</span>
 						)}

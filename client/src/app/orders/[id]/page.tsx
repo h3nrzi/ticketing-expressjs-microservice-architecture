@@ -1,4 +1,5 @@
 import { getOrderById } from "@/lib/api/orders-api";
+import Timer from "./timer";
 
 interface Props {
 	params: Promise<{ id: string }>;
@@ -10,7 +11,13 @@ const OrderDetailsPage = async ({ params }: Props) => {
 
 	if (!order) return <div>Order not found</div>;
 
-	return <div>{order.id}</div>;
+	const msLeft = new Date(order.expiresAt).getTime() - new Date().getTime();
+
+	return (
+		<div className="m-5">
+			<Timer timeToLeft={msLeft / 1000} />
+		</div>
+	);
 };
 
 export default OrderDetailsPage;

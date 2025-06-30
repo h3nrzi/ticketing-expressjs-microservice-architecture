@@ -1,19 +1,15 @@
 import { getTicketById } from "@/lib/api/tickets-api";
 import ReserveButton from "./reserve-button";
-import { getCurrentUser } from "@/lib/api/users-api";
-import { redirect } from "next/navigation";
 
 interface Props {
 	params: Promise<{ id: string }>;
 }
 
 const TicketDetailsPage = async ({ params }: Props) => {
-	const { data: userData } = await getCurrentUser();
 	const { id } = await params;
 	const { data: ticket } = await getTicketById(id);
 
 	if (!ticket) return <div>Ticket not found</div>;
-	if (!userData?.currentUser) redirect("/");
 
 	return (
 		<div className="row m-5">
