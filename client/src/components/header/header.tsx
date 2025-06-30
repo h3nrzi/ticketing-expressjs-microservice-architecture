@@ -14,21 +14,21 @@ export default async function Header() {
 					<span className="h1">🎟️</span>
 				</Link>
 
-				{/* if the user is logged in, show the my tickets link */}
+				{/* my tickets link */}
 				{data?.currentUser && (
-					<Link href="/my-tickets" className="navbar-text">
-						My Tickets
+					<Link href="/my-tickets" className="navbar-text ml-2">
+						تیکت های من
 					</Link>
 				)}
 
-				{/* if the user is logged in, show the orders link */}
+				{/* orders link */}
 				{data?.currentUser && (
-					<Link href="/orders" className="navbar-text">
-						My Orders
+					<Link href="/orders" className="navbar-text ml-5">
+						سفارش های من
 					</Link>
 				)}
 
-				{/* if the user is logged in, show the user nav, otherwise show the auth links */}
+				{/* user nav or auth links */}
 				<div className="navbar-nav ms-auto">
 					{data?.currentUser ? (
 						<UserNav email={data.currentUser.email} />

@@ -34,7 +34,7 @@ const ReserveButton = ({ ticketId }: Props) => {
 
 	useEffect(() => {
 		if (state?.success) {
-			toast.success("Ticket reserved successfully!");
+			toast.success("تیکت با موفقیت رزرو شد!");
 			router.push("/orders/" + state.orderId);
 		}
 	}, [state, router]);
@@ -44,7 +44,7 @@ const ReserveButton = ({ ticketId }: Props) => {
 			<form action={formAction}>
 				<ErrorDisplay errors={state?.errors} />
 				<input type="hidden" name="ticketId" value={ticketId} />
-				<SubmitButton className="btn btn-primary">Reserve Ticket</SubmitButton>
+				<SubmitButton className="btn btn-primary">رزرو تیکت</SubmitButton>
 			</form>
 		</div>
 	);

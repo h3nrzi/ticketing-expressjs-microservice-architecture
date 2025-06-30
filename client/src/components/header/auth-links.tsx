@@ -6,10 +6,10 @@ export default function AuthLinks() {
 	return (
 		<>
 			<Link href="/auth/signin" className="nav-item nav-link">
-				Sign In
+				ورود
 			</Link>
 			<Link href="/auth/signup" className="nav-item nav-link">
-				Sign Up
+				ثبت نام
 			</Link>
 		</>
 	);

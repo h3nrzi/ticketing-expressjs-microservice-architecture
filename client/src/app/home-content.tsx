@@ -8,7 +8,7 @@ interface HomeContentProps {
 export default function HomeContent({ currentUser, errors }: HomeContentProps) {
 	if (errors) {
 		return (
-			<div className="container mt-5">
+			<div className="container mt-5 ">
 				<div className="alert alert-danger">
 					خطا: {errors.map((err) => err.message).join(", ")}
 				</div>
@@ -19,7 +19,7 @@ export default function HomeContent({ currentUser, errors }: HomeContentProps) {
 	return (
 		<div className="container mt-5">
 			{currentUser ? (
-				<h1>خوش آمدید {currentUser.email}!</h1>
+				<h1>خوش آمدید {currentUser.email}</h1>
 			) : (
 				<div>
 					<h1>به سایت خرید آنلاین بلیط کنسرت خوش آمدید</h1>

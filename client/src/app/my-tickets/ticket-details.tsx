@@ -6,8 +6,8 @@ const TicketDetails = async ({ tickets }: { tickets: Ticket[] }) => {
 		<table className="table">
 			<thead>
 				<tr>
-					<th>Ticket Name</th>
-					<th>Ticket Price</th>
+					<th>نام تیکت</th>
+					<th>قیمت تیکت</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -16,12 +16,12 @@ const TicketDetails = async ({ tickets }: { tickets: Ticket[] }) => {
 						<td>
 							<Link href={`/my-tickets/${ticket.id}`}>{ticket.title}</Link>
 							{ticket.orderId && (
-								<span className="badge badge-pill badge-info ml-1">
-									Reserved
+								<span className="badge badge-pill badge-info mr-2">
+									رزرو شده
 								</span>
 							)}
 						</td>
-						<td>${ticket.price}</td>
+						<td>{ticket.price} دلار</td>
 					</tr>
 				))}
 			</tbody>

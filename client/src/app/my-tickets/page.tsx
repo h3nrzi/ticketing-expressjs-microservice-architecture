@@ -14,11 +14,11 @@ const MyTicketsPage = async () => {
 	return (
 		<div className="m-5">
 			<div className="row justify-content-between">
-				<h1 className="mb-5">My Tickets</h1>
+				<h1 className="mb-5">تیکت های من</h1>
 				<NewButton />
 			</div>
 			{!tickets || tickets.length === 0 ? (
-				<p>You do not have any ticket...</p>
+				<p>شما هیچ تیکتی ندارید...</p>
 			) : (
 				<TicketDetails tickets={tickets} />
 			)}

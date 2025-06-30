@@ -17,7 +17,7 @@ const NewTicketPage = () => {
 
 	useEffect(() => {
 		if (state?.success) {
-			toast.success("Ticket created successfully!");
+			toast.success("تیکت با موفقیت ایجاد شد!");
 			router.push("/my-tickets");
 		}
 	}, [state, router]);
@@ -27,26 +27,26 @@ const NewTicketPage = () => {
 			<div className="row">
 				<div className="col-md-6">
 					<form action={formAction}>
-						<h1 className="mb-4">Create a Ticket</h1>
+						<h1 className="mb-4">ساخت تیکت جدید</h1>
 
 						<FormField
-							label="Title"
+							label="نام تیکت"
 							name="title"
 							type="text"
-							placeholder="Enter the title of the ticket"
+							placeholder="نام تیکت خود را وارد کنید"
 							errors={state?.errors}
 						/>
 
 						<FormField
-							label="Price"
+							label="قیمت تیکت"
 							name="price"
 							type="number"
-							placeholder="Enter the price of the ticket"
+							placeholder="قیمت تیکت خود را وارد کنید"
 							errors={state?.errors}
 						/>
 
 						<SubmitButton className="btn btn-primary w-100 mb-3">
-							Create Ticket
+							ایجاد تیکت
 						</SubmitButton>
 
 						{/* Display general errors */}

@@ -18,7 +18,7 @@ const SignUpPage = () => {
 
 	useEffect(() => {
 		if (state?.success) {
-			toast.success("Account created successfully!");
+			toast.success("حساب کاربری با موفقیت ایجاد شد!");
 			router.push("/");
 		}
 	}, [state, router]);
@@ -27,31 +27,31 @@ const SignUpPage = () => {
 		<div className="container mt-5">
 			<div className="row justify-content-center">
 				<div className="col-md-6">
-					<form className="card p-4" action={formAction}>
-						<h1 className="text-center mb-4">Sign Up</h1>
+					<form className="card p-4 " action={formAction}>
+						<h1 className="text-center mb-4">ثبت نام</h1>
 
 						<FormField
-							label="Email"
+							label="ایمیل"
 							name="email"
 							type="email"
-							placeholder="Enter your email"
+							placeholder="ایمیل خود را وارد کنید"
 							errors={state?.errors}
 						/>
 
 						<FormField
-							label="Password"
+							label="رمز عبور"
 							name="password"
 							type="password"
-							placeholder="Enter your password"
+							placeholder="رمز خود را وارد کنید"
 							errors={state?.errors}
 						/>
 
 						<SubmitButton className="btn btn-primary w-100 mb-3">
-							Sign Up
+							ثبت نام
 						</SubmitButton>
 
 						<Link href="/auth/signin" className="btn btn-secondary w-100 mb-3">
-							Already have an account? Login
+							حساب کاربری دارید؟
 						</Link>
 
 						{/* Display general errors */}

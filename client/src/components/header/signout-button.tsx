@@ -15,14 +15,14 @@ const SignoutButton = () => {
 
 	useEffect(() => {
 		if (state?.success) {
-			// router.refresh();
-			toast.success("Logged out successfully! See you next time!");
+			router.push("/");
+			toast.success("خروج با موفقیت انجام شد!");
 		}
 	}, [state, router]);
 
 	return (
 		<form action={formAction} className="nav-item nav-link">
-			<SubmitButton className="btn border btn-sm">Sign Out</SubmitButton>
+			<SubmitButton className="btn border btn-sm">خروج</SubmitButton>
 		</form>
 	);
 };

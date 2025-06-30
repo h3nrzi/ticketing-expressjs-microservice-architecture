@@ -9,7 +9,7 @@ const OrderDetailsPage = async ({ params }: Props) => {
 	const { id } = await params;
 	const { data: order } = await getOrderById(id);
 
-	if (!order) return <div>Order not found</div>;
+	if (!order) return <div>سفارش یافت نشد</div>;
 
 	const msLeft = new Date(order.expiresAt).getTime() - new Date().getTime();
 

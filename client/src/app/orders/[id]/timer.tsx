@@ -28,11 +28,11 @@ const Timer = ({ timeToLeft }: Props) => {
 		<div>
 			{Math.round(time) > 0 ? (
 				<p className="h1 border p-1 rounded text-center">
-					Time Left to Pay: {Math.round(time)} seconds
+					زمان باقی مانده برای پرداخت: {Math.round(time)} ثانیه
 				</p>
 			) : (
 				<p className="h1 border p-1 rounded text-center text-danger">
-					The order has been expired
+					زمان پرداخت سفارش به پایان رسیده است
 				</p>
 			)}
 		</div>
