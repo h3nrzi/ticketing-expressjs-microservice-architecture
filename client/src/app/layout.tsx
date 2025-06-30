@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { PropsWithChildren } from "react";
 import "@/styles/globals.css";
-import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-rtl/dist/css/bootstrap-rtl.min.css";
 import "@/styles/custom-bootstrap.css";
 import { ClientToaster } from "./client-toaster";
 import Header from "@/components/header/header";
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: PropsWithChildren) {
 	return (
-		<html lang="en">
+		<html lang="fa" dir="rtl">
 			<body>
 				<Header />
 				{children}

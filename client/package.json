@@ -11,6 +11,7 @@
 	"dependencies": {
 		"axios": "0.19.2",
 		"bootstrap": "4.4.1",
+		"bootstrap-rtl": "^3.3.4",
 		"next": "14.2.17",
 		"react": "^18",
 		"react-dom": "^18",

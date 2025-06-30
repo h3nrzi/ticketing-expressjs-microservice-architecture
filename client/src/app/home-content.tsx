@@ -10,7 +10,7 @@ export default function HomeContent({ currentUser, errors }: HomeContentProps) {
 		return (
 			<div className="container mt-5">
 				<div className="alert alert-danger">
-					Error: {errors.map((err) => err.message).join(", ")}
+					خطا: {errors.map((err) => err.message).join(", ")}
 				</div>
 			</div>
 		);
@@ -19,13 +19,13 @@ export default function HomeContent({ currentUser, errors }: HomeContentProps) {
 	return (
 		<div className="container mt-5">
 			{currentUser ? (
-				<h1>Welcome {currentUser.email}!</h1>
+				<h1>خوش آمدید {currentUser.email}!</h1>
 			) : (
 				<div>
-					<h1>Welcome to Ticketing</h1>
-					<p>Please sign in to continue.</p>
+					<h1>به سایت خرید آنلاین بلیط کنسرت خوش آمدید</h1>
+					<p>لطفا برای ادامه وارد حساب کاربری خود شوید.</p>
 					<Link href="/auth/signin" className="btn btn-primary">
-						Sign In
+						ورود
 					</Link>
 				</div>
 			)}
