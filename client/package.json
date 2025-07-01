@@ -15,7 +15,8 @@
 		"next": "14.2.17",
 		"react": "^18",
 		"react-dom": "^18",
-		"react-hot-toast": "^2.5.2"
+		"react-hot-toast": "^2.5.2",
+		"react-stripe-checkout": "^2.6.3"
 	},
 	"devDependencies": {
 		"@types/node": "^20",
