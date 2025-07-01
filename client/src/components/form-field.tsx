@@ -8,21 +8,23 @@ interface Props {
 	type: string;
 	placeholder: string;
 	errors?: ErrorResponse["errors"];
+	defaultValue?: string | number;
 }
 
-const FormField = ({ label, name, type, placeholder, errors }: Props) => (
+const FormField = (props: Props) => (
 	<div className="form-group mb-3">
-		<label className="form-label" htmlFor={name}>
-			{label}
+		<label className="form-label" htmlFor={props.name}>
+			{props.label}
 		</label>
 		<input
 			className="form-control"
-			type={type}
-			name={name}
-			id={name}
-			placeholder={placeholder}
+			type={props.type}
+			name={props.name}
+			id={props.name}
+			placeholder={props.placeholder}
+			defaultValue={props.defaultValue}
 		/>
-		<ErrorDisplay errors={errors} field={name} />
+		<ErrorDisplay errors={props.errors} field={props.name} />
 	</div>
 );
 

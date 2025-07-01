@@ -1,4 +1,5 @@
 import { getTicketById } from "@/lib/api/tickets-api";
+import EditTicketForm from "./edit-ticket-form";
 
 interface Props {
 	params: Promise<{ id: string }>;
@@ -6,9 +7,13 @@ interface Props {
 
 const EditTicketPage = async ({ params }: Props) => {
 	const { id } = await params;
-	const ticket = await getTicketById(id);
+	const { data: ticket } = await getTicketById(id);
 
-	return <div>{JSON.stringify(ticket)}</div>;
+	if (!ticket) {
+		return <div>تیکت یافت نشد</div>;
+	}
+
+	return <EditTicketForm ticket={ticket} />;
 };
 
 export default EditTicketPage;
