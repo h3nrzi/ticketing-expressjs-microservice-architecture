@@ -26,9 +26,10 @@ const Timer = ({ timeToLeft }: Props) => {
 
 	return (
 		<div>
-			{Math.round(time) > 0 ? (
+			{time > 0 ? (
 				<p className="h1 border p-1 rounded text-center">
-					زمان باقی مانده برای پرداخت: {Math.round(time)} ثانیه
+					زمان باقی مانده برای پرداخت:{" "}
+					{`${Math.floor(time / 60)}:${Math.round(time % 60)}`}
 				</p>
 			) : (
 				<p className="h1 border p-1 rounded text-center text-danger">
