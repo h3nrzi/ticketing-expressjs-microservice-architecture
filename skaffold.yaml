@@ -67,11 +67,11 @@ build:
           - src: "payments/src/**/*.ts"
             dest: .
     # Client Service
-    - image: h3nrzi/client
-      context: client
-      docker:
-        dockerfile: Dockerfile
-      sync:
-        manual:
-          - src: "client/src/**/*.ts"
-            dest: .
+    # - image: h3nrzi/client
+    #   context: client
+    #   docker:
+    #     dockerfile: Dockerfile
+    #   sync:
+    #     manual:
+    #       - src: "client/src/**/*.ts"
+    #         dest: .
