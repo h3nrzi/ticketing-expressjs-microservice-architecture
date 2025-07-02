@@ -1,8 +1,9 @@
 "use client";
 
+import { createPayment } from "@/lib/actions/payments-actions";
 import { Order } from "@/types/Order";
 import { User } from "@/types/User";
-import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 import StripeCheckout, { Token } from "react-stripe-checkout";
 
 interface Props {
@@ -11,24 +12,14 @@ interface Props {
 }
 
 const Stripe = ({ order, user }: Props) => {
-	const router = useRouter();
-
 	const onToken = async (token: Token) => {
-		const response = await fetch("http://ticketing.dev/api/payments", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			credentials: "include",
-			body: JSON.stringify({
-				token: token.id,
-				orderId: order.id,
-			}),
-		});
+		const response = await createPayment(order.id, token.id);
 
-		if (response.ok) {
-			router.push("/orders");
+		if (response.success) {
+			return toast.success("پرداخت با موفقیت انجام شد");
 		}
+
+		toast.error(response.errors[0].message);
 	};
 
 	return (
@@ -41,7 +32,7 @@ const Stripe = ({ order, user }: Props) => {
 			currency="usd"
 			email={user?.email}
 			name="Order Payment"
-			description={`Order ${order.id} for ${order.ticket.title}`}
+			description={`Order: ${order.id}`}
 			locale="fa"
 		/>
 	);
