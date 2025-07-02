@@ -2,7 +2,8 @@
 
 import { Order } from "@/types/Order";
 import { User } from "@/types/User";
-import StripeCheckout from "react-stripe-checkout";
+import { useRouter } from "next/navigation";
+import StripeCheckout, { Token } from "react-stripe-checkout";
 
 interface Props {
 	order: Order;
@@ -10,9 +11,29 @@ interface Props {
 }
 
 const Stripe = ({ order, user }: Props) => {
+	const router = useRouter();
+
+	const onToken = async (token: Token) => {
+		const response = await fetch("http://ticketing.dev/api/payments", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			credentials: "include",
+			body: JSON.stringify({
+				token: token.id,
+				orderId: order.id,
+			}),
+		});
+
+		if (response.ok) {
+			router.push("/orders");
+		}
+	};
+
 	return (
 		<StripeCheckout
-			token={(token) => console.log(token)}
+			token={onToken}
 			stripeKey={
 				"pk_test_51OaCacLQVey4LCJDba9SAJgqhZ64ESaDLqFYXghugmYllyKQUrpkVWCNLi1x5f8uyo3ZGvJ0fs6HPfiFYpUyNthx00tnQtfL7m"
 			}
