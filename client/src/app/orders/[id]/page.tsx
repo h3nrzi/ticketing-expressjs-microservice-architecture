@@ -18,8 +18,24 @@ const OrderDetailsPage = async ({ params }: Props) => {
 
 	return (
 		<div className="m-5">
-			<Timer timeToLeft={msLeft / 1000} />
-			<Stripe order={orderData} user={userData?.currentUser} />
+			<h1 className="h1 border p-1 rounded text-center">
+				سفارش {orderData.id}
+			</h1>
+
+			{orderData.status !== "complete" && (
+				<>
+					<Timer timeToLeft={msLeft / 1000} />
+					<div className="mt-5">
+						<Stripe order={orderData} user={userData?.currentUser} />
+					</div>
+				</>
+			)}
+
+			{orderData.status === "complete" && (
+				<p className="h1 border p-1 rounded text-center text-success">
+					سفارش پرداخت شده است
+				</p>
+			)}
 		</div>
 	);
 };

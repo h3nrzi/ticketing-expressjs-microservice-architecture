@@ -3,6 +3,7 @@
 import { createPayment } from "@/lib/actions/payments-actions";
 import { Order } from "@/types/Order";
 import { User } from "@/types/User";
+import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import StripeCheckout, { Token } from "react-stripe-checkout";
 
@@ -12,11 +13,14 @@ interface Props {
 }
 
 const Stripe = ({ order, user }: Props) => {
+	const router = useRouter();
+
 	const onToken = async (token: Token) => {
 		const response = await createPayment(order.id, token.id);
 
 		if (response.success) {
-			return toast.success("پرداخت با موفقیت انجام شد");
+			toast.success("پرداخت با موفقیت انجام شد");
+			return router.push("/orders");
 		}
 
 		toast.error(response.errors[0].message);

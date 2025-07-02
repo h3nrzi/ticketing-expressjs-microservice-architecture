@@ -19,7 +19,7 @@ const OrdersPage = async () => {
 							<span className="badge badge-info mr-2">درحال انتظار</span>
 						)}
 						{order.status === "complete" && (
-							<span className="badge badge-bg-success mr-3">تکمیل شده</span>
+							<span className="badge badge-success mr-3">تکمیل شده</span>
 						)}
 					</li>
 				))}
