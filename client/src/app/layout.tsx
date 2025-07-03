@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { PropsWithChildren } from "react";
 import "@/styles/globals.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-rtl/dist/css/bootstrap-rtl.min.css";
-import "@/styles/custom-bootstrap.css";
 import { ClientToaster } from "./client-toaster";
 import Header from "@/components/header/header";
+import Bootstrap from "./bootstrap";
 
 // app/fonts.js
 import localFont from "next/font/local";
@@ -55,6 +53,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html lang="fa" dir="rtl">
 			<body style={{ fontFamily: "Vazir" }}>
+				<Bootstrap />
 				<Header />
 				{children}
 				<ClientToaster />

@@ -14,20 +14,6 @@ export default async function Header() {
 					<span className="h1">🎟️</span>
 				</Link>
 
-				{/* my tickets link */}
-				{data?.currentUser && (
-					<Link href="/my-tickets" className="navbar-text ml-2">
-						تیکت های من
-					</Link>
-				)}
-
-				{/* orders link */}
-				{data?.currentUser && (
-					<Link href="/orders" className="navbar-text ml-5">
-						سفارش های من
-					</Link>
-				)}
-
 				{/* user nav or auth links */}
 				<div className="navbar-nav ms-auto">
 					{data?.currentUser ? (

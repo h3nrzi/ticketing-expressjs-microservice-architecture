@@ -21,8 +21,8 @@ const SignoutButton = () => {
 	}, [state, router]);
 
 	return (
-		<form action={formAction} className="nav-item nav-link">
-			<SubmitButton className="btn border btn-sm">خروج</SubmitButton>
+		<form action={formAction} className="nav-item nav-link w-100">
+			<SubmitButton className="btn border btn-sm w-100">خروج</SubmitButton>
 		</form>
 	);
 };
