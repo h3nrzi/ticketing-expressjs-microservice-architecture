@@ -20,7 +20,7 @@ const Stripe = ({ order, user }: Props) => {
 
 		if (response.success) {
 			toast.success("پرداخت با موفقیت انجام شد");
-			return router.push("/orders");
+			return router.refresh();
 		}
 
 		toast.error(response.errors[0].message);
