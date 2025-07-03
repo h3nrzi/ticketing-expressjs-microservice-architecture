@@ -17,7 +17,7 @@ export default function SignUpPage() {
 		try {
 			setIsLoading(true);
 
-			const response = await fetch("/api/auth/signup", {
+			const response = await fetch("https://ticketing.dev/api/auth/signup", {
 				method: "POST",
 				body: JSON.stringify({ email, password }),
 				headers: { "Content-Type": "application/json" },
