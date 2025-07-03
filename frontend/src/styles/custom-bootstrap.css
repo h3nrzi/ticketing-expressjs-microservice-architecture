@@ -1,0 +1,118 @@
+:root {
+	/* Custom color palette */
+	--primary: #2563eb;
+	--primary-dark: #1d4ed8;
+	--secondary: #64748b;
+	--success: #22c55e;
+	--info: #0ea5e9;
+	--warning: #f59e0b;
+	--danger: #ef4444;
+	--light: #f8fafc;
+	--dark: #1e293b;
+
+	/* Custom border radius */
+	--border-radius: 0.75rem;
+	--border-radius-sm: 0.5rem;
+	--border-radius-lg: 1rem;
+
+	/* Custom shadows */
+	--box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--box-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--box-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+		0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Custom button styles */
+.btn {
+	border-radius: var(--border-radius);
+	font-weight: 500;
+	transition: all 0.2s ease-in-out;
+	box-shadow: var(--box-shadow-sm);
+}
+
+.btn:hover {
+	transform: translateY(-1px);
+	box-shadow: var(--box-shadow);
+}
+
+.btn-primary {
+	background-color: var(--primary);
+	border-color: var(--primary);
+}
+
+.btn-primary:hover {
+	background-color: var(--primary-dark);
+	border-color: var(--primary-dark);
+}
+
+/* Custom card styles */
+.card {
+	border-radius: var(--border-radius);
+	box-shadow: var(--box-shadow);
+	border: none;
+	transition: all 0.2s ease-in-out;
+}
+
+.card:hover {
+	box-shadow: var(--box-shadow-lg);
+}
+
+/* Custom form controls */
+.form-control {
+	border-radius: var(--border-radius-sm);
+	border: 1px solid #e2e8f0;
+	padding: 0.75rem 1rem;
+	transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+	border-color: var(--primary);
+	box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+}
+
+/* Custom alert styles */
+.alert {
+	border-radius: var(--border-radius);
+	border: none;
+	box-shadow: var(--box-shadow-sm);
+}
+
+/* Custom navbar styles */
+.navbar {
+	box-shadow: var(--box-shadow);
+	background-color: white;
+}
+
+/* Custom table styles */
+.table {
+	border-radius: var(--border-radius);
+	overflow: hidden;
+}
+
+.table thead th {
+	background-color: var(--light);
+	border-bottom: 2px solid #e2e8f0;
+	font-weight: 600;
+}
+
+/* Custom badge styles */
+.badge {
+	border-radius: var(--border-radius-sm);
+	padding: 0.35em 0.65em;
+	font-weight: 500;
+}
+
+/* Custom modal styles */
+.modal-content {
+	border-radius: var(--border-radius);
+	border: none;
+	box-shadow: var(--box-shadow-lg);
+}
+
+.modal-header {
+	border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-footer {
+	border-top: 1px solid #e2e8f0;
+}

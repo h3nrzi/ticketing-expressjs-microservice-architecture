@@ -5,7 +5,7 @@ import ErrorDisplay from "../components/common/ErrorDisplay";
 import FormField from "../components/common/FormField";
 import type { ErrorResponse } from "../types/ErrorResponse";
 
-export default function SignInPage() {
+export default function SignUpPage() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [errors, setErrors] = useState<ErrorResponse["errors"]>([]);
@@ -17,7 +17,7 @@ export default function SignInPage() {
 		try {
 			setIsLoading(true);
 
-			const response = await fetch("/api/auth/signin", {
+			const response = await fetch("/api/auth/signup", {
 				method: "POST",
 				body: JSON.stringify({ email, password }),
 				headers: { "Content-Type": "application/json" },
@@ -27,7 +27,7 @@ export default function SignInPage() {
 			setIsLoading(false);
 
 			if (response.ok) {
-				toast.success("ورود با موفقیت انجام شد!");
+				toast.success("ثبت نام با موفقیت انجام شد!");
 				navigate("/");
 			} else {
 				const errorData = await response.json();
@@ -44,7 +44,7 @@ export default function SignInPage() {
 			<div className="row justify-content-center">
 				<div className="col-md-6">
 					<form className="card p-4" onSubmit={handleSubmit}>
-						<h1 className="text-center mb-4">ورود</h1>
+						<h1 className="text-center mb-4">ثبت نام</h1>
 
 						<FormField
 							label="ایمیل"
@@ -71,11 +71,11 @@ export default function SignInPage() {
 							className="btn btn-primary w-100 mb-3"
 							disabled={isLoading}
 						>
-							{isLoading ? "در حال بارگذاری..." : "ورود"}
+							{isLoading ? "در حال بارگذاری..." : "ثبت نام"}
 						</button>
 
-						<Link to="/register" className="w-100 mb-3">
-							حساب کاربری ندارید؟
+						<Link to="/login" className="w-100 mb-3">
+							حساب کاربری دارید؟
 						</Link>
 
 						<ErrorDisplay errors={errors} />
