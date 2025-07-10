@@ -29,9 +29,7 @@ const Stripe = ({ order, user }: Props) => {
 	return (
 		<StripeCheckout
 			token={onToken}
-			stripeKey={
-				"pk_test_51OaCacLQVey4LCJDba9SAJgqhZ64ESaDLqFYXghugmYllyKQUrpkVWCNLi1x5f8uyo3ZGvJ0fs6HPfiFYpUyNthx00tnQtfL7m"
-			}
+			stripeKey={process.env.NEXT_PUBLIC_STRIPE_KEY!}
 			amount={order.ticket.price * 100}
 			currency="usd"
 			email={user?.email}

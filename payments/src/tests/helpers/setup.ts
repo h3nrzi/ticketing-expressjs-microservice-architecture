@@ -9,8 +9,7 @@ import mongoose from "mongoose";
 let mongo: MongoMemoryServer;
 
 // Set Stripe key for testing
-process.env.STRIPE_KEY =
-	"sk_test_fake_key_for_testing";
+process.env.STRIPE_KEY = process.env.STRIPE_TEST_KEY || "sk_test_fake_key_for_testing";
 
 beforeAll(async () => {
 	// Set JWT key for testing
