@@ -22,7 +22,7 @@ const orderController = new OrderController(orderService);
  */
 router.get("/currentuser", [
 	requireAuth,
-	orderController.findOrdersByUserId.bind(orderController),
+	orderController.findOrdersByUserId.bind(orderController)
 ]);
 
 /**
@@ -41,7 +41,7 @@ router.post("/", [
 		.custom((input: string) => mongoose.Types.ObjectId.isValid(input))
 		.withMessage("TicketId must be a valid MongoDB ID"),
 	validateRequest,
-	orderController.createOrder.bind(orderController),
+	orderController.createOrder.bind(orderController)
 ]);
 
 /**
@@ -54,7 +54,7 @@ router.post("/", [
 router.get("/:id", [
 	requireAuth,
 	validateRequest,
-	orderController.findOrderById.bind(orderController),
+	orderController.findOrderById.bind(orderController)
 ]);
 
 /**
@@ -66,7 +66,7 @@ router.get("/:id", [
  */
 router.delete("/:id", [
 	requireAuth,
-	orderController.cancelOrder.bind(orderController),
+	orderController.cancelOrder.bind(orderController)
 ]);
 
 export { router as orderRoutes };

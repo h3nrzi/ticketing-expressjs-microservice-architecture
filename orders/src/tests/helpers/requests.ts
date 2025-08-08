@@ -6,7 +6,7 @@ interface OrderData {
 }
 
 const getOrdersRequest = async (cookie: string[]) => {
-	return request(app).get("/api/orders").set("Cookie", cookie);
+	return request(app).get("/api/orders/currentuser").set("Cookie", cookie);
 };
 
 const getOrderRequest = async (id: string, cookie: string[]) => {
