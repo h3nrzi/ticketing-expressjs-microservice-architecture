@@ -3,6 +3,7 @@ import app from "./app";
 
 async function startServer() {
 	try {
+		console.log("Starting up...");
 		// Check if JWT_KEY is defined in environment variables
 		if (!process.env.JWT_KEY) throw new Error("JWT_KEY must be defined!");
 

@@ -9,7 +9,7 @@ import { Order } from "@/types/Order";
 
 export const reserveTicket = async (
 	prevState: FormState,
-	formData: FormData
+	formData: FormData,
 ) => {
 	const ticketId = formData.get("ticketId");
 
@@ -19,7 +19,7 @@ export const reserveTicket = async (
 		const res = await axios.post<Order>(
 			"http://ticketing.dev/api/orders",
 			{ ticketId },
-			{ headers: { Cookie: token?.value || [] } }
+			{ headers: { Cookie: token?.value || [] } },
 		);
 
 		revalidatePath("/my-tickets");

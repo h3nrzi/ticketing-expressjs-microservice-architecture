@@ -9,7 +9,7 @@ export async function getCurrentUserTickets() {
 	try {
 		const res = await axios.get(
 			"http://ticketing.dev/api/tickets/currentuser",
-			{ headers: token ? { Cookie: token.value } : {} }
+			{ headers: token ? { Cookie: token.value } : {} },
 		);
 
 		const data = res.data as Ticket[];
@@ -28,7 +28,7 @@ export async function getTicketById(id: string) {
 	try {
 		const res = await axios.get<Ticket>(
 			`http://ticketing.dev/api/tickets/${id}`,
-			{ headers: token ? { Cookie: token.value } : {} }
+			{ headers: token ? { Cookie: token.value } : {} },
 		);
 
 		const data = res.data;

@@ -24,7 +24,7 @@ router.post(
 	// validateRequest is a middleware that validates the request
 	validateRequest,
 	// bind the controller method to the router
-	authController.signup.bind(authController)
+	authController.signup.bind(authController),
 );
 
 router.post(
@@ -38,21 +38,21 @@ router.post(
 	// validateRequest is a middleware that validates the request
 	validateRequest,
 	// bind the controller method to the router
-	authController.signin.bind(authController)
+	authController.signin.bind(authController),
 );
 
 router.get(
 	// route
 	"/currentuser",
 	// bind the controller method to the router
-	authController.getCurrentUser.bind(authController)
+	authController.getCurrentUser.bind(authController),
 );
 
 router.post(
 	// route
 	"/signout",
 	// bind the controller method to the router
-	authController.signout.bind(authController)
+	authController.signout.bind(authController),
 );
 
 export { router as authRouter };

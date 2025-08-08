@@ -21,7 +21,7 @@ export class TicketController {
 		const { id: currentUserId } = req.currentUser!;
 		const ticket = await this.ticketService.createTicket(
 			req.body as CreateTicketDto,
-			currentUserId
+			currentUserId,
 		);
 		res.status(201).send(ticket);
 	}
@@ -32,7 +32,7 @@ export class TicketController {
 		const ticket = await this.ticketService.updateTicket(
 			ticketId,
 			req.body as UpdateTicketDto,
-			currentUserId
+			currentUserId,
 		);
 		res.status(200).send(ticket);
 	}

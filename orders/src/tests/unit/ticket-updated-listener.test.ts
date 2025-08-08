@@ -42,7 +42,7 @@ describe("TicketUpdatedListener", () => {
 
 		// write assertions to make sure a ticket was created
 		const savedTicket: ITicketDoc | null = await Ticket.findById(
-			ticketUpdatedEventData.id
+			ticketUpdatedEventData.id,
 		);
 		expect(savedTicket!.title).toEqual(ticketUpdatedEventData.title);
 		expect(savedTicket!.price).toEqual(ticketUpdatedEventData.price);
@@ -61,7 +61,7 @@ describe("TicketUpdatedListener", () => {
 		// call the onMessage function with the data and message
 		const promise = listener.onMessage(
 			{ ...ticketUpdatedEventData, version: 1000 },
-			msg
+			msg,
 		);
 
 		// write assertions to make sure the message was not acked

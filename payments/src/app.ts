@@ -36,7 +36,7 @@ app.use(
 		httpOnly: true,
 		// sameSite: "none",
 		// path: "/",
-	})
+	}),
 );
 
 app.use(currentUser);

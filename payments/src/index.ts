@@ -19,7 +19,7 @@ import { OrderCreatedListener } from "./events/handlers/order-created-listener";
 		await natsWrapper.connect(
 			process.env.NATS_CLUSTER_ID!,
 			process.env.NATS_CLIENT_ID!,
-			process.env.NATS_URL!
+			process.env.NATS_URL!,
 		);
 
 		// ====== Handle NATS connection close event ======

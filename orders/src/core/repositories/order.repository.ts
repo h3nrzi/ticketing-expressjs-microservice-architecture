@@ -19,7 +19,7 @@ export class OrderRepository {
 
 	findByUserId(
 		userId: string,
-		populate?: PopulateOptions
+		populate?: PopulateOptions,
 	): Promise<IOrderDoc[]> {
 		const orders = Order.find({ userId });
 		if (populate) orders.populate(populate);

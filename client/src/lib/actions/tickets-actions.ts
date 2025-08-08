@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache";
 
 export const createTicket = async (
 	prevState: FormState,
-	formData: FormData
+	formData: FormData,
 ) => {
 	const title = formData.get("title");
 	const price = formData.get("price");
@@ -19,7 +19,7 @@ export const createTicket = async (
 		await axios.post(
 			"http://ticketing.dev/api/tickets",
 			{ title, price },
-			{ headers: { Cookie: token?.value || [] } }
+			{ headers: { Cookie: token?.value || [] } },
 		);
 
 		revalidatePath("/my-tickets");
@@ -34,7 +34,7 @@ export const createTicket = async (
 
 export const updateTicket = async (
 	prevState: FormState,
-	formData: FormData
+	formData: FormData,
 ) => {
 	const id = formData.get("id");
 	const title = formData.get("title");
@@ -46,7 +46,7 @@ export const updateTicket = async (
 		await axios.patch(
 			`http://ticketing.dev/api/tickets/${id}`,
 			{ title, price },
-			{ headers: { Cookie: token?.value || [] } }
+			{ headers: { Cookie: token?.value || [] } },
 		);
 
 		revalidatePath("/my-tickets");

@@ -11,7 +11,7 @@ export async function getCurrentUserOrders() {
 			"http://ticketing.dev/api/orders/currentuser",
 			{
 				headers: token ? { Cookie: token.value } : {},
-			}
+			},
 		);
 
 		const data = res.data;
@@ -30,7 +30,7 @@ export async function getOrderById(id: string) {
 	try {
 		const res = await axios.get<Order>(
 			`http://ticketing.dev/api/orders/${id}`,
-			{ headers: token ? { Cookie: token.value } : {} }
+			{ headers: token ? { Cookie: token.value } : {} },
 		);
 
 		const data = res.data;

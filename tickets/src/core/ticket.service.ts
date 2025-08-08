@@ -28,7 +28,7 @@ export class TicketService {
 
 	async createTicket(
 		createTicketDto: CreateTicketDto,
-		userId: string
+		userId: string,
 	): Promise<ITicketDocument> {
 		// create the ticket
 		const ticket = await this.ticketRepository.create(createTicketDto, userId);
@@ -51,7 +51,7 @@ export class TicketService {
 	async updateTicket(
 		ticketId: string,
 		updateTicketDto: UpdateTicketDto,
-		currentUserId: string
+		currentUserId: string,
 	): Promise<ITicketDocument> {
 		// check if the ticket exists, if not, throw an error
 		const ticket = await this.getTicketById(ticketId);
@@ -66,7 +66,7 @@ export class TicketService {
 		// update the ticket
 		const updatedTicket = await this.ticketRepository.update(
 			ticket,
-			updateTicketDto
+			updateTicketDto,
 		);
 
 		// publish the ticket updated event

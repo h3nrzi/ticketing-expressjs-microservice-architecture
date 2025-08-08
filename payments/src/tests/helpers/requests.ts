@@ -8,7 +8,7 @@ interface CreatePaymentDto {
 
 export const postPaymentsRequest = (
 	body: CreatePaymentDto,
-	token: string[]
+	token: string[],
 ): Promise<supertest.Response> => {
 	return supertest(app).post("/api/payments").set("Cookie", token).send(body);
 };

@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema(
 				delete ret.__v;
 			},
 		},
-	}
+	},
 );
 
 // ===============================
@@ -50,7 +50,7 @@ userSchema.pre("save", async function (done) {
 
 // Compare password for authentication
 userSchema.methods.comparePassword = async function (
-	candidatePassword: string
+	candidatePassword: string,
 ): Promise<boolean> {
 	return bcrypt.compare(candidatePassword, this.password);
 };
@@ -61,5 +61,5 @@ userSchema.methods.comparePassword = async function (
 
 export const User = mongoose.model<IUserDocument, IUserModel>(
 	"User",
-	userSchema
+	userSchema,
 );

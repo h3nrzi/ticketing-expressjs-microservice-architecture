@@ -72,7 +72,7 @@ describe("Signup", () => {
 		testCases.forEach(({ description, email, expectedMessage }) => {
 			it(`returns a 400 with ${description}`, async () => {
 				const response = await signup(createInvalidEmailUser(email)).expect(
-					400
+					400,
 				);
 				expectValidationError(response, expectedMessage);
 			});
@@ -112,7 +112,7 @@ describe("Signup", () => {
 		testCases.forEach(({ description, password, expectedMessage }) => {
 			it(`returns a 400 with ${description}`, async () => {
 				const response = await signup(
-					createInvalidPasswordUser(password)
+					createInvalidPasswordUser(password),
 				).expect(400);
 				expectValidationError(response, expectedMessage);
 			});

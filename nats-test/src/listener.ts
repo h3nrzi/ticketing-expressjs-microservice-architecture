@@ -12,7 +12,7 @@ const stan = nats.connect(
 	randomBytes(4).toString("hex"), // generate a random id for the listener
 	{
 		url: "http://localhost:4222", // the url of the nats server
-	}
+	},
 );
 
 // ================================
@@ -34,7 +34,7 @@ stan.on(
 		// create a new listener and listen for messages
 		const listener = new TicketCreatedListener(stan);
 		listener.listen();
-	}
+	},
 );
 
 // ================================

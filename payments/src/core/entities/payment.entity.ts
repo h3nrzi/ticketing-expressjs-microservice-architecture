@@ -25,7 +25,7 @@ const paymentSchema = new mongoose.Schema<IPaymentDoc>(
 				delete ret._id;
 			},
 		},
-	}
+	},
 );
 
 paymentSchema.set("versionKey", "version");
@@ -37,5 +37,5 @@ paymentSchema.statics.build = (attrs: IPayment) => {
 
 export const Payment = mongoose.model<IPaymentDoc, IPaymentModel>(
 	"Payment",
-	paymentSchema
+	paymentSchema,
 );

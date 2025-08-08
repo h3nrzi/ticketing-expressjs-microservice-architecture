@@ -5,7 +5,7 @@ export const natsWrapper = {
 			.mockImplementation(
 				(subject: string, data: any, callback: () => void) => {
 					callback();
-				}
+				},
 			),
 	},
 };

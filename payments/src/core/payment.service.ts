@@ -15,12 +15,12 @@ import { natsWrapper } from "../config/nats-wrapper";
 export class PaymentService {
 	constructor(
 		private readonly paymentRepository: PaymentRepository,
-		private readonly orderRepository: OrderRepository
+		private readonly orderRepository: OrderRepository,
 	) {}
 
 	async createPayment(
 		createPaymentDto: CreatePaymentDto,
-		currentUserId: string
+		currentUserId: string,
 	): Promise<IPaymentDoc> {
 		// Check if the order exists, if not, throw an error
 		const order = await this.orderRepository.getOrder(createPaymentDto.orderId);
@@ -48,7 +48,7 @@ export class PaymentService {
 		const payment = await this.paymentRepository.createPayment(
 			order.id,
 			charge.id,
-			order.ticketPrice
+			order.ticketPrice,
 		);
 		await payment.save();
 

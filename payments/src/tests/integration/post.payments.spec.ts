@@ -31,7 +31,7 @@ describe("POST /api/payments", () => {
 		it("should return 400 if orderId is not provided", async () => {
 			const response = await postPaymentsRequest(
 				{ orderId: "", token: "tok_visa" },
-				alexCookie
+				alexCookie,
 			);
 			expect(response.status).toBe(400);
 		});
@@ -39,7 +39,7 @@ describe("POST /api/payments", () => {
 		it("should return 400 if token is not provided", async () => {
 			const response = await postPaymentsRequest(
 				{ orderId: new mongoose.Types.ObjectId().toHexString(), token: "" },
-				alexCookie
+				alexCookie,
 			);
 			expect(response.status).toBe(400);
 		});
@@ -52,7 +52,7 @@ describe("POST /api/payments", () => {
 					orderId: new mongoose.Types.ObjectId().toHexString(),
 					token: "tok_visa",
 				},
-				[]
+				[],
 			);
 
 			expect(response.status).toBe(401);
@@ -72,7 +72,7 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				bobCookie
+				bobCookie,
 			);
 
 			expect(response.status).toBe(401);
@@ -86,7 +86,7 @@ describe("POST /api/payments", () => {
 					orderId: new mongoose.Types.ObjectId().toHexString(),
 					token: "tok_visa",
 				},
-				alexCookie
+				alexCookie,
 			);
 			expect(response.status).toBe(404);
 		});
@@ -105,7 +105,7 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				alexCookie
+				alexCookie,
 			);
 			expect(response.status).toBe(400);
 		});
@@ -124,7 +124,7 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				alexCookie
+				alexCookie,
 			);
 			expect(response.status).toBe(400);
 		});
@@ -144,12 +144,12 @@ describe("POST /api/payments", () => {
 
 			const response = await postPaymentsRequest(
 				{ orderId, token: "tok_visa" },
-				alexCookie
+				alexCookie,
 			);
 
 			const stripeCharges = await stripe.charges.list({ limit: 50 });
 			const stripeCharge = stripeCharges.data.find(
-				(charge): boolean => charge.amount === ticketPrice * 100
+				(charge): boolean => charge.amount === ticketPrice * 100,
 			);
 
 			expect(response.status).toBe(201);

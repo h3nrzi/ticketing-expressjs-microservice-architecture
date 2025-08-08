@@ -16,7 +16,7 @@ const EXPIRATION_WINDOW_SECONDS = 15 * 60; // 15 minutes
 export class OrderService {
 	constructor(
 		private readonly orderRepository: OrderRepository,
-		private readonly ticketRepository: ITicketRepository
+		private readonly ticketRepository: ITicketRepository,
 	) {}
 
 	async findOrdersByUserId(userId: string): Promise<IOrderDoc[]> {

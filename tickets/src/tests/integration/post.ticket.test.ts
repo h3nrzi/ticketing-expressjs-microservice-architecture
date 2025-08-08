@@ -20,7 +20,7 @@ describe("POST /api/tickets", () => {
 					price: validTicket.price,
 					id: expect.any(String),
 					userId: expect.any(String),
-				})
+				}),
 			);
 		});
 	});

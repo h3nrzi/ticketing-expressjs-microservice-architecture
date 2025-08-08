@@ -9,6 +9,6 @@ export const stripe = {
 		}),
 		list: jest.fn().mockImplementation(() => {
 			return Promise.resolve({ data: mockCharges });
-		})
-	}
+		}),
+	},
 };

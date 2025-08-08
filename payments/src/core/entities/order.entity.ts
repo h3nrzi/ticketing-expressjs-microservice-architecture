@@ -26,7 +26,7 @@ const orderSchema = new mongoose.Schema<IOrderDoc>(
 				delete returnedObject._id;
 			},
 		},
-	}
+	},
 );
 
 orderSchema.set("versionKey", "version");
@@ -38,5 +38,5 @@ orderSchema.statics.build = (attrs: IOrder): IOrderDoc => {
 
 export const Order = mongoose.model<IOrderDoc, IOrderModel>(
 	"Order",
-	orderSchema
+	orderSchema,
 );

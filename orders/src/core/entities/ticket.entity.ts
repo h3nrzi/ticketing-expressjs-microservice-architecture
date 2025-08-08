@@ -26,7 +26,7 @@ const ticketSchema = new mongoose.Schema<ITicketDoc>(
 				delete ret._id;
 			},
 		},
-	}
+	},
 );
 
 ticketSchema.set("versionKey", "version");
@@ -37,7 +37,7 @@ ticketSchema.statics.build = (attrs: ITicket): ITicketDoc => {
 };
 
 ticketSchema.statics.findByEvent = async (
-	event: IEvent
+	event: IEvent,
 ): Promise<ITicketDoc | null> => {
 	return Ticket.findOne({
 		_id: event.id,
@@ -47,5 +47,5 @@ ticketSchema.statics.findByEvent = async (
 
 export const Ticket = mongoose.model<ITicketDoc, ITicketModel>(
 	"Ticket",
-	ticketSchema
+	ticketSchema,
 );

@@ -11,7 +11,7 @@ export async function getCurrentUser() {
 			"http://ticketing.dev/api/users/currentuser",
 			{
 				headers: token ? { Cookie: token.value } : {},
-			}
+			},
 		);
 
 		const data = res.data;

@@ -34,7 +34,7 @@ describe("TicketCreatedListener", () => {
 
 		// write assertions to make sure a ticket was created
 		const savedTicket: ITicketDoc | null = await Ticket.findById(
-			ticketCreatedEventData.id
+			ticketCreatedEventData.id,
 		);
 		expect(savedTicket!.title).toEqual(ticketCreatedEventData.title);
 		expect(savedTicket!.price).toEqual(ticketCreatedEventData.price);

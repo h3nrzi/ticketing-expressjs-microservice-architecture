@@ -12,7 +12,7 @@ const stan = nats.connect(
 	"ABC", // the client id
 	{
 		url: "http://localhost:4222", // the url of the nats server
-	}
+	},
 );
 
 // ================================

@@ -5,7 +5,7 @@ export class PaymentRepository {
 	async createPayment(
 		orderId: string,
 		stripeId: string,
-		amount: number
+		amount: number,
 	): Promise<IPaymentDoc> {
 		return Payment.build({ orderId, amount, stripeId });
 	}

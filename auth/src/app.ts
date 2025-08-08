@@ -27,7 +27,7 @@ app.use(
 		httpOnly: true, // Prevent client-side JavaScript from accessing the cookie
 		// sameSite: "none", // Allow cookies to be sent to any site
 		// path: "/", // Set the path to the root of the domain
-	})
+	}),
 );
 
 // Add current user middleware

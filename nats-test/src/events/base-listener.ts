@@ -73,7 +73,7 @@ export abstract class BaseListener<T extends Event> {
 		const subscription = this.client.subscribe(
 			this.subject,
 			this.queueGroupName,
-			this.subscriptionOptions()
+			this.subscriptionOptions(),
 		);
 
 		subscription.on("message", (msg: Message) => {

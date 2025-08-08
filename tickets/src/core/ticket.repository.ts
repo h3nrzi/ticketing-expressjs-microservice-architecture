@@ -13,14 +13,14 @@ export class TicketRepository {
 
 	async create(
 		createTicketDto: CreateTicketDto,
-		userId: string
+		userId: string,
 	): Promise<ITicketDocument> {
 		return TicketModel.build({ ...createTicketDto, userId });
 	}
 
 	async update(
 		ticket: ITicketDocument,
-		updateTicketDto: UpdateTicketDto
+		updateTicketDto: UpdateTicketDto,
 	): Promise<ITicketDocument> {
 		ticket.set(updateTicketDto);
 		await ticket.save();

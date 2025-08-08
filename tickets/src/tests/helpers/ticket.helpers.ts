@@ -20,7 +20,7 @@ export const getTicket = async (id: string) => {
 export const updateTicket = async (
 	id: string,
 	data: Partial<TicketData>,
-	cookie?: string[]
+	cookie?: string[],
 ) => {
 	const req = request(app).patch(`/api/tickets/${id}`).send(data);
 	if (cookie) req.set("Cookie", cookie);

@@ -7,7 +7,7 @@ export class PaymentController {
 	async createPayment(req: Request, res: Response): Promise<void> {
 		const payment = await this.paymentService.createPayment(
 			req.body,
-			req.currentUser!.id
+			req.currentUser!.id,
 		);
 		res.status(201).json(payment);
 	}

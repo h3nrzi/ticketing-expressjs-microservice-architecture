@@ -20,7 +20,7 @@ describe("PATCH /api/tickets/:id", () => {
 		it("should fail if not authenticated", async () => {
 			const createRes = await createTicket(
 				{ title: "Concert", price: 20 },
-				cookie
+				cookie,
 			);
 			const id = createRes.body.id;
 
@@ -34,14 +34,14 @@ describe("PATCH /api/tickets/:id", () => {
 		it("should fail if user is not the owner of the ticket", async () => {
 			const createRes = await createTicket(
 				{ title: "Concert", price: 20 },
-				cookie
+				cookie,
 			);
 			const id = createRes.body.id;
 
 			const res = await updateTicket(
 				id,
 				{ title: "Hacked Title", price: 100 },
-				otherCookie
+				otherCookie,
 			);
 			expect(res.status).toBe(401);
 		});
@@ -51,7 +51,7 @@ describe("PATCH /api/tickets/:id", () => {
 		it("should fail with 400 if title is empty", async () => {
 			const createRes = await createTicket(
 				{ title: "Concert", price: 20 },
-				cookie
+				cookie,
 			);
 			const id = createRes.body.id;
 
@@ -62,14 +62,14 @@ describe("PATCH /api/tickets/:id", () => {
 		it("should fail with 400 if price is negative", async () => {
 			const createRes = await createTicket(
 				{ title: "Concert", price: 20 },
-				cookie
+				cookie,
 			);
 			const id = createRes.body.id;
 
 			const res = await updateTicket(
 				id,
 				{ title: "Concert", price: -10 },
-				cookie
+				cookie,
 			);
 			expect(res.status).toBe(400);
 		});
@@ -81,7 +81,7 @@ describe("PATCH /api/tickets/:id", () => {
 			const res = await updateTicket(
 				id,
 				{ title: "Updated Concert", price: 30 },
-				cookie
+				cookie,
 			);
 			expect(res.status).toBe(404);
 		});
@@ -89,14 +89,14 @@ describe("PATCH /api/tickets/:id", () => {
 		it("should update a ticket with valid data and authentication", async () => {
 			const createRes = await createTicket(
 				{ title: "Concert", price: 20 },
-				cookie
+				cookie,
 			);
 			const id = createRes.body.id;
 
 			const res = await updateTicket(
 				id,
 				{ title: "Updated Concert", price: 30 },
-				cookie
+				cookie,
 			);
 
 			expect(res.status).toBe(200);
@@ -107,14 +107,14 @@ describe("PATCH /api/tickets/:id", () => {
 		it("publishes an event", async () => {
 			const createRes = await createTicket(
 				{ title: "Concert", price: 20 },
-				cookie
+				cookie,
 			);
 			const id = createRes.body.id;
 
 			const res = await updateTicket(
 				id,
 				{ title: "Updated Concert", price: 30 },
-				cookie
+				cookie,
 			);
 
 			expect(natsWrapper.client.publish).toHaveBeenCalled();
@@ -123,7 +123,7 @@ describe("PATCH /api/tickets/:id", () => {
 		it("rejects update if the ticket is reserved", async () => {
 			const ticketCreatedResponse = await createTicket(
 				{ title: "Concert", price: 30 },
-				cookie
+				cookie,
 			);
 
 			const ticket = await TicketModel.findById(ticketCreatedResponse.body.id);
@@ -133,7 +133,7 @@ describe("PATCH /api/tickets/:id", () => {
 			const res = await updateTicket(
 				ticket?.id,
 				{ title: "Updated Concert", price: 300 },
-				cookie
+				cookie,
 			);
 
 			expect(res.status).toBe(400);

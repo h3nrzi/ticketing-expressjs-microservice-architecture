@@ -5,11 +5,11 @@ import { IUserRepository } from "../infrastructure/user.repository";
 export interface IAuthService {
 	signup(
 		email: string,
-		password: string
+		password: string,
 	): Promise<{ user: IUserDocument; token: string }>;
 	signin(
 		email: string,
-		password: string
+		password: string,
 	): Promise<{ user: IUserDocument; token: string }>;
 	getCurrentUser(userId: string): Promise<IUserDocument | null>;
 }

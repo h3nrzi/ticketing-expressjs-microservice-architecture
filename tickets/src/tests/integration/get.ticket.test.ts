@@ -11,7 +11,7 @@ describe("GET /api/tickets/:id", () => {
 	it("returns a ticket by id", async () => {
 		const createRes = await createTicket(
 			{ title: "Concert", price: 20 },
-			cookie
+			cookie,
 		);
 		const id = createRes.body.id;
 

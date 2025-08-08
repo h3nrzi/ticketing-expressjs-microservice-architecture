@@ -32,7 +32,7 @@ const ticketSchema = new mongoose.Schema<ITicketDocument>(
 				delete ret._id;
 			},
 		},
-	}
+	},
 );
 
 ticketSchema.set("versionKey", "version");
@@ -44,5 +44,5 @@ ticketSchema.statics.build = (attrs: ITicket) => {
 
 export const TicketModel = mongoose.model<ITicketDocument, ITicketModel>(
 	"Ticket",
-	ticketSchema
+	ticketSchema,
 );

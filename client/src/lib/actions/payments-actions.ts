@@ -19,7 +19,7 @@ export const createPayment = async (orderId: string, stripeToken: string) => {
 				headers: {
 					Cookie: token?.value || [],
 				},
-			}
+			},
 		);
 
 		revalidatePath("/orders");
